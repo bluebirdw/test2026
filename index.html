@@ -584,7 +584,14 @@
       border: 1px solid var(--hairline);
     }
     .team-grid--single { grid-template-columns: minmax(0, 1fr); }
-    .team-grid > .team-card:last-child:nth-child(odd) { grid-column: 1 / -1; }
+    /* 单个成员的模块：卡片铺满整行（与 team-grid--single 保持一致） */
+    .team-grid > .team-card:only-child { grid-column: 1 / -1; }
+    /* 奇数个成员的模块（≥3 人）：最后一张不再跨列，保持与其他成员卡同宽 */
+    .team-grid > .team-card:last-child:nth-child(odd):not(:only-child) { grid-column: auto; }
+    @media (min-width: 1041px) {
+      /* 右侧空位用与卡片同色的面板补齐，避免露出网格底色 */
+      .team-grid:has(> .team-card:last-child:nth-child(odd):not(:only-child))::after { content: ""; background: var(--surface); }
+    }
     .team-card {
       position: relative;
       min-width: 0;
