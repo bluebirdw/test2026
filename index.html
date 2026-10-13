@@ -590,7 +590,15 @@
     .team-grid > .team-card:last-child:nth-child(odd):not(:only-child) { grid-column: auto; }
     @media (min-width: 1041px) {
       /* 右侧空位用与卡片同色的面板补齐，避免露出网格底色 */
-      .team-grid:has(> .team-card:last-child:nth-child(odd):not(:only-child))::after { content: ""; background: var(--surface); }
+      /* 空位格：淡九龙印章水印 */
+      .team-grid:has(> .team-card:last-child:nth-child(odd):not(:only-child))::after {
+        content: "";
+        background-color: var(--surface);
+        background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNDAgMTQwIiB3aWR0aD0iMTQwIiBoZWlnaHQ9IjE0MCI+CiAgPGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZTMyMjE5Ij4KICAgIDxyZWN0IHg9IjgiIHk9IjgiIHdpZHRoPSIxMjQiIGhlaWdodD0iMTI0IiBzdHJva2Utd2lkdGg9IjUiIG9wYWNpdHk9Ii4zMCIvPgogICAgPHJlY3QgeD0iMjAiIHk9IjIwIiB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgc3Ryb2tlLXdpZHRoPSIyIiBvcGFjaXR5PSIuMjAiLz4KICA8L2c+CiAgPGcgZmlsbD0iI2UzMjIxOSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IlNvbmd0aSBTQywgU2ltU3VuLCBOb3RvIFNlcmlmIENKSyBTQywgc2VyaWYiIGZvbnQtd2VpZ2h0PSI3MDAiPgogICAgPHRleHQgeD0iNzAiIHk9IjcyIiBmb250LXNpemU9IjQ2IiBvcGFjaXR5PSIuMzAiPuS5nTwvdGV4dD4KICAgIDx0ZXh0IHg9IjcwIiB5PSIxMTIiIGZvbnQtc2l6ZT0iNDYiIG9wYWNpdHk9Ii4zMCI+6b6ZPC90ZXh0PgogIDwvZz4KICA8dGV4dCB4PSIxMzMiIHk9IjcwIiBmaWxsPSIjZTMyMjE5IiBmb250LWZhbWlseT0iSGVsdmV0aWNhLCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI3IiBsZXR0ZXItc3BhY2luZz0iMS41IiBvcGFjaXR5PSIuMjIiIHRyYW5zZm9ybT0icm90YXRlKDkwIDEzMyA3MCkiPkpJVUxPTkc8L3RleHQ+Cjwvc3ZnPgo=");
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: clamp(120px, 13vw, 168px);
+      }
     }
     .team-card {
       position: relative;
