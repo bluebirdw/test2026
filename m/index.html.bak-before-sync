@@ -1,0 +1,666 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#08090b">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-7d0d519a.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/touchicon-3797c1a9.png">
+  <title>九龙战队｜少一点公司架子，多一点真正做事的人</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      color-scheme:light dark;
+      --red:#d71920;--red-hot:#f12a31;--deep:#08090b;--deep-2:#0d0f12;
+      --paper:#f1f0ed;--paper-2:#e5e3df;--ink:#111214;--muted:#64676d;
+      --white:#f8f8f6;--line:rgba(255,255,255,.15);--black-line:rgba(10,11,13,.16);
+      --safe-top:max(14px,env(safe-area-inset-top));--safe-bottom:max(20px,env(safe-area-inset-bottom));
+    }
+    @media(prefers-color-scheme:dark){
+      :root{--paper:#111316;--paper-2:#171a1e;--ink:#f3f3f0;--muted:#a6a9ae;--black-line:rgba(255,255,255,.13)}
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;scroll-padding-top:72px}
+    body{margin:0;background:var(--deep);color:var(--white);font-family:"Noto Sans SC",sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+    a{color:inherit;text-decoration:none}button{font:inherit}img{display:block;max-width:100%}
+    ::selection{background:var(--red);color:#fff}
+    .shell{width:min(100%,760px);margin:0 auto;padding-inline:20px;position:relative;z-index:2}
+    .section{position:relative;overflow:hidden;padding:88px 0;isolation:isolate}
+    .section-dark{background:var(--deep);color:var(--white)}
+    .section-paper{background:var(--paper);color:var(--ink)}
+    .section-red{background:var(--red);color:#fff}
+    .eyebrow{display:flex;align-items:center;gap:10px;margin:0 0 22px;font-family:"Barlow Condensed",sans-serif;font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+    .eyebrow::before{content:"";width:28px;height:2px;background:var(--red)}
+    .section-red .eyebrow::before{background:#fff}.section-paper .eyebrow{color:var(--muted)}
+    .display{font-size:clamp(36px,10.5vw,68px);line-height:1.06;letter-spacing:-.045em;margin:0;font-weight:900}
+    .display .red{color:var(--red)}
+    .lead{font-size:18px;line-height:1.82;margin:24px 0 0;color:#c6c8cb;max-width:34em}
+    .section-paper .lead{color:var(--muted)}
+    .condensed{font-family:"Barlow Condensed","Noto Sans SC",sans-serif}
+    .rule{border:0;border-top:1px solid var(--line);margin:32px 0}.section-paper .rule{border-color:var(--black-line)}
+
+    /* Mobile navigation */
+    .nav{position:fixed;z-index:40;inset:0 0 auto;height:68px;padding-top:var(--safe-top);pointer-events:none}
+    .nav::before{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgba(5,6,8,.88),rgba(5,6,8,.36),transparent);height:92px;opacity:.9}
+    .nav-inner{width:min(100%,760px);margin:auto;padding:0 16px;display:flex;justify-content:space-between;align-items:center;position:relative;pointer-events:auto}
+    .brand{display:flex;align-items:center;gap:9px;min-width:0}
+    .brand img{width:42px;height:42px;object-fit:contain}
+    .brand-copy{display:grid;line-height:1.05}.brand-copy strong{font-size:15px;letter-spacing:.1em}.brand-copy span{font:600 9px/1.2 "Barlow Condensed";letter-spacing:.15em;color:#aaaeb5;margin-top:4px}
+    .menu-btn{width:46px;height:46px;border:1px solid rgba(255,255,255,.22);border-radius:50%;background:rgba(8,9,11,.75);color:white;display:grid;place-items:center;position:relative;cursor:pointer;-webkit-tap-highlight-color:transparent}
+    .menu-lines,.menu-lines::before,.menu-lines::after{width:18px;height:1.5px;background:currentColor;display:block;transition:.25s ease}
+    .menu-lines::before,.menu-lines::after{content:"";position:absolute;left:13px}.menu-lines::before{top:16px}.menu-lines::after{bottom:15px}
+    .menu-btn[aria-expanded="true"] .menu-lines{background:transparent}.menu-btn[aria-expanded="true"] .menu-lines::before{transform:translateY(6px) rotate(45deg)}.menu-btn[aria-expanded="true"] .menu-lines::after{transform:translateY(-7px) rotate(-45deg)}
+    .menu{position:fixed;z-index:35;inset:0;background:#08090b;padding:104px 24px var(--safe-bottom);transform:translateY(-102%);transition:transform .38s cubic-bezier(.77,0,.18,1);display:flex;flex-direction:column;justify-content:space-between;pointer-events:auto}
+    .menu.open{transform:none}
+    .menu-list{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+    .menu-list a{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:17px 2px;border-bottom:1px solid var(--line);font-size:20px;font-weight:700}
+    .menu-list b{font:600 12px "Barlow Condensed";letter-spacing:.12em;color:var(--red-hot)}
+    .menu-foot{font:500 11px "Barlow Condensed";letter-spacing:.16em;color:#858990;text-transform:uppercase}
+    body.menu-open{overflow:hidden}
+
+    /* Hero */
+    .hero{min-height:100svh;padding:128px 0 48px;display:flex;align-items:flex-end;background:#07080a;position:relative;overflow:hidden;isolation:isolate}
+    .hero-video{position:absolute;inset:0;width:100%;height:100%;z-index:0;object-fit:cover;object-position:center center;background:#07080a url("../assets/bg-f1cad777.jpg") center/cover no-repeat;pointer-events:none}
+    #hero-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:1;opacity:.58;pointer-events:none}
+    .hero::before{content:"";position:absolute;z-index:2;inset:0;background:radial-gradient(ellipse 90% 56% at 84% 24%,rgba(215,25,32,.1),transparent 58%),linear-gradient(to bottom,rgba(7,8,10,.12),rgba(7,8,10,.34) 56%,rgba(7,8,10,.88) 92%)}
+    .hero::after{content:"";position:absolute;z-index:3;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(255,255,255,.018) 0 1px,transparent 1px 4px);mix-blend-mode:screen}
+    .hero .shell{z-index:4}
+    .hero-kicker{display:flex;gap:10px;align-items:center;font:600 11px "Barlow Condensed";letter-spacing:.16em;color:#c2c4c8;text-transform:uppercase;margin-bottom:24px}
+    .pulse{width:7px;height:7px;background:var(--red);border-radius:50%;box-shadow:0 0 0 6px rgba(215,25,32,.16);animation:pulse 2.8s ease-in-out infinite}
+    .hero h1{max-width:100%;font-size:clamp(25px,8.8vw,60px);line-height:1.1;letter-spacing:-.045em;margin:0;font-weight:900;overflow-wrap:anywhere}
+    .hero h1 span,.hero h1 em{display:block;white-space:normal;text-wrap:balance}
+    .hero h1 em{color:var(--red-hot);font-style:normal}
+    .hero-sub{max-width:100%;font-size:clamp(13px,4vw,15px);line-height:1.8;color:#b5b8be;margin:24px 0 0;overflow-wrap:anywhere}
+    .hero-sub span{display:block;white-space:normal;text-wrap:balance}
+    .hero-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:28px}
+    .btn{min-height:54px;padding:0 16px;display:flex;align-items:center;justify-content:center;gap:8px;border:1px solid transparent;font-size:14px;font-weight:700;letter-spacing:.02em;cursor:pointer;-webkit-tap-highlight-color:transparent}
+    .btn-primary{background:var(--red);color:#fff}.btn-ghost{border-color:rgba(255,255,255,.3);color:#fff;background:rgba(255,255,255,.035)}
+    .btn svg{width:17px;height:17px}
+    .hero-bottom{margin-top:34px;display:flex;align-items:end;justify-content:space-between;border-top:1px solid var(--line);padding-top:15px}
+    .hero-bottom small{font:500 10px/1.55 "Barlow Condensed";letter-spacing:.14em;color:#858990;text-transform:uppercase}.scroll-mark{height:44px;width:1px;background:linear-gradient(to bottom,var(--red) 50%,rgba(255,255,255,.18) 50%);background-size:100% 200%;animation:scan 2s linear infinite}
+
+    /* Identity */
+    .identity-grid{display:grid;gap:26px;margin-top:38px}
+    .statement{font-size:27px;line-height:1.45;font-weight:800;letter-spacing:-.03em}.statement mark{background:none;color:var(--red)}
+    .statement-goal{font-size:clamp(21px,6.8vw,27px);letter-spacing:-.04em}.statement-goal span{display:block;white-space:nowrap}
+    .body-copy{font-size:15px;line-height:1.95;color:var(--muted);margin:0}
+    .pillars{margin-top:36px;border-top:1px solid var(--black-line)}
+    .pillar{display:grid;grid-template-columns:60px 1fr;gap:16px;padding:24px 0;border-bottom:1px solid var(--black-line)}
+    .pillar-index{font:700 28px "Barlow Condensed";color:var(--red)}.pillar h3{margin:0 0 8px;font-size:19px}.pillar p{margin:0;color:var(--muted);font-size:14px;line-height:1.7}
+    .human-ai{margin-top:42px;padding:24px;background:var(--ink);color:var(--paper);position:relative;overflow:hidden}
+    @media(prefers-color-scheme:dark){.human-ai{background:#050607;color:#f4f3ef}}
+    .human-ai::after{content:"";position:absolute;width:160px;height:160px;border:1px solid rgba(215,25,32,.55);border-radius:50%;right:-90px;top:-90px;box-shadow:0 0 0 24px rgba(215,25,32,.08),0 0 0 48px rgba(215,25,32,.04);animation:radar 8s linear infinite}
+    .equation{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;font:600 16px/1.25 "Barlow Condensed";letter-spacing:.05em;text-transform:uppercase}.equation span:nth-child(2){color:var(--red);font-size:25px}.equation strong{font-size:12px;color:#94979c;display:block;margin-top:7px;letter-spacing:.1em}
+
+    /* Team */
+    .team-bg{position:absolute;inset:0;z-index:-1;opacity:.28;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:42px 42px;animation:gridMove 14s linear infinite}
+    .team-groups{display:grid;gap:64px;margin-top:48px}
+    .team-module{display:grid;gap:18px}
+    .module-head{display:grid;grid-template-columns:56px 1fr;gap:14px;align-items:end;padding-bottom:14px;border-bottom:1px solid var(--line)}
+    .module-no{font:800 44px/.85 "Barlow Condensed";color:var(--red)}
+    .module-head h3{margin:0;font-size:19px;line-height:1.35;letter-spacing:-.02em}.module-head p{margin:5px 0 0;color:#767b83;font:600 10px/1.3 "Barlow Condensed";letter-spacing:.14em;text-transform:uppercase}
+    .module-members{display:grid;gap:18px}
+    .team-member{position:relative;background:#0c0d10;border:1px solid var(--line);overflow:hidden}
+    .member-photo{position:relative;aspect-ratio:4/5;background:#14171b;overflow:hidden}
+    .member-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,transparent 58%,rgba(7,8,10,.28));pointer-events:none}
+    .member-photo img{width:100%;height:100%;object-fit:cover;object-position:center top;filter:saturate(.78) contrast(1.03)}
+    .member-copy{padding:24px 20px 28px}
+    .member-name-row{display:flex;justify-content:space-between;gap:16px;align-items:start;padding-bottom:18px;border-bottom:1px solid var(--line)}
+    .member-name{margin:0;font-size:34px;line-height:1.05;letter-spacing:-.045em}.nationality{display:inline-flex;align-items:center;gap:6px;flex:0 0 auto;font-size:13px;color:#a4a8ae;font-weight:600;white-space:nowrap;padding-top:7px}.flag-icon{width:18px;height:12px;display:block;flex:0 0 auto;border-radius:1px;box-shadow:0 0 0 1px rgba(255,255,255,.18)}
+    .education-mark{flex:0 0 auto;width:48px;height:48px;display:grid;place-items:center;margin-top:-2px}
+    .education-mark img{width:44px;height:44px;object-fit:contain;opacity:.86;filter:drop-shadow(0 2px 8px rgba(0,0,0,.32))}
+    .member-label{margin:12px 0 0;color:var(--red-hot);font-size:15px;line-height:1.6;font-weight:700}
+    .member-section{margin-top:20px}.member-section h5{margin:0 0 10px;color:#737780;font:700 11px/1.2 "Barlow Condensed","Noto Sans SC";letter-spacing:.14em;text-transform:uppercase}
+    .skill-list{display:flex;flex-wrap:wrap;gap:7px}.skill-list span{border:1px solid rgba(255,255,255,.14);padding:7px 9px;color:#c6c8cc;font-size:12px;line-height:1.25}
+    .member-style{margin:0;color:#f1f1ef;font-size:18px;line-height:1.68;font-weight:700}
+    .member-bio{margin:0;color:#a7abb1;font-size:14px;line-height:1.9}
+    .seal-photo{display:grid;place-items:center;background:radial-gradient(circle at 50% 44%,rgba(215,25,32,.18),transparent 56%),#101216}
+    .seal{position:relative;width:152px;height:152px;border:2px solid var(--red);border-radius:50%;display:grid;place-items:center;color:var(--red);font-size:64px;font-weight:900;box-shadow:0 0 0 9px rgba(215,25,32,.07)}
+    .seal::before,.seal::after{content:"";position:absolute;border:1px solid rgba(215,25,32,.46);border-radius:50%;inset:9px}.seal::after{inset:-18px;border-color:rgba(215,25,32,.2)}
+    .pending-member{min-height:390px;display:grid;place-items:center;padding:36px 24px;text-align:center;background:linear-gradient(135deg,rgba(215,25,32,.06),transparent 42%),#0c0d10}
+    .pending-mark{width:126px;height:126px;margin:auto;border:1px solid rgba(215,25,32,.7);border-radius:50%;display:grid;place-items:center;color:var(--red);font-size:42px;font-weight:900;box-shadow:0 0 0 8px rgba(215,25,32,.05)}
+    .pending-member h4{margin:28px 0 8px;font-size:30px}.pending-member p{margin:0;color:#777b82;font-size:13px;line-height:1.7}.pending-code{display:block;margin-top:20px;color:#555a62;font:600 10px "Barlow Condensed";letter-spacing:.18em}
+    .team-note{margin-top:30px;padding-left:14px;border-left:2px solid var(--red);font-size:12px;line-height:1.7;color:#8f9297}
+
+    /* Capabilities */
+    .orbit{position:absolute;z-index:-1;right:-170px;top:40px;width:360px;height:360px;border:1px solid rgba(215,25,32,.2);border-radius:50%;animation:spin 26s linear infinite}.orbit::before,.orbit::after{content:"";position:absolute;border:1px solid rgba(215,25,32,.14);border-radius:50%;inset:34px}.orbit::after{inset:92px;border-style:dashed}
+    .cap-list{margin-top:40px;display:grid;gap:14px}
+    .cap{position:relative;padding:26px 22px 22px;background:var(--paper-2);border-top:4px solid var(--ink);overflow:hidden}
+    .cap:nth-child(1),.cap:nth-child(4){border-top-color:var(--red)}
+    .cap-index{font:800 56px/.85 "Barlow Condensed";color:transparent;-webkit-text-stroke:1px var(--black-line);position:absolute;right:14px;top:16px}
+    .cap h3{font-size:25px;line-height:1.2;margin:0 0 12px;max-width:75%}.cap > p{font-size:14px;line-height:1.75;color:var(--muted);margin:0 0 18px}
+    .tags{display:flex;flex-wrap:wrap;gap:7px}.tag{padding:7px 9px;border:1px solid var(--black-line);font-size:11px;line-height:1.2;color:var(--muted);background:color-mix(in srgb,var(--paper) 60%,transparent)}
+    .cap-tech{position:absolute;inset:auto -30px -44px auto;width:130px;height:130px;opacity:.16;border:1px solid currentColor;border-radius:50%;animation:spin 12s linear infinite}.cap-tech::before{content:"";position:absolute;inset:22px;border:1px dashed currentColor;border-radius:50%}
+
+
+    /* Selected works */
+    .case-index{overflow:hidden;background:#08090b}
+    .case-index .eyebrow{color:var(--red-hot)}
+    .case-index-grid{position:absolute;z-index:-1;inset:0;opacity:.2;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:42px 42px;animation:gridMove 14s linear infinite;mask-image:linear-gradient(to bottom,transparent 0,#000 12%,#000 88%,transparent 100%)}
+    .case-category-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:34px}
+    .case-category{min-height:42px;padding:9px 14px;display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.28);background:#0b0c0e;color:#d7d9dd;font-size:12px;font-weight:700;line-height:1.25;white-space:nowrap;cursor:pointer;transition:background .2s ease,border-color .2s ease,color .2s ease;-webkit-tap-highlight-color:transparent}
+    .case-category.active{background:var(--red);border-color:var(--red);color:#fff}
+    .case-category:hover,.case-category:focus-visible{border-color:var(--red-hot);color:#fff;outline:none}
+    .case-category:focus-visible{box-shadow:0 0 0 2px rgba(241,42,49,.3)}
+    .works{display:grid;gap:14px;margin-top:22px}
+    .work-card{position:relative;display:flex;min-height:370px;overflow:hidden;border:1px solid rgba(255,255,255,.17);background:#0d0f12;color:#fff;isolation:isolate;-webkit-tap-highlight-color:transparent}
+    .work-card.hidden{display:none}
+    .work-card::after{content:"";position:absolute;z-index:-1;inset:0;background:linear-gradient(180deg,rgba(4,5,7,.22),rgba(4,5,7,.6) 44%,rgba(4,5,7,.96) 100%)}
+    .work-card:focus-visible{outline:2px solid var(--red-hot);outline-offset:3px}
+    .work-visual{position:absolute;z-index:-2;inset:0;overflow:hidden;background:#101318}
+    .work-visual::after{content:"";position:absolute;inset:0;opacity:.42;background:repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 4px);mix-blend-mode:screen}
+    .work-content{width:100%;padding:24px;display:flex;flex-direction:column;justify-content:flex-end;position:relative;z-index:2}
+    .work-top{position:absolute;inset:22px 22px auto;display:flex;justify-content:space-between;align-items:flex-start;gap:20px}
+    .work-type{font:600 11px/1.25 "Barlow Condensed";letter-spacing:.14em;color:var(--red-hot)}
+    .work-no{font:700 48px/.82 "Barlow Condensed";color:rgba(255,255,255,.38)}
+    .work-card h3{font-size:clamp(25px,7.4vw,34px);line-height:1.18;letter-spacing:-.025em;margin:0 0 12px;max-width:14em}
+    .work-card p{font-size:14px;line-height:1.75;color:#d0d2d5;margin:0;max-width:31em}
+    .work-meta{margin-top:18px;padding-top:15px;border-top:1px solid rgba(255,255,255,.2);font-size:11px;line-height:1.75;color:#9da1a7}
+    .work-cta{margin-top:16px;font:600 11px "Barlow Condensed";letter-spacing:.15em;color:#fff;text-transform:uppercase}
+    .work-cta::after{content:"  →";color:var(--red-hot)}
+    .work-carousel-track{display:flex;width:100%;height:100%;transition:transform .5s cubic-bezier(.22,.61,.36,1);touch-action:pan-y}
+    .work-carousel-track img{width:100%;height:100%;flex:0 0 100%;max-width:none;object-fit:cover;object-position:center}
+    .work-dots{position:absolute;z-index:3;left:24px;right:24px;top:69px;display:flex;gap:6px;pointer-events:none}
+    .work-dot{width:16px;height:2px;background:rgba(255,255,255,.35);transition:background .2s ease,width .2s ease}
+    .work-dot.active{width:30px;background:var(--red-hot)}
+    .work-ai{background:radial-gradient(circle at 78% 20%,rgba(215,25,32,.42),transparent 31%),linear-gradient(135deg,#141820 0%,#090a0d 72%)}
+    .work-ai::before{content:"";position:absolute;width:260px;height:260px;right:-72px;top:-48px;border:1px solid rgba(255,255,255,.17);border-radius:50%;box-shadow:0 0 0 34px rgba(215,25,32,.055),0 0 0 78px rgba(255,255,255,.025);animation:spin 24s linear infinite}
+    .work-film{background:linear-gradient(118deg,rgba(215,25,32,.3),transparent 34%),repeating-linear-gradient(132deg,#11141a 0 15px,#090b0f 15px 31px)}
+    .work-film::before{content:"";position:absolute;inset:14% -8%;transform:rotate(-8deg);border-block:1px solid rgba(255,255,255,.16);background:repeating-linear-gradient(90deg,rgba(255,255,255,.12) 0 19px,transparent 19px 34px);opacity:.6;animation:film 12s linear infinite}
+    .work-event{background:radial-gradient(ellipse at 22% 16%,rgba(215,25,32,.42),transparent 30%),linear-gradient(155deg,#151116,#090a0d 68%)}
+    .work-event::before{content:"";position:absolute;width:230px;height:230px;right:-42px;top:28px;transform:rotate(45deg);border:1px solid rgba(255,255,255,.14);box-shadow:28px 28px 0 rgba(215,25,32,.06),56px 56px 0 rgba(255,255,255,.025);animation:ring 7s ease-in-out infinite}
+
+    /* Process */
+    .signal{position:absolute;z-index:-1;inset:0;opacity:.13;background:repeating-linear-gradient(90deg,transparent 0 8%,var(--red) 8.2% 8.45%,transparent 8.6% 18%);mask-image:linear-gradient(to bottom,transparent,#000 20%,#000 80%,transparent);animation:signal 7s linear infinite}
+    .steps{position:relative;margin-top:38px;padding-left:26px}.steps::before{content:"";position:absolute;left:5px;top:10px;bottom:20px;width:1px;background:linear-gradient(var(--red),rgba(215,25,32,.1))}
+    .step{position:relative;padding:0 0 34px}.step::before{content:"";position:absolute;left:-26px;top:7px;width:11px;height:11px;background:var(--deep);border:2px solid var(--red);border-radius:50%;box-shadow:0 0 0 5px rgba(215,25,32,.12)}
+    .step-no{font:700 11px "Barlow Condensed";letter-spacing:.16em;color:var(--red);text-transform:uppercase}.step h3{font-size:23px;margin:6px 0 8px}.step p{margin:0;color:var(--muted);font-size:14px;line-height:1.75}
+    .process-end{padding:22px 0;border-block:1px solid var(--black-line);display:flex;justify-content:space-between;align-items:center;font-size:14px;font-weight:700}.process-end b{color:var(--red);font-size:26px}
+
+    /* Why */
+    .why-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);margin-top:38px}
+    .why{background:#0c0d10;padding:24px 18px;min-height:184px}.why b{font:700 12px "Barlow Condensed";letter-spacing:.14em;color:var(--red)}.why h3{font-size:28px;margin:24px 0 8px}.why p{margin:0;color:#989ca2;font-size:12px;line-height:1.65}
+    .manifesto{font-size:clamp(30px,8.8vw,54px);line-height:1.2;font-weight:900;letter-spacing:-.04em;margin:72px 0 0}.manifesto span{color:var(--red)}
+
+    /* Contact */
+    .contact-rings{position:absolute;z-index:-1;width:360px;height:360px;right:-180px;top:-120px;border:1px solid rgba(255,255,255,.27);border-radius:50%;animation:ring 5s ease-out infinite}.contact-rings::before,.contact-rings::after{content:"";position:absolute;inset:40px;border:1px solid rgba(255,255,255,.18);border-radius:50%}.contact-rings::after{inset:90px}
+    .contact .display{font-size:clamp(36px,10.5vw,68px)}.contact .lead{color:rgba(255,255,255,.82)}
+    .brief{margin-top:34px;border:1px solid rgba(255,255,255,.38);padding:22px;background:rgba(0,0,0,.08)}.brief h3{margin:0 0 14px;font-size:17px}.brief ol{margin:0;padding-left:21px;font-size:13px;line-height:2;color:rgba(255,255,255,.82)}
+    .copy-btn{width:100%;margin-top:18px;background:#fff;color:#151515;border:0;min-height:54px;font-weight:800;cursor:pointer}.copy-btn.done{background:#111;color:#fff}
+    .toast{position:fixed;z-index:60;left:50%;bottom:calc(var(--safe-bottom) + 14px);transform:translate(-50%,30px);background:#fff;color:#111;padding:12px 18px;font-size:13px;font-weight:700;opacity:0;pointer-events:none;transition:.25s}.toast.show{opacity:1;transform:translate(-50%,0)}
+
+    footer{background:#050607;color:#fff;padding:44px 0 calc(26px + var(--safe-bottom))}
+    .footer-brand{display:flex;align-items:center;gap:14px}.footer-brand img{width:62px;height:62px;object-fit:contain}.footer-brand h2{margin:0;font-size:22px}.footer-brand p{margin:5px 0 0;color:#777b81;font:500 10px "Barlow Condensed";letter-spacing:.12em;text-transform:uppercase}
+    .footer-links{display:grid;grid-template-columns:1fr 1fr;gap:12px 24px;margin:34px 0;padding:24px 0;border-block:1px solid var(--line)}.footer-links a{font-size:13px;color:#adb0b5}
+    .footer-bottom{display:flex;justify-content:space-between;gap:24px;color:#666a70;font-size:10px;line-height:1.7}.top-link{color:#c3c5c9;white-space:nowrap}
+
+    /* Reveal + motion */
+    .reveal{opacity:1;transform:none;transition:transform .35s ease}.reveal.in{opacity:1;transform:none}
+    @keyframes pulse{50%{box-shadow:0 0 0 11px rgba(215,25,32,0)}}
+    @keyframes scan{to{background-position:0 -200%}}
+    @keyframes gridMove{to{background-position:42px 42px}}
+    @keyframes radar{to{transform:rotate(360deg)}}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    @keyframes film{to{background-position:280px 0}}
+    @keyframes signal{50%{transform:translateX(8%)}}
+    @keyframes ring{0%{transform:scale(.75);opacity:0}35%{opacity:1}100%{transform:scale(1.18);opacity:0}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
+
+    /* Wide-screen grace; mobile remains primary */
+    @media(min-width:680px){
+      .shell{padding-inline:30px}.section{padding:110px 0}.hero{padding-top:150px}.hero-actions{width:430px}.identity-grid{grid-template-columns:1.05fr .95fr}.team-member.has-photo{display:grid;grid-template-columns:.9fr 1.1fr}.team-member.has-photo .member-photo{aspect-ratio:auto;min-height:620px}.team-member.has-photo .member-copy{padding:34px 30px}.cap-list{grid-template-columns:1fr 1fr}.case-category-list{gap:12px}.case-category{padding-inline:20px}.steps{display:grid;grid-template-columns:1fr 1fr;gap:0 46px;padding-left:0}.steps::before{display:none}.step::before{left:auto;right:0}.why-grid{grid-template-columns:repeat(3,1fr)}.work-tabs{grid-template-columns:repeat(4,1fr)}
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav" aria-label="主导航">
+    <div class="nav-inner">
+      <a class="brand" href="#top" aria-label="返回首页">
+        <img src="../assets/brand-45114d43.png" alt="九龙文化红章标志">
+        <span class="brand-copy"><strong>九龙战队</strong><span>JIULONG SQUAD</span></span>
+      </a>
+      <button class="menu-btn" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="mobile-menu"><span class="menu-lines"></span></button>
+    </div>
+  </nav>
+  <div class="menu" id="mobile-menu" aria-hidden="true">
+    <ul class="menu-list">
+      <li><a href="#about"><span>我们是谁</span><b>02 / WE ARE</b></a></li>
+      <li><a href="#team"><span>十四人战队</span><b>03 / THE TEAM</b></a></li>
+      <li><a href="#services"><span>四大业务</span><b>04 / CAPABILITY</b></a></li>
+      <li><a href="#case-categories"><span>我们做过什么</span><b>05 / PROJECT INDEX</b></a></li>
+      <li><a href="#process"><span>工作方法</span><b>06 / PROCESS</b></a></li>
+      <li><a href="#why"><span>选择九龙</span><b>07 / WHY JIULONG</b></a></li>
+      <li><a href="#contact"><span>开始沟通</span><b>08 / CONTACT</b></a></li>
+    </ul>
+    <div class="menu-foot">Hefei Jiulong P.R. & Cultural Dissemination Co., Ltd.</div>
+  </div>
+
+  <main id="top">
+    <section class="hero">
+      <video class="hero-video" autoplay muted loop playsinline preload="auto" poster="../assets/bg-f1cad777.jpg" disablepictureinpicture aria-hidden="true">
+        <source src="../assets/video-04f1e641.mp4" type="video/mp4">
+      </video>
+      <canvas id="hero-canvas" aria-hidden="true"></canvas>
+      <div class="shell">
+        <div class="hero-kicker"><span class="pulse"></span>Small team · big capability</div>
+        <h1><span>少一点公司架子，</span><em>多一点真正做事的人。</em></h1>
+        <p class="hero-sub"><span>不追求复杂，只解决问题。</span><span>不追求低价，而追求真正的高性价比。</span></p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#about">认识我们 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M14 7l5 5-5 5" stroke="currentColor" stroke-width="1.8"/></svg></a>
+          <a class="btn btn-ghost" href="#services">四大业务</a>
+        </div>
+        <div class="hero-bottom"><small>Jiulong Culture / AI Era<br>Hefei · China</small><span class="scroll-mark" aria-hidden="true"></span></div>
+      </div>
+    </section>
+
+    <section class="section section-paper" id="about">
+      <div class="shell">
+        <p class="eyebrow reveal">02 / We are</p>
+        <h2 class="display reveal">我们<br>是谁</h2>
+        <div class="identity-grid">
+          <p class="statement statement-goal reveal"><span>我们的目标很简单</span><span>用专业能力 <mark>+</mark> AI生产力</span><span>为客户做出真正值得的产品。</span></p>
+          <p class="body-copy reveal">客户面对的，不是层层传递需求的销售，而是真正做项目的人。九龙战队聚合策划、设计、技术、影视、空间与活动等专业能力，按项目组织战力。</p>
+        </div>
+        <div class="pillars">
+          <article class="pillar reveal"><div class="pillar-index">01</div><div><h3>小团队</h3><p>精简组织与沟通链路，把资源投入真正创造价值的人和事情。</p></div></article>
+          <article class="pillar reveal"><div class="pillar-index">02</div><div><h3>强个体</h3><p>专业经验 × AI 生产力，让每个成员拥有过去一支小组的效率。</p></div></article>
+          <article class="pillar reveal"><div class="pillar-index">03</div><div><h3>真落地</h3><p>从策划、设计到开发、制作、施工与执行，完整闭环交付。</p></div></article>
+        </div>
+        <div class="human-ai reveal"><div class="equation"><div>Human judgment<strong>人负责判断</strong></div><span>×</span><div>AI productivity<strong>AI 负责提效</strong></div></div></div>
+      </div>
+    </section>
+
+    <section class="section section-dark" id="team">
+      <div class="team-bg" aria-hidden="true"></div>
+      <div class="shell">
+        <p class="eyebrow reveal">03 / The team</p>
+        <h2 class="display reveal">十四位伙伴<br><span class="red">一支战队</span></h2>
+        <p class="lead reveal">跨越商务、创作、空间、现场与技术，以专业分工组成完整交付链路。</p>
+
+        <div class="team-groups">
+          <section class="team-module reveal" aria-labelledby="module-1">
+            <header class="module-head"><span class="module-no">01</span><div><h3 id="module-1">管理与商务核心</h3><p>Management &amp; Business</p></div></header>
+            <div class="module-members">
+              <article class="team-member has-photo">
+                <div class="member-photo"><img src="../assets/team-8980c5e7.webp" alt="王璐商务形象照" loading="lazy" decoding="async"></div>
+                <div class="member-copy">
+                  <div class="member-name-row"><div><h4 class="member-name">王璐</h4><p class="member-label">核心全能型选手 / 商务与战略</p></div><span class="education-mark" title="北京大学媒介经营管理专业"><img src="../assets/seal-c59419cf.png" alt="北京大学校徽"></span></div>
+                  <div class="member-section"><h5>核心能力 / Expertise</h5><div class="skill-list"><span>商务拓展与操盘</span><span>战略统筹</span><span>项目策划</span><span>媒介经营管理</span></div></div>
+                  <div class="member-section"><h5>个人风格 / Style</h5><p class="member-style">运筹帷幄的团队核心，以极致商务视野开疆拓土，把一切可能化为现实。</p></div>
+                  <div class="member-section"><h5>人物介绍 / Profile</h5><p class="member-bio">九龙战队的核心灵魂与商务主帅。秉持“先做人，后做事，追求完美”的信念，凭借深厚的媒介经营管理背景与全栈战略视野，不仅是项目统筹的顶层操盘手，更在商务最前沿披荆斩棘，为团队破局开路。</p></div>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section class="team-module reveal" aria-labelledby="module-2">
+            <header class="module-head"><span class="module-no">02</span><div><h3 id="module-2">党建与企业文化品牌战略</h3><p>Party Building &amp; Brand Strategy</p></div></header>
+            <div class="module-members">
+              <article class="team-member has-photo">
+                <div class="member-photo"><img src="../assets/team-ed66e3d8.webp" alt="张晓伟党建与品牌战略专家形象照" loading="lazy" decoding="async"></div>
+                <div class="member-copy">
+                  <div class="member-name-row"><div><h4 class="member-name">张晓伟</h4><p class="member-label">党建与品牌引领型选手 / 文化与战略</p></div></div>
+                  <div class="member-section"><h5>核心能力 / Expertise</h5><div class="skill-list"><span>党建品牌塑造</span><span>企业文化凝练</span><span>价值观落地</span><span>政策导向洞察</span><span>文化软实力与品牌价值双重提升</span><span>实操方案规划</span></div></div>
+                  <div class="member-section"><h5>个人风格 / Style</h5><p class="member-style">以红色党建引领与深度文化洞察，筑牢组织发展之魂，铸就卓越品牌软实力。</p></div>
+                  <div class="member-section"><h5>人物介绍 / Profile</h5><p class="member-bio">党建文化与企业文化融合创新的资深专家。擅长从组织发展实际需求出发，将宏观政策导向与时代脉搏转化为可落地、可传播的系统实践方案。精准提炼并构建具有鲜明特色的党建与企业品牌体系，全方位助力组织实现文化软实力与商业价值的双重跃升。</p></div>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section class="team-module reveal" aria-labelledby="module-3">
+            <header class="module-head"><span class="module-no">03</span><div><h3 id="module-3">AI、硬件与软件架构</h3><p>AI, Hardware &amp; Architecture</p></div></header>
+            <div class="module-members">
+              <article class="team-member has-photo">
+                <div class="member-photo"><img src="../assets/team-6257e17c.webp" alt="袁子健硅谷背景个人形象照" loading="lazy" decoding="async"></div>
+                <div class="member-copy">
+                  <div class="member-name-row"><div><h4 class="member-name">袁子健</h4><p class="member-label">国际硅谷智造型选手 / 跨国架构与AI工程</p></div><span class="nationality">美籍<svg class="flag-icon" viewBox="0 0 19 10" role="img" aria-label="美国国旗"><rect width="19" height="10" fill="#fff"/><path d="M0 0h19v1H0zm0 2h19v1H0zm0 2h19v1H0zm0 2h19v1H0zm0 2h19v1H0z" fill="#b22234"/><rect width="8" height="5.4" fill="#3c3b6e"/><g fill="#fff"><circle cx="1.2" cy="1" r=".28"/><circle cx="3" cy="1" r=".28"/><circle cx="4.8" cy="1" r=".28"/><circle cx="6.6" cy="1" r=".28"/><circle cx="2.1" cy="2.2" r=".28"/><circle cx="3.9" cy="2.2" r=".28"/><circle cx="5.7" cy="2.2" r=".28"/><circle cx="1.2" cy="3.4" r=".28"/><circle cx="3" cy="3.4" r=".28"/><circle cx="4.8" cy="3.4" r=".28"/><circle cx="6.6" cy="3.4" r=".28"/><circle cx="2.1" cy="4.6" r=".28"/><circle cx="3.9" cy="4.6" r=".28"/><circle cx="5.7" cy="4.6" r=".28"/></g></svg></span></div>
+                  <div class="member-section"><h5>核心能力 / Expertise</h5><div class="skill-list"><span>美国硅谷多年从业背景</span><span>企业级产品研发（CRM / ITSM / ALM）</span><span>C++ &amp; Java &amp; Python全栈</span><span>数据库架构</span><span>AI Vibe Coding智能编程</span><span>跨文化技术协同</span></div></div>
+                  <div class="member-section"><h5>个人风格 / Style</h5><p class="member-style">融汇硅谷前沿标准与国际视野，以AI范式重构企业级软件的极致效能。</p></div>
+                  <div class="member-section"><h5>人物介绍 / Profile</h5><p class="member-bio">作为团队的美国籍技术专家，拥有硅谷多年的深厚研发与架构背景。深耕企业级产品研发，精通底层技术与数据库架构。更将国际化的工程视野与AI Vibe Coding智能编程范式完美融合，为团队注入面向全球的前沿技术动能。</p></div>
+                </div>
+              </article>
+              <article class="team-member has-photo">
+                <div class="member-photo"><img src="../assets/team-da792d23.webp" alt="费毓商务形象照" loading="lazy" decoding="async"></div>
+                <div class="member-copy">
+                  <div class="member-name-row"><div><h4 class="member-name">费毓</h4><p class="member-label">国际全栈架构型选手 / 全球化研发与交付</p></div><span class="nationality">澳籍<svg class="flag-icon" viewBox="0 0 20 10" role="img" aria-label="澳大利亚国旗"><rect width="20" height="10" fill="#012169"/><g><path d="M0 0l10 5M10 0L0 5" stroke="#fff" stroke-width="1.25"/><path d="M0 0l10 5M10 0L0 5" stroke="#c8102e" stroke-width=".55"/><path d="M5 0v5M0 2.5h10" stroke="#fff" stroke-width="1.7"/><path d="M5 0v5M0 2.5h10" stroke="#c8102e" stroke-width=".85"/></g><g fill="#fff"><path d="M14.6 1l.3.8.8.1-.6.5.2.8-.7-.4-.7.4.2-.8-.6-.5.8-.1z"/><path d="M12.8 4.1l.28.7.75.05-.58.48.18.73-.63-.4-.64.4.19-.73-.58-.48.74-.05z"/><path d="M16.9 3.5l.25.62.67.04-.51.43.16.65-.57-.35-.57.35.17-.65-.52-.43.67-.04z"/><path d="M15.4 7.2l.28.7.74.05-.57.47.18.73-.63-.39-.64.39.19-.73-.58-.47.74-.05z"/><path d="M18.4 5.8l.21.53.57.04-.44.36.14.55-.48-.3-.49.3.15-.55-.44-.36.56-.04z"/><path d="M5.3 6.2l.48 1.17 1.26.08-.97.8.3 1.22-1.07-.66-1.08.66.32-1.22-.98-.8 1.26-.08z"/></g></svg></span></div>
+                  <div class="member-section"><h5>核心能力 / Expertise</h5><div class="skill-list"><span>澳大利亚多年从业与交付背景</span><span>SaaS / ERP / CRM / ITSM / ALM企业级研发</span><span>跨国全栈技术</span><span>AI Vibe Coding智能编程</span></div></div>
+                  <div class="member-section"><h5>个人风格 / Style</h5><p class="member-style">自带国际化视野的全栈架构标杆，以跨国交付经验打通企业数字化全链路。</p></div>
+                  <div class="member-section"><h5>人物介绍 / Profile</h5><p class="member-bio">作为团队的澳大利亚籍资深研发专家，拥有丰富的跨国一线研发与全球化交付经验。精通多领域全栈技术与大型数据库调优。以国际化的卓越标准和前沿AI工具，赋能系统全链路的高效交付。</p></div>
+                </div>
+              </article>
+              <article class="team-member has-photo">
+                <div class="member-photo"><img src="../assets/team-bd61eb69.webp" alt="朱觉斌商务形象照" loading="lazy" decoding="async"></div>
+                <div class="member-copy">
+                  <div class="member-name-row"><div><h4 class="member-name">朱觉斌</h4><p class="member-label">AI与硬件型选手 / 算法与智造</p></div></div>
+                  <div class="member-section"><h5>核心能力 / Expertise</h5><div class="skill-list"><span>人工智能</span><span>智能硬件</span><span>嵌入式开发</span><span>C++ &amp; Python</span><span>算法落地</span></div></div>
+                  <div class="member-section"><h5>个人风格 / Style</h5><p class="member-style">打通算法与物理世界，让AI在硬件上真正落地生根。</p></div>
+                  <div class="member-section"><h5>人物介绍 / Profile</h5><p class="member-bio">兼具商科战略视野与硬核软硬件开发能力。深耕AI与智能硬件领域，擅长将前沿大模型与底层硬件深度融合，把抽象的算法转化为看得见、摸得着的智能产品与系统方案。</p></div>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section class="team-module reveal" aria-labelledby="module-4">
+            <header class="module-head"><span class="module-no">04</span><div><h3 id="module-4">项目管理与投标统筹</h3><p>Project &amp; Bidding</p></div></header>
+            <div class="module-members">
+              <article class="team-member has-photo">
+                <div class="member-photo"><img src="../assets/team-4ed2c370.webp" alt="肖兰军商务形象照" loading="lazy" decoding="async"></div>
+                <div class="member-copy">
+                  <div class="member-name-row"><div><h4 class="member-name">肖兰军</h4><p class="member-label">风险把控型选手 / 协调与投标</p></div></div>
+                  <div class="member-section"><h5>核心能力 / Expertise</h5><div class="skill-list"><span>项目投标</span><span>全程把控</span><span>资源协调</span><span>商务统筹</span></div></div>
+                  <div class="member-section"><h5>个人风格 / Style</h5><p class="member-style">用严谨与细致筑起坚固防线，确保每一步稳扎稳打。</p></div>
+                  <div class="member-section"><h5>人物介绍 / Profile</h5><p class="member-bio">极具大局观与沟通艺术的实干专家。以积极主动、认真负责的态度，在投标冲锋与项目协调中做到滴水不漏。</p></div>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section class="team-module reveal" aria-labelledby="module-5">
+            <header class="module-head"><span class="module-no">05</span><div><h3 id="module-5">影视影像创作与制片矩阵</h3><p>Film Creation &amp; Production</p></div></header>
+            <div class="module-members">
+              <article class="team-member has-photo">
+                <div class="member-photo"><img src="../assets/team-a597deb6.webp" alt="徐银福商务形象照" loading="lazy" decoding="async"></div>
+                <div class="member-copy">
+                  <div class="member-name-row"><div><h4 class="member-name">徐银福</h4><p class="member-label">影像导演型选手 / 视觉与叙事</p></div></div>
+                  <div class="member-section"><h5>核心能力 / Expertise</h5><div class="skill-list"><span>视觉广告</span><span>剧情片</span><span>跨界艺术</span><span>人物心理挖掘</span><span>节奏与调性塑造</span><span>16年行业老兵</span></div></div>
+                  <div class="member-section"><h5>个人风格 / Style</h5><p class="member-style">把每一个疯狂的梦，用镜头死磕成直击人心的现实。</p></div>
+                  <div class="member-section"><h5>人物介绍 / Profile</h5><p class="member-bio">十六年光影匠人，一个“就爱做梦，更爱死磕自己”的视觉主脑。擅长在镜头后洞察人物内心、雕琢每一帧的节奏与调性，将视觉广告、剧情片与跨界艺术完美交织，赋予每一个故事直击灵魂的生命力。</p></div>
+                </div>
+              </article>
+              <article class="team-member has-photo">
+                <div class="member-photo"><img src="../assets/team-7e36b18e.webp" alt="蔡晓东商务形象照" loading="lazy" decoding="async"></div>
+                <div class="member-copy">
+                  <div class="member-name-row"><div><h4 class="member-name">蔡晓东</h4><p class="member-label">制片统筹型选手 / 资金与落地</p></div></div>
+                  <div class="member-section"><h5>核心能力 / Expertise</h5><div class="skill-list"><span>影视项目统筹</span><span>资金与场地调度</span><span>摄制团队管理</span><span>宣传片与微电影</span><span>周期与成本把控</span><span>10年行业老兵</span></div></div>
+                  <div class="member-section"><h5>个人风格 / Style</h5><p class="member-style">于细节处严丝合缝，让每一个奇思妙想完美落地生根。</p></div>
+                  <div class="member-section"><h5>人物介绍 / Profile</h5><p class="member-bio">十年制片生涯的资深操盘手，团队创意与现实之间的坚实桥梁。在宣传片、短视频、活动纪实与微电影项目中游刃有余，以严苛的周期、场地与成本把控力，确保每一个灵感都能高效、高品质地完美呈现。</p></div>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section class="team-module reveal" aria-labelledby="module-6">
+            <header class="module-head"><span class="module-no">06</span><div><h3 id="module-6">平面视觉、空间设计与落地</h3><p>Visual, Space &amp; Build</p></div></header>
+            <div class="module-members">
+              <article class="team-member has-photo">
+                <div class="member-photo"><img src="../assets/team-7d417db3.webp" alt="孟朕视觉设计师形象照" loading="lazy" decoding="async"></div>
+                <div class="member-copy">
+                  <div class="member-name-row"><div><h4 class="member-name">孟朕</h4><p class="member-label">视觉平面型选手 / 美学与创意</p></div></div>
+                  <div class="member-section"><h5>核心能力 / Expertise</h5><div class="skill-list"><span>艺术设计</span><span>视觉平面设计</span><span>Photoshop &amp; Illustrator</span><span>丰富实战经验</span></div></div>
+                  <div class="member-section"><h5>个人风格 / Style</h5><p class="member-style">以开阔的视觉思维与精湛的软件功底，让每一个平面创意精准传达品牌灵魂。</p></div>
+                  <div class="member-section"><h5>人物介绍 / Profile</h5><p class="member-bio">毕业于山东师范大学艺术设计专业的资深视觉操盘手。拥有多年丰富的一线平面设计经验与开阔的设计思维，精通Photoshop、Illustrator等核心软件，擅长将灵感化为极具视觉冲击力的平面视觉语言。</p></div>
+                </div>
+              </article>
+              <article class="team-member has-photo">
+                <div class="member-photo"><img src="../assets/team-f65e3d07.webp" alt="胡伟伟商务形象照" loading="lazy" decoding="async"></div>
+                <div class="member-copy">
+                  <div class="member-name-row"><div><h4 class="member-name">胡伟伟</h4><p class="member-label">空间策展型选手 / 空间与跨界</p></div></div>
+                  <div class="member-section"><h5>核心能力 / Expertise</h5><div class="skill-list"><span>室内设计</span><span>10年行业经验</span><span>策展设计</span><span>跨界设计</span><span>落地型策展</span><span>多场景适配</span><span>细节统筹</span></div></div>
+                  <div class="member-section"><h5>个人风格 / Style</h5><p class="member-style">以严苛标准与极致细节，让空间化作会说话的叙事场域。</p></div>
+                  <div class="member-section"><h5>人物介绍 / Profile</h5><p class="member-bio">深耕室内设计与策展领域十年的实干派。兼具务实灵活的应变力与严苛的标准感，擅长在多场景适配中精准统筹每一个微小细节，将前沿策展与跨界设计完美落地为极具沉浸感的现实空间。</p></div>
+                </div>
+              </article>
+              <article class="team-member has-photo">
+                <div class="member-photo"><img src="../assets/team-bf5a62cd.webp" alt="卢程室内设计工作环境商务形象照" loading="lazy" decoding="async"></div>
+                <div class="member-copy">
+                  <div class="member-name-row"><div><h4 class="member-name">卢程</h4><p class="member-label">空间叙事型选手 / 展陈与酒店</p></div></div>
+                  <div class="member-section"><h5>核心能力 / Expertise</h5><div class="skill-list"><span>室内设计</span><span>10年行业经验</span><span>展陈空间・酒店设计・跨界空间</span><span>文化叙事与工程逻辑协同</span><span>现场灵活取舍与品质把控</span></div></div>
+                  <div class="member-section"><h5>个人风格 / Style</h5><p class="member-style">以深厚文化叙事交织严谨工程逻辑，在现场千变万化中死守设计的灵魂与品质。</p></div>
+                  <div class="member-section"><h5>人物介绍 / Profile</h5><p class="member-bio">深耕室内设计与展陈酒店领域十年的实力派。擅长将深厚的文化叙事融入空间语言，兼顾美学艺术与硬核工程逻辑。以务实灵活的多方协同能力和对现场条件的精准把控，在取舍之间完美守护设计落地的至高品质。</p></div>
+                </div>
+              </article>
+              <article class="team-member has-photo">
+                <div class="member-photo"><img src="../assets/team-18ac7a88.webp" alt="张卫东商务形象照" loading="lazy" decoding="async"></div>
+                <div class="member-copy">
+                  <div class="member-name-row"><div><h4 class="member-name">张卫东</h4><p class="member-label">制作落地型选手 / 设计与安装</p></div></div>
+                  <div class="member-section"><h5>核心能力 / Expertise</h5><div class="skill-list"><span>广告设计</span><span>广告制作</span><span>现场安装</span><span>视觉呈现</span></div></div>
+                  <div class="member-section"><h5>个人风格 / Style</h5><p class="member-style">让创意从图纸走向现实，让视觉拥有硬核支撑。</p></div>
+                  <div class="member-section"><h5>人物介绍 / Profile</h5><p class="member-bio">专注广告会展行业多年，以严谨细致的追求完美态度，将每一个平面和空间创意完美复刻并稳固呈现于现实之中。</p></div>
+                </div>
+              </article>
+              <article class="team-member has-photo">
+                <div class="member-photo"><img src="../assets/team-03055977.webp" alt="费维东施工项目经理形象照" loading="lazy" decoding="async"></div>
+                <div class="member-copy">
+                  <div class="member-name-row"><div><h4 class="member-name">费维东</h4><p class="member-label">匠心工程统筹型选手 / 施工与全案落地</p></div></div>
+                  <div class="member-section"><h5>核心能力 / Expertise</h5><div class="skill-list"><span>装修行业25年资深老兵</span><span>展厅・酒店・餐饮・商铺全案施工</span><span>项目全流程管理（设计、材料、施工、落地）</span><span>严苛工程交付</span></div></div>
+                  <div class="member-section"><h5>个人风格 / Style</h5><p class="member-style">以25年极致匠心死磕每个细节，在日复一日的忙碌中将图纸完美筑为现实。</p></div>
+                  <div class="member-section"><h5>人物介绍 / Profile</h5><p class="member-bio">深耕装修行业二十五载的资深施工项目经理。从前期设计对接、材料严选到现场施工与最终完美落地，他以极其细致有条理的严苛标准和永无止境的完美主义，将每一张设计蓝图化作坚实、震撼的实体空间。</p></div>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section class="team-module reveal" aria-labelledby="module-7">
+            <header class="module-head"><span class="module-no">07</span><div><h3 id="module-7">舞美视听与现场执行</h3><p>Stage, Sound &amp; Live</p></div></header>
+            <div class="module-members">
+              <article class="team-member has-photo">
+                <div class="member-photo"><img src="../assets/team-46836398.webp" alt="唐军在录音棚调音台前的工作形象照" loading="lazy" decoding="async"></div>
+                <div class="member-copy">
+                  <div class="member-name-row"><div><h4 class="member-name">唐军</h4><p class="member-label">视听掌控型选手 / 舞美与执行</p></div></div>
+                  <div class="member-section"><h5>核心能力 / Expertise</h5><div class="skill-list"><span>舞台灯光</span><span>现场音控</span><span>活动执行</span><span>17年行业老兵</span></div></div>
+                  <div class="member-section"><h5>个人风格 / Style</h5><p class="member-style">在光影与声音交织的现场，把每一个瞬间做到极致。</p></div>
+                  <div class="member-section"><h5>人物介绍 / Profile</h5><p class="member-bio">十七年如一日的匠心坚守，诚信至上。无论是光影的明暗起伏，还是音符的完美落地，他都是现场一切震撼体验的幕后操盘手。</p></div>
+                </div>
+              </article>
+            </div>
+          </section>
+        </div>
+        <p class="team-note reveal">十四位实名成员齐整集结，以完整专业矩阵协同作战。</p>
+      </div>
+    </section>
+
+    <section class="section section-paper" id="services">
+      <div class="orbit" aria-hidden="true"></div>
+      <div class="shell">
+        <p class="eyebrow reveal">04 / Capability</p>
+        <h2 class="display reveal">我们能做<br><span class="red">什么</span></h2>
+        <p class="lead reveal">四大业务版块，覆盖从一个想法到一个真正可以使用、传播与落地的产品。</p>
+        <div class="cap-list">
+          <article class="cap reveal"><span class="cap-index">01</span><h3>AI 智能软件</h3><p>让 AI 真正进入业务，而不是为了 AI 而 AI。</p><div class="tags"><span class="tag">智能AI软件设计与开发</span><span class="tag">AI智能体</span><span class="tag">数字人 / 数字语音</span><span class="tag">本地大模型与知识库</span><span class="tag">企业AI应用</span><span class="tag">ITSM系统</span></div><i class="cap-tech" aria-hidden="true"></i></article>
+          <article class="cap reveal"><span class="cap-index">02</span><h3>文化展示空间</h3><p>先解决内容，再解决表达，最后让空间真正落地。</p><div class="tags"><span class="tag">展厅设计施工一体化</span><span class="tag">广告标识标牌</span><span class="tag">企业形象墙</span><span class="tag">文化内容策划</span><span class="tag">平面 / 三维视觉</span></div><i class="cap-tech" aria-hidden="true"></i></article>
+          <article class="cap reveal"><span class="cap-index">03</span><h3>影视与视频内容</h3><p>传统影视制作能力 × AI 内容生产力。</p><div class="tags"><span class="tag">宣传片</span><span class="tag">短视频拍摄制作</span><span class="tag">品牌视频</span><span class="tag">微电影</span><span class="tag">脚本策划</span><span class="tag">AIGC视频</span></div><i class="cap-tech" aria-hidden="true"></i></article>
+          <article class="cap reveal"><span class="cap-index">04</span><h3>活动与会务</h3><p>从创意策划到现场执行，让活动从“办完”变成“有效”。</p><div class="tags"><span class="tag">活动策划实施</span><span class="tag">会议 / 论坛 / 年会</span><span class="tag">发布会 / 庆典</span><span class="tag">品牌活动</span><span class="tag">公关活动</span><span class="tag">现场执行</span></div><i class="cap-tech" aria-hidden="true"></i></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-dark case-index" id="case-categories" aria-labelledby="case-categories-title">
+      <div class="case-index-grid" aria-hidden="true"></div>
+      <div class="shell">
+        <p class="eyebrow reveal">05 / Selected Works</p>
+        <h2 class="display reveal" id="case-categories-title">我们做过什么</h2>
+        <p class="lead reveal">真正的能力，不需要解释太多。让项目、过程与结果说话。</p>
+        <div class="case-category-list reveal" role="group" aria-label="筛选案例分类">
+          <button class="case-category active" type="button" data-filter="all" aria-pressed="true">全部</button>
+          <button class="case-category" type="button" data-filter="ai" aria-pressed="false">AI/软件</button>
+          <button class="case-category" type="button" data-filter="space" aria-pressed="false">空间/展厅</button>
+          <button class="case-category" type="button" data-filter="video" aria-pressed="false">影视/视频</button>
+          <button class="case-category" type="button" data-filter="event" aria-pressed="false">活动/会务</button>
+        </div>
+
+        <div class="works" aria-live="polite">
+          <a class="work-card reveal" data-category="space" href="../cases/#space" aria-label="查看六安烟草安全文化宣教室案例">
+            <div class="work-visual work-carousel" aria-hidden="true">
+              <div class="work-carousel-track">
+                <img src="../assets/work-770684ed.webp" alt="" loading="lazy">
+                <img src="../assets/work-5a2269cf.webp" alt="" loading="lazy">
+                <img src="../assets/work-ed122f35.webp" alt="" loading="lazy">
+                <img src="../assets/work-c95fecca.webp" alt="" loading="lazy">
+                <img src="../assets/work-a37faaa3.webp" alt="" loading="lazy">
+                <img src="../assets/work-c31ef742.webp" alt="" loading="lazy">
+              </div>
+            </div>
+            <div class="work-dots" aria-hidden="true"><span class="work-dot active"></span><span class="work-dot"></span><span class="work-dot"></span><span class="work-dot"></span><span class="work-dot"></span><span class="work-dot"></span></div>
+            <div class="work-content">
+              <div class="work-top"><span class="work-type">SPACE / EXHIBITION</span><span class="work-no">01</span></div>
+              <h3>六安烟草安全文化宣教室</h3>
+              <p>从墙面展示升级为可以参与、互动与学习的安全文化场景。</p>
+              <div class="work-meta">内容策划 / 空间规划 / 视觉设计 / AI互动 / 制作安装</div>
+              <span class="work-cta">查看案例</span>
+            </div>
+          </a>
+
+          <a class="work-card reveal" data-category="ai" href="../cases/#ai" aria-label="查看企业AI智能体案例">
+            <div class="work-visual work-ai" aria-hidden="true"></div>
+            <div class="work-content">
+              <div class="work-top"><span class="work-type">AI / ENTERPRISE</span><span class="work-no">02</span></div>
+              <h3>企业AI智能体</h3>
+              <p>整理内部资料、搭建知识库与智能问答，让沉淀的知识成为可调用的生产力。</p>
+              <div class="work-meta">知识库 / Agent设计 / 本地部署 / 系统开发</div>
+              <span class="work-cta">查看案例</span>
+            </div>
+          </a>
+
+          <a class="work-card reveal" data-category="video" href="../cases/#video" aria-label="查看企业宣传片案例">
+            <div class="work-visual work-film" aria-hidden="true"></div>
+            <div class="work-content">
+              <div class="work-top"><span class="work-type">FILM / BRAND</span><span class="work-no">03</span></div>
+              <h3>企业宣传片</h3>
+              <p>从品牌理解与脚本策划开始，而不是从摄影机开始。</p>
+              <div class="work-meta">策划 / 脚本 / 分镜 / 拍摄 / 剪辑 / AIGC</div>
+              <span class="work-cta">查看案例</span>
+            </div>
+          </a>
+
+          <a class="work-card reveal" data-category="event" href="../cases/#event" aria-label="查看品牌活动与发布会案例">
+            <div class="work-visual work-carousel" aria-hidden="true">
+              <div class="work-carousel-track">
+                <img src="../assets/work-89dd7772.webp" alt="" loading="lazy">
+                <img src="../assets/img-ee1db91e.webp" alt="" loading="lazy">
+                <img src="../assets/img-ea966af7.webp" alt="" loading="lazy">
+                <img src="../assets/img-a58dc4bd.webp" alt="" loading="lazy">
+                <img src="../assets/img-5d4d1157.webp" alt="" loading="lazy">
+                <img src="../assets/img-ed947a7f.webp" alt="" loading="lazy">
+                <img src="../assets/img-7e9fa62a.webp" alt="" loading="lazy">
+                <img src="../assets/img-c81542bd.webp" alt="" loading="lazy">
+              </div>
+            </div>
+            <div class="work-dots" aria-hidden="true"><span class="work-dot active"></span><span class="work-dot"></span><span class="work-dot"></span><span class="work-dot"></span><span class="work-dot"></span><span class="work-dot"></span><span class="work-dot"></span><span class="work-dot"></span></div>
+            <div class="work-content">
+              <div class="work-top"><span class="work-type">EVENT / EXPERIENCE</span><span class="work-no">04</span></div>
+              <h3>品牌活动与发布会</h3>
+              <p>从一个想法，到一场完整的现场体验，再到后续传播。</p>
+              <div class="work-meta">策划 / 视觉 / 空间 / 物料 / 执行 / 传播</div>
+              <span class="work-cta">查看案例</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-paper" id="process">
+      <div class="signal" aria-hidden="true"></div>
+      <div class="shell">
+        <p class="eyebrow reveal">06 / How we work</p>
+        <h2 class="display reveal">我们怎么<br><span class="red">做</span></h2>
+        <p class="lead reveal">不靠人海战术，靠专业与效率。先把问题定义清楚，再把资源投向正确的解法。</p>
+        <div class="steps">
+          <article class="step reveal"><span class="step-no">Step 01</span><h3>听懂需求</h3><p>先理解你真正想解决的问题，而不是急着卖方案。</p></article>
+          <article class="step reveal"><span class="step-no">Step 02</span><h3>定义问题</h3><p>明确目标、预算、时间、受众与最终成果。</p></article>
+          <article class="step reveal"><span class="step-no">Step 03</span><h3>组织能力</h3><p>客户需要什么，就为项目组合什么专业能力。</p></article>
+          <article class="step reveal"><span class="step-no">Step 04</span><h3>AI 赋能</h3><p>让 AI 进入研究、方案、设计、代码与内容流程。</p></article>
+          <article class="step reveal"><span class="step-no">Step 05</span><h3>快速打样</h3><p>先做 Demo、原型、样稿、样片或效果图，尽早验证。</p></article>
+          <article class="step reveal"><span class="step-no">Step 06</span><h3>最终落地</h3><p>从设计到开发、制作、施工、执行与交付，形成闭环。</p></article>
+        </div>
+        <div class="process-end reveal"><span>AI 负责提高效率</span><b>+</b><span>人负责最终判断</span></div>
+      </div>
+    </section>
+
+    <section class="section section-dark" id="why">
+      <div class="shell">
+        <p class="eyebrow reveal">07 / Why Jiulong</p>
+        <h2 class="display reveal">把“小”重新定义成<span class="red">优势。</span></h2>
+        <div class="why-grid">
+          <article class="why reveal"><b>01 / SMALL</b><h3>小</h3><p>没有庞大的组织成本，让预算回到项目本身。</p></article>
+          <article class="why reveal"><b>02 / FAST</b><h3>快</h3><p>减少内部沟通层级，直接和做项目的人沟通。</p></article>
+          <article class="why reveal"><b>03 / PRO</b><h3>专</h3><p>用专业经验理解问题，不套用模板。</p></article>
+          <article class="why reveal"><b>04 / AI</b><h3>AI</h3><p>让专业能力获得超级生产力。</p></article>
+          <article class="why reveal"><b>05 / FLEX</b><h3>活</h3><p>一个项目，一套能力组合。</p></article>
+          <article class="why reveal"><b>06 / VALUE</b><h3>值</h3><p>不追最低价，追求更合理的项目价值。</p></article>
+        </div>
+        <p class="manifesto reveal">我们不追求把公司做得很大。<br>我们只希望把每一个项目，<span>做好。</span></p>
+      </div>
+    </section>
+
+    <section class="section section-red contact" id="contact">
+      <div class="contact-rings" aria-hidden="true"></div>
+      <div class="shell">
+        <p class="eyebrow reveal">08 / Contact</p>
+        <h2 class="display reveal">有一个想法？<br>和九龙战队聊聊。</h2>
+        <p class="lead reveal">你可以带着完整需求来，也可以只有一个模糊的想法。从一个想法开始，把它真正做出来。</p>
+        <div class="brief reveal"><h3>第一次沟通，建议准备</h3><ol><li>项目类型与核心目标</li><li>预期交付时间</li><li>大致预算范围</li><li>已有资料与参考方向</li></ol><button class="copy-btn" type="button" id="copy-brief">复制项目沟通清单</button></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell">
+      <div class="footer-brand"><img src="../assets/brand-45114d43.png" alt="九龙文化红章标志"><div><h2>九龙战队</h2><p>Jiulong Squad · Hefei</p></div></div>
+      <div class="footer-links"><a href="#about">我们是谁</a><a href="#team">十四人战队</a><a href="#services">四大业务</a><a href="#case-categories">项目案例</a><a href="#process">工作方法</a><a href="#contact">开始沟通</a></div>
+      <div class="footer-bottom"><span>合肥九龙文化传播有限责任公司<br>© 2026 JIULONG SQUAD</span><a class="top-link" href="#top">返回顶部 ↑</a></div>
+    </div>
+  </footer>
+  <div class="toast" id="toast" role="status" aria-live="polite">沟通清单已复制</div>
+
+  <script>
+    (function(){
+      var heroVideo=document.querySelector('.hero-video');
+      function startHeroVideo(){if(!heroVideo)return;heroVideo.muted=true;var playAttempt=heroVideo.play();if(playAttempt&&playAttempt.catch)playAttempt.catch(function(){})}
+      if(heroVideo){heroVideo.addEventListener('canplay',startHeroVideo,{once:true});document.addEventListener('visibilitychange',function(){if(!document.hidden)startHeroVideo()});window.addEventListener('pageshow',startHeroVideo)}
+
+      var menuBtn=document.querySelector('.menu-btn'), menu=document.getElementById('mobile-menu');
+      function setMenu(open){menuBtn.setAttribute('aria-expanded',String(open));menuBtn.setAttribute('aria-label',open?'关闭导航菜单':'打开导航菜单');menu.setAttribute('aria-hidden',String(!open));menu.classList.toggle('open',open);document.body.classList.toggle('menu-open',open)}
+      menuBtn.addEventListener('click',function(){setMenu(menuBtn.getAttribute('aria-expanded')!=='true')});
+      menu.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){setMenu(false)})});
+      document.addEventListener('keydown',function(e){if(e.key==='Escape')setMenu(false)});
+
+      var reveals=document.querySelectorAll('.reveal');
+      if('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches){
+        var observer=new IntersectionObserver(function(entries){entries.forEach(function(entry){if(entry.isIntersecting){entry.target.classList.add('in');observer.unobserve(entry.target)}})},{threshold:.08,rootMargin:'0px 0px -30px'});
+        reveals.forEach(function(el){observer.observe(el)});
+      } else {reveals.forEach(function(el){el.classList.add('in')})}
+
+      /* In-page work filtering */
+      var filterButtons=document.querySelectorAll('.case-category[data-filter]'),workCards=document.querySelectorAll('.work-card[data-category]');
+      filterButtons.forEach(function(button){
+        button.addEventListener('click',function(){
+          var filter=button.getAttribute('data-filter');
+          filterButtons.forEach(function(item){var selected=item===button;item.classList.toggle('active',selected);item.setAttribute('aria-pressed',String(selected))});
+          workCards.forEach(function(card){card.classList.toggle('hidden',filter!=='all'&&card.getAttribute('data-category')!==filter)});
+        });
+      });
+
+      /* Six-image carousel: autoplay plus horizontal touch swipe */
+      document.querySelectorAll('.work-carousel').forEach(function(carousel){
+        var card=carousel.closest('.work-card'),track=carousel.querySelector('.work-carousel-track'),slides=track.querySelectorAll('img'),dots=card.querySelectorAll('.work-dot'),index=0,startX=0,deltaX=0,dragging=false,swiped=false,timer;
+        function show(next){index=(next+slides.length)%slides.length;track.style.transform='translate3d('+(-index*100)+'%,0,0)';dots.forEach(function(dot,i){dot.classList.toggle('active',i===index)})}
+        function startTimer(){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;clearInterval(timer);timer=setInterval(function(){show(index+1)},4800)}
+        carousel.addEventListener('pointerdown',function(e){if(e.pointerType==='mouse'&&e.button!==0)return;dragging=true;swiped=false;startX=e.clientX;deltaX=0;clearInterval(timer);carousel.setPointerCapture(e.pointerId)});
+        carousel.addEventListener('pointermove',function(e){if(!dragging)return;deltaX=e.clientX-startX;if(Math.abs(deltaX)>8)swiped=true});
+        function endDrag(){if(!dragging)return;dragging=false;if(Math.abs(deltaX)>42)show(index+(deltaX<0?1:-1));startTimer()}
+        carousel.addEventListener('pointerup',endDrag);carousel.addEventListener('pointercancel',endDrag);
+        card.addEventListener('click',function(e){if(swiped){e.preventDefault();swiped=false}});
+        card.addEventListener('mouseenter',function(){clearInterval(timer)});card.addEventListener('mouseleave',startTimer);
+        show(0);startTimer();
+      });
+
+      var copyBtn=document.getElementById('copy-brief'),toast=document.getElementById('toast');
+      copyBtn.addEventListener('click',function(){
+        var text='九龙战队项目沟通清单\n1. 项目类型：\n2. 核心目标：\n3. 预期交付时间：\n4. 大致预算范围：\n5. 已有资料：\n6. 参考方向：';
+        function done(){copyBtn.textContent='已复制，可直接发送';copyBtn.classList.add('done');toast.classList.add('show');setTimeout(function(){toast.classList.remove('show')},1800)}
+        if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(text).then(done)}else{var t=document.createElement('textarea');t.value=text;t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();done()}
+      });
+
+      /* Lightweight hero network: capped nodes/DPR and no work when reduced motion */
+      var canvas=document.getElementById('hero-canvas'),ctx=canvas.getContext('2d'),reduce=matchMedia('(prefers-reduced-motion: reduce)').matches,nodes=[],raf;
+      function resize(){var r=canvas.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,1.5);canvas.width=r.width*d;canvas.height=r.height*d;ctx.setTransform(d,0,0,d,0,0);nodes=Array.from({length:Math.min(26,Math.max(16,Math.round(r.width/20)))},function(){return{x:Math.random()*r.width,y:Math.random()*r.height,vx:(Math.random()-.5)*.14,vy:(Math.random()-.5)*.14}});draw(true)}
+      function draw(still){var w=canvas.clientWidth,h=canvas.clientHeight;ctx.clearRect(0,0,w,h);for(var i=0;i<nodes.length;i++){var n=nodes[i];if(!still){n.x+=n.vx;n.y+=n.vy;if(n.x<0||n.x>w)n.vx*=-1;if(n.y<0||n.y>h)n.vy*=-1}ctx.fillStyle=i%6===0?'rgba(215,25,32,.72)':'rgba(255,255,255,.28)';ctx.beginPath();ctx.arc(n.x,n.y,i%6===0?1.8:1,0,Math.PI*2);ctx.fill();for(var j=i+1;j<nodes.length;j++){var m=nodes[j],dx=n.x-m.x,dy=n.y-m.y,dist=Math.sqrt(dx*dx+dy*dy);if(dist<108){ctx.strokeStyle='rgba(255,255,255,'+((1-dist/108)*.12)+')';ctx.lineWidth=.6;ctx.beginPath();ctx.moveTo(n.x,n.y);ctx.lineTo(m.x,m.y);ctx.stroke()}}}if(!reduce&&!still)raf=requestAnimationFrame(function(){draw(false)})}
+      resize();if(!reduce)draw(false);window.addEventListener('resize',function(){cancelAnimationFrame(raf);resize();if(!reduce)draw(false)},{passive:true});
+    })();
+  </script>
+</body>
+</html>

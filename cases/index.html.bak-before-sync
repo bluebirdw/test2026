@@ -1,0 +1,1735 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-7d0d519a.png">
+  <link rel="icon" type="image/png" sizes="64x64" href="../assets/favicon-2b508d1f.png">
+  <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../assets/touchicon-3797c1a9.png">
+  <title>项目案例｜九龙战队</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;800;900&family=Oswald:wght@500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #f3f2ef;
+      --surface: #ffffff;
+      --surface-2: #e8e6e1;
+      --ink: #141414;
+      --muted: #686661;
+      --line: rgba(17,17,17,.15);
+      --strong-line: rgba(17,17,17,.3);
+      --accent: #c60012;
+      --accent-2: #8b000d;
+      --accent-ink: #fff;
+      --shadow: 0 24px 70px rgba(25,18,18,.12);
+      --header-bg: rgba(243,242,239,.9);
+      --modal: rgba(8,8,9,.94);
+      --grain: .035;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #08090a;
+        --surface: #111214;
+        --surface-2: #191b1e;
+        --ink: #f5f3ef;
+        --muted: #aaa7a1;
+        --line: rgba(255,255,255,.12);
+        --strong-line: rgba(255,255,255,.28);
+        --accent: #e00018;
+        --accent-2: #920010;
+        --accent-ink: #fff;
+        --shadow: 0 30px 90px rgba(0,0,0,.48);
+        --header-bg: rgba(8,9,10,.9);
+        --modal: rgba(3,3,4,.95);
+        --grain: .07;
+      }
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-width: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Noto Sans SC", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    body.modal-open { overflow: hidden; }
+    button, a { font: inherit; }
+    button { color: inherit; }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+
+    .tech-field {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      overflow: hidden;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 14% 6%, color-mix(in srgb, var(--accent) 11%, transparent), transparent 24rem),
+        linear-gradient(var(--line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line) 1px, transparent 1px);
+      background-size: auto, 72px 72px, 72px 72px;
+      mask-image: linear-gradient(to bottom, #000 0, rgba(0,0,0,.62) 32%, transparent 80%);
+    }
+    .tech-field::before {
+      content: "";
+      position: absolute;
+      width: 48vw;
+      aspect-ratio: 1;
+      right: -18vw;
+      top: 10vh;
+      border: 1px solid var(--strong-line);
+      border-radius: 50%;
+      box-shadow: 0 0 0 5vw color-mix(in srgb, var(--accent) 3%, transparent), 0 0 0 10vw var(--line);
+      animation: pulseRing 12s ease-in-out infinite;
+    }
+    .tech-field::after {
+      content: "";
+      position: absolute;
+      inset: -20% 0 auto;
+      height: 32%;
+      background: linear-gradient(to bottom, transparent, color-mix(in srgb, var(--accent) 9%, transparent), transparent);
+      animation: scan 8s linear infinite;
+    }
+    @keyframes scan { to { transform: translateY(160vh); } }
+    @keyframes pulseRing { 50% { transform: scale(1.08); opacity: .5; } }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      height: 78px;
+      border-bottom: 1px solid var(--line);
+      background: var(--header-bg);
+      backdrop-filter: blur(18px);
+    }
+    .header-inner {
+      width: min(1240px, calc(100% - 48px));
+      height: 100%;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      min-width: 0;
+    }
+    .brand img { width: 45px; height: 45px; object-fit: contain; }
+    .brand-title {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.2;
+      font-weight: 800;
+      letter-spacing: .05em;
+    }
+    .brand-title small {
+      display: block;
+      margin-top: 4px;
+      font-family: "Oswald", sans-serif;
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: .23em;
+      color: var(--muted);
+    }
+    .home-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+    .home-link svg { width: 18px; transition: transform .2s ease; }
+    .home-link:hover svg { transform: translateX(-4px); }
+
+    .hero {
+      width: min(1240px, calc(100% - 48px));
+      margin: 0 auto;
+      padding: 96px 0 64px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 390px);
+      gap: 64px;
+      align-items: end;
+      border-bottom: 1px solid var(--strong-line);
+    }
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(58px, 8vw, 118px);
+      line-height: .9;
+      letter-spacing: -.065em;
+      font-weight: 900;
+    }
+    .hero h1 span { color: var(--accent); }
+    .hero-copy { padding-bottom: 6px; }
+    .hero-copy p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.9;
+    }
+    .hero-index {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+      font-family: "Oswald", sans-serif;
+      font-size: 13px;
+      letter-spacing: .18em;
+      font-weight: 600;
+    }
+    .hero-index::before { content: ""; width: 38px; height: 3px; background: var(--accent); }
+
+    .tabs-wrap {
+      position: sticky;
+      top: 78px;
+      z-index: 20;
+      border-bottom: 1px solid var(--line);
+      background: var(--header-bg);
+      backdrop-filter: blur(18px);
+    }
+    .tabs {
+      width: min(1240px, calc(100% - 48px));
+      margin: auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
+    .tab {
+      position: relative;
+      min-height: 70px;
+      padding: 12px 16px;
+      border: 0;
+      border-right: 1px solid var(--line);
+      background: transparent;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 15px;
+      transition: color .2s ease, background .2s ease;
+    }
+    .tab:first-child { border-left: 1px solid var(--line); }
+    .tab::after {
+      content: "";
+      position: absolute;
+      left: 20%; right: 20%; bottom: -1px;
+      height: 3px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transition: transform .22s ease;
+    }
+    .tab[aria-selected="true"] { color: var(--accent); background: color-mix(in srgb, var(--accent) 5%, transparent); }
+    .tab[aria-selected="true"]::after { transform: scaleX(1); }
+
+    main { min-height: 72vh; }
+    .panel {
+      width: min(1240px, calc(100% - 48px));
+      margin: 0 auto;
+      padding: 68px 0 104px;
+    }
+    .panel[hidden] { display: none; }
+    .panel-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 32px;
+      margin-bottom: 44px;
+    }
+    .panel-heading h2 { margin: 0; font-size: clamp(28px, 4vw, 52px); letter-spacing: -.04em; }
+    .panel-heading p { margin: 0 0 5px; color: var(--muted); font-size: 13px; letter-spacing: .08em; }
+
+    .case-list { display: grid; gap: 40px; }
+    .case-card {
+      display: grid;
+      grid-template-columns: minmax(0, 1.52fr) minmax(320px, .82fr);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .case-card:nth-child(even) { grid-template-columns: minmax(320px, .82fr) minmax(0, 1.52fr); }
+    .case-card:nth-child(even) .gallery { order: 2; }
+    .gallery {
+      position: relative;
+      min-width: 0;
+      aspect-ratio: 16/9;
+      background: #070707;
+      overflow: hidden;
+      touch-action: pan-y;
+      user-select: none;
+    }
+    .gallery-track { width: 100%; height: 100%; position: relative; }
+    .gallery-slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity .42s ease;
+      cursor: zoom-in;
+      border: 0;
+      padding: 0;
+      background: #000;
+      width: 100%;
+    }
+    .gallery-slide.is-active { opacity: 1; z-index: 1; }
+    .gallery-slide img { width: 100%; height: 100%; object-fit: cover; }
+    .gallery::after {
+      content: "";
+      position: absolute;
+      z-index: 2;
+      inset: auto 0 0;
+      height: 34%;
+      background: linear-gradient(to top, rgba(0,0,0,.58), transparent);
+      pointer-events: none;
+    }
+    .gallery-nav {
+      position: absolute;
+      z-index: 4;
+      right: 20px;
+      bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .gallery-btn, .lightbox-btn, .lightbox-close {
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255,255,255,.35);
+      background: rgba(10,10,11,.72);
+      color: white;
+      cursor: pointer;
+      transition: background .2s ease, border-color .2s ease;
+    }
+    .gallery-btn { width: 42px; height: 42px; }
+    .gallery-btn:hover, .lightbox-btn:hover, .lightbox-close:hover { background: var(--accent); border-color: var(--accent); }
+    .gallery-btn svg { width: 19px; }
+    .gallery-count {
+      position: absolute;
+      z-index: 4;
+      left: 22px;
+      bottom: 19px;
+      color: white;
+      font-family: "Oswald", sans-serif;
+      font-size: 13px;
+      letter-spacing: .15em;
+    }
+    .swipe-hint {
+      position: absolute;
+      z-index: 4;
+      top: 16px;
+      right: 16px;
+      display: none;
+      padding: 6px 9px;
+      color: white;
+      background: rgba(0,0,0,.55);
+      font-size: 10px;
+      letter-spacing: .06em;
+    }
+    .case-copy {
+      position: relative;
+      padding: clamp(32px, 5vw, 64px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-width: 0;
+    }
+    .case-number {
+      position: absolute;
+      top: 26px;
+      right: 28px;
+      font-family: "Oswald", sans-serif;
+      color: color-mix(in srgb, var(--ink) 10%, transparent);
+      font-size: 70px;
+      font-weight: 600;
+      line-height: 1;
+    }
+    .case-category {
+      position: relative;
+      align-self: flex-start;
+      margin: 0 0 22px;
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .15em;
+    }
+    .case-category::before { content: ""; display: inline-block; width: 28px; height: 2px; margin: 0 10px 3px 0; background: var(--accent); }
+    .case-copy h3 {
+      position: relative;
+      margin: 0 0 14px;
+      max-width: 10em;
+      font-size: clamp(27px, 3.2vw, 43px);
+      line-height: 1.16;
+      letter-spacing: -.045em;
+    }
+    .case-tagline {
+      position: relative;
+      margin: 0 0 20px;
+      font-weight: 700;
+      font-size: 15px;
+      line-height: 1.55;
+      color: var(--ink);
+    }
+    .case-description {
+      position: relative;
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.95;
+    }
+    .case-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 26px;
+    }
+    .case-meta span { padding: 6px 9px; border: 1px solid var(--line); font-size: 11px; color: var(--muted); }
+    .case-account {
+      margin: 20px 0 0;
+      padding: 14px 16px;
+      border: 1px solid color-mix(in srgb, var(--accent) 46%, var(--line));
+      background: color-mix(in srgb, var(--accent) 7%, var(--surface));
+      color: var(--ink);
+      font-family: "Oswald", "Noto Sans SC", sans-serif;
+      font-size: 13px;
+      line-height: 1.65;
+      letter-spacing: .035em;
+    }
+    .case-account strong { color: var(--accent); font-weight: 700; }
+    .case-actions { display: flex; margin-top: 20px; }
+    .external-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 42px;
+      padding: 0 16px;
+      border: 1px solid var(--ink);
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      transition: color .2s ease, background .2s ease, border-color .2s ease;
+    }
+    .external-link:hover { color: var(--accent-ink); background: var(--accent); border-color: var(--accent); }
+    .external-link svg { width: 16px; height: 16px; }
+
+    .gallery-play { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; z-index: 3; }
+    .gallery-play > span {
+      width: clamp(56px, 6.2vw, 76px);
+      height: clamp(56px, 6.2vw, 76px);
+      border-radius: 50%;
+      background: rgba(0, 0, 0, .44);
+      border: 1px solid rgba(255, 255, 255, .78);
+      display: grid;
+      place-items: center;
+      color: #fff;
+      backdrop-filter: blur(2px);
+    }
+    .gallery-play svg { width: 34%; height: 34%; margin-left: 8%; }
+
+    .empty-state {
+      min-height: 390px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      border-top: 1px solid var(--strong-line);
+      border-bottom: 1px solid var(--strong-line);
+      background: repeating-linear-gradient(135deg, transparent 0 14px, color-mix(in srgb, var(--ink) 2.5%, transparent) 14px 15px);
+    }
+    .empty-state strong { display: block; font-size: clamp(28px, 5vw, 56px); letter-spacing: -.04em; }
+    .empty-state span { display: block; margin-top: 12px; color: var(--muted); font-size: 13px; letter-spacing: .1em; }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 34px 24px calc(34px + env(safe-area-inset-bottom));
+      color: var(--muted);
+      text-align: center;
+      font-size: 12px;
+      letter-spacing: .08em;
+    }
+
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 70px 90px;
+      background: var(--modal);
+    }
+    .lightbox.is-open { display: flex; }
+    .lightbox-figure { margin: 0; width: min(1320px, 100%); }
+    .lightbox img { width: 100%; max-height: calc(100vh - 170px); object-fit: contain; }
+    .lightbox figcaption { margin-top: 14px; color: #c9c6c1; text-align: center; font-size: 12px; letter-spacing: .05em; }
+    .lightbox-close { position: absolute; top: 22px; right: 24px; width: 46px; height: 46px; }
+    .lightbox-btn { position: absolute; top: 50%; width: 50px; height: 60px; transform: translateY(-50%); }
+    .lightbox-btn.prev { left: 22px; }
+    .lightbox-btn.next { right: 22px; }
+    .lightbox svg { width: 22px; }
+
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; gap: 30px; padding-top: 72px; }
+      .hero-copy { max-width: 560px; }
+      .case-card, .case-card:nth-child(even) { grid-template-columns: 1fr; }
+      .case-card:nth-child(even) .gallery { order: 0; }
+      .case-copy { padding: 42px; }
+    }
+    @media (max-width: 640px) {
+      .site-header { height: 66px; }
+      .header-inner, .hero, .panel, .tabs { width: min(100% - 28px, 1240px); }
+      .brand img { width: 37px; height: 37px; }
+      .brand-title { font-size: 15px; }
+      .brand-title small { display: none; }
+      .home-link span { display: none; }
+      .hero { padding: 58px 0 42px; }
+      .hero h1 { font-size: clamp(50px, 18vw, 78px); }
+      .hero-copy p { font-size: 14px; }
+      .tabs-wrap { top: 66px; }
+      .tabs { grid-template-columns: repeat(2, 1fr); }
+      .tab { min-height: 52px; padding: 8px 5px; border-bottom: 1px solid var(--line); font-size: 12px; }
+      .tab:nth-child(3) { border-left: 1px solid var(--line); }
+      .panel { padding: 46px 0 72px; }
+      .panel-heading { display: block; margin-bottom: 28px; }
+      .panel-heading p { margin-top: 12px; }
+      .case-list { gap: 26px; }
+      .case-copy { padding: 32px 24px 34px; }
+      .case-number { top: 22px; right: 22px; font-size: 52px; }
+      .case-copy h3 { font-size: 29px; }
+      .case-category { margin-bottom: 17px; }
+      .gallery { aspect-ratio: 4/3; }
+      .gallery-nav { right: 12px; bottom: 12px; }
+      .gallery-btn { width: 38px; height: 38px; }
+      .gallery-count { left: 14px; bottom: 14px; }
+      .swipe-hint { display: block; }
+      .lightbox { padding: 76px 12px 84px; }
+      .lightbox img { max-height: calc(100vh - 190px); }
+      .lightbox-btn { top: auto; bottom: 18px; width: 52px; height: 48px; transform: none; }
+      .lightbox-btn.prev { left: calc(50% - 60px); }
+      .lightbox-btn.next { right: calc(50% - 60px); }
+      .lightbox-close { top: 16px; right: 16px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+    .case-episodes {
+      order: 3;
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      padding: 0 clamp(32px, 5vw, 64px) clamp(32px, 5vw, 64px);
+    }
+    .case-episodes a { display: flex; align-items: center; gap: 8px; padding: 11px 13px; border: 1px solid var(--line); color: var(--ink); text-decoration: none; font-size: 12.5px; line-height: 1.5; transition: color .2s ease, background .2s ease, border-color .2s ease; }
+    .case-episodes a:hover { color: var(--accent-ink); background: var(--accent); border-color: var(--accent); }
+    .case-episodes b { flex: none; font-family: "Oswald", "Noto Sans SC", sans-serif; font-weight: 600; letter-spacing: .05em; color: var(--accent); }
+    .case-episodes a:hover b { color: inherit; }
+    .case-episodes svg { flex: none; width: 13px; height: 13px; margin-left: auto; }
+    @media (max-width: 980px) { .case-episodes { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 720px) { .case-episodes { grid-template-columns: 1fr; padding: 0 24px 34px; } }
+    .case-episodes.is-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    @media (max-width: 980px) { .case-episodes.is-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 720px) { .case-episodes.is-3 { grid-template-columns: 1fr; } }
+
+  </style>
+</head>
+<body>
+  <div class="tech-field" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand">
+        <picture>
+          <source srcset="../assets/brand-45114d43.png" media="(prefers-color-scheme: dark)">
+          <img src="../assets/img-8f3bf102.png" alt="九龙战队标志">
+        </picture>
+        <p class="brand-title">项目案例<small>SELECTED WORKS</small></p>
+      </div>
+      <a class="home-link" href="../" aria-label="返回首页">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 18l-6-6 6-6M9 12h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>返回首页</span>
+      </a>
+    </div>
+  </header>
+
+  <section class="hero" aria-labelledby="page-title">
+    <h1 id="page-title">作品<span>，</span><br>即答案</h1>
+    <div class="hero-copy">
+      <div class="hero-index">CASE ARCHIVE / 01</div>
+      <p>从策略与设计，到制作与交付。这里收录九龙战队在四大业务版块中的代表实践，以真实空间与成果，回答每一次托付。</p>
+    </div>
+  </section>
+
+  <div class="tabs-wrap">
+    <div class="tabs" role="tablist" aria-label="案例分类">
+      <button class="tab" id="tab-ai" role="tab" aria-selected="true" aria-controls="panel-ai">AI智能软件</button>
+      <button class="tab" id="tab-space" role="tab" aria-selected="false" aria-controls="panel-space" tabindex="-1">文化展示空间</button>
+      <button class="tab" id="tab-video" role="tab" aria-selected="false" aria-controls="panel-video" tabindex="-1">影视与视频内容</button>
+      <button class="tab" id="tab-event" role="tab" aria-selected="false" aria-controls="panel-event" tabindex="-1">活动与会务</button>
+    </div>
+  </div>
+
+  <main>
+    <section class="panel" id="panel-ai" role="tabpanel" aria-labelledby="tab-ai">
+      <div class="panel-heading"><h2>AI智能软件</h2><p>AI INTELLIGENCE & SOFTWARE · 01 PROJECT</p></div>
+      <div class="case-list">
+        <article class="case-card" data-case-title="ServiceTrack 新一代ITSM智能运维平台">
+          <div class="gallery" aria-label="ServiceTrack新一代ITSM智能运维平台项目图片轮播">
+            <div class="gallery-track" role="button" tabindex="0" aria-label="点击放大当前图片">
+              <div class="gallery-slide is-active" data-caption="平台首页"><img src="../assets/case-d65812de.webp" alt="ServiceTrack新一代ITSM智能运维平台首页"></div>
+              <div class="gallery-slide" data-caption="产品能力"><img src="../assets/case-a4b0d2b1.webp" alt="ServiceTrack产品能力页面" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="智能工作台"><img src="../assets/case-e26f5f6c.webp" alt="ServiceTrack智能工作台界面" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="工单详情"><img src="../assets/case-f3bbb2ae.webp" alt="ServiceTrack工单详情界面" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="产品试用"><img src="../assets/case-b97d9da8.webp" alt="ServiceTrack产品试用页面" loading="lazy"></div>
+            </div>
+            <span class="swipe-hint">左右滑动</span>
+            <span class="gallery-count" aria-live="polite">01 / 05</span>
+            <div class="gallery-nav">
+              <button class="gallery-btn prev" type="button" aria-label="上一张"><svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+              <button class="gallery-btn next" type="button" aria-label="下一张"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+            </div>
+          </div>
+          <div class="case-copy">
+            <span class="case-number">01</span>
+            <p class="case-category">AI智能软件 · ITSM</p>
+            <h3>ServiceTrack 新一代ITSM智能运维平台</h3>
+            <p class="case-tagline">AI驱动 · 让IT服务管理快人一步</p>
+            <p class="case-description">AI驱动的新一代ITSM智能运维平台，让IT服务管理快人一步。</p>
+            <p class="case-account"><strong>测试账号</strong>：zhoujiajie&nbsp;&nbsp;/&nbsp;&nbsp;<strong>密码</strong>：123456</p>
+            <div class="case-meta"><span>AI智能问答</span><span>AI智能派单</span><span>ITIL流程管理</span><span>CMDB</span><span>知识库</span></div>
+            <div class="case-actions">
+              <a class="external-link" href="https://www.newquery.com.cn/" target="_blank" rel="noopener noreferrer">访问官网<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 5h5v5M19 5l-8 8M19 13v6H5V5h6" stroke="currentColor" stroke-width="1.7"/></svg></a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-space" role="tabpanel" aria-labelledby="tab-space" hidden>
+      <div class="panel-heading"><h2>文化展示空间</h2><p>CULTURAL EXHIBITION SPACE · 08 PROJECTS</p></div>
+      <div class="case-list">
+        <article class="case-card" data-case-title="六安烟草安全文化宣教室">
+          <div class="gallery" aria-label="六安烟草安全文化宣教室项目图片轮播">
+            <div class="gallery-track" role="button" tabindex="0" aria-label="点击放大当前图片">
+              <div class="gallery-slide is-active" data-caption="主形象空间"><img src="../assets/work-770684ed.webp" alt="六安烟草安全文化宣教室主形象空间"></div>
+              <div class="gallery-slide" data-caption="参观走廊"><img src="../assets/work-5a2269cf.webp" alt="六安烟草安全文化宣教室参观走廊效果图" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="文化展墙"><img src="../assets/work-ed122f35.webp" alt="六安烟草安全文化宣教室文化展墙效果图" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="VR互动体验区"><img src="../assets/work-c95fecca.webp" alt="六安烟草安全文化宣教室VR互动体验区效果图" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="AI大屏互动区"><img src="../assets/work-a37faaa3.webp" alt="六安烟草安全文化宣教室AI大屏互动区效果图" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="应急演练区"><img src="../assets/work-c31ef742.webp" alt="六安烟草安全文化宣教室应急演练区效果图" loading="lazy"></div>
+            </div>
+            <span class="swipe-hint">左右滑动</span>
+            <span class="gallery-count" aria-live="polite">01 / 06</span>
+            <div class="gallery-nav">
+              <button class="gallery-btn prev" type="button" aria-label="上一张"><svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+              <button class="gallery-btn next" type="button" aria-label="下一张"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+            </div>
+          </div>
+          <div class="case-copy">
+            <span class="case-number">01</span>
+            <p class="case-category">安全文化 · 数字互动</p>
+            <h3>六安烟草安全文化宣教室</h3>
+            <p class="case-tagline">萃炼安全匠心 · 智筑平安六烟</p>
+            <p class="case-description">为六安烟草打造的安全文化宣教空间——主形象墙、VR互动体验、AI大屏、应急演练区一体成型，科技感与文化叙事兼得。</p>
+            <div class="case-meta"><span>空间设计</span><span>多媒体互动</span><span>落地实施</span></div>
+          </div>
+        </article>
+
+        <article class="case-card" data-case-title="六安烟草劳模创新工作室">
+          <div class="gallery" aria-label="六安烟草劳模创新工作室项目图片轮播">
+            <div class="gallery-track" role="button" tabindex="0" aria-label="点击放大当前图片">
+              <div class="gallery-slide is-active" data-caption="入口形象空间"><img src="../assets/case-3c5459f0.webp" alt="六安烟草劳模创新工作室入口形象空间"></div>
+              <div class="gallery-slide" data-caption="精神客厅"><img src="../assets/case-57671396.webp" alt="六安烟草劳模创新工作室精神客厅效果图" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="办公空间"><img src="../assets/case-42836d34.webp" alt="六安烟草劳模创新工作室办公空间效果图" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="研讨空间"><img src="../assets/case-95fc3100.webp" alt="六安烟草劳模创新工作室研讨空间效果图" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="实训工作台"><img src="../assets/case-6b8f1bc4.webp" alt="六安烟草劳模创新工作室实训工作台效果图" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="空间全景"><img src="../assets/case-1d660199.webp" alt="六安烟草劳模创新工作室空间全景效果图" loading="lazy"></div>
+            </div>
+            <span class="swipe-hint">左右滑动</span>
+            <span class="gallery-count" aria-live="polite">01 / 06</span>
+            <div class="gallery-nav">
+              <button class="gallery-btn prev" type="button" aria-label="上一张"><svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+              <button class="gallery-btn next" type="button" aria-label="下一张"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+            </div>
+          </div>
+          <div class="case-copy">
+            <span class="case-number">02</span>
+            <p class="case-category">劳模精神 · 匠心传承</p>
+            <h3>六安烟草劳模创新工作室</h3>
+            <p class="case-tagline">高志强（智立方）劳模创新工作室</p>
+            <p class="case-description">以劳模精神为内核的创新工作室——精神客厅、实训工作台、研讨空间一应俱全，让匠心传承看得见、摸得着。</p>
+            <div class="case-meta"><span>空间策展</span><span>文化叙事</span><span>全案落地</span></div>
+          </div>
+        </article>
+            <article class="case-card" data-case-title="国科能源（滁州）有限公司企业展厅">
+              <div class="gallery" aria-label="国科能源（滁州）有限公司企业展厅项目图片轮播">
+                <div class="gallery-track" role="button" tabindex="0" aria-label="点击放大当前图片">
+                <div class="gallery-slide is-active" data-caption="入口形象屏 ·「NETC 国科能源」"><img src="../assets/case-guoke-hall-01.webp" alt="国科能源（滁州）有限公司企业展厅 · 入口形象屏 ·「NETC 国科能源」" width="1200" height="675" decoding="async"></div>
+                <div class="gallery-slide" data-caption="展厅整体布局鸟瞰"><img src="../assets/case-guoke-hall-02.webp" alt="国科能源（滁州）有限公司企业展厅 · 展厅整体布局鸟瞰" loading="lazy" width="1200" height="675" decoding="async"></div>
+                <div class="gallery-slide" data-caption="序厅门头与迎宾形象墙"><img src="../assets/case-guoke-hall-03.webp" alt="国科能源（滁州）有限公司企业展厅 · 序厅门头与迎宾形象墙" loading="lazy" width="1200" height="675" decoding="async"></div>
+                <div class="gallery-slide" data-caption="弧形展屏与图文展墙"><img src="../assets/case-guoke-hall-04.webp" alt="国科能源（滁州）有限公司企业展厅 · 弧形展屏与图文展墙" loading="lazy" width="1200" height="675" decoding="async"></div>
+                <div class="gallery-slide" data-caption="中心大屏 · 数据可视化"><img src="../assets/case-guoke-hall-05.webp" alt="国科能源（滁州）有限公司企业展厅 · 中心大屏 · 数据可视化" loading="lazy" width="1200" height="675" decoding="async"></div>
+                <div class="gallery-slide" data-caption="中心展区全景"><img src="../assets/case-guoke-hall-06.webp" alt="国科能源（滁州）有限公司企业展厅 · 中心展区全景" loading="lazy" width="1200" height="675" decoding="async"></div>
+                <div class="gallery-slide" data-caption="图文展墙与实物展台"><img src="../assets/case-guoke-hall-07.webp" alt="国科能源（滁州）有限公司企业展厅 · 图文展墙与实物展台" loading="lazy" width="1200" height="675" decoding="async"></div>
+                <div class="gallery-slide" data-caption="环形顶面造型与中心展台"><img src="../assets/case-guoke-hall-08.webp" alt="国科能源（滁州）有限公司企业展厅 · 环形顶面造型与中心展台" loading="lazy" width="1200" height="675" decoding="async"></div>
+                <div class="gallery-slide" data-caption="中心展区与展项图文墙"><img src="../assets/case-guoke-hall-09.webp" alt="国科能源（滁州）有限公司企业展厅 · 中心展区与展项图文墙" loading="lazy" width="1200" height="675" decoding="async"></div>
+                <div class="gallery-slide" data-caption="弧形展墙与互动展项"><img src="../assets/case-guoke-hall-10.webp" alt="国科能源（滁州）有限公司企业展厅 · 弧形展墙与互动展项" loading="lazy" width="1200" height="675" decoding="async"></div>
+                <div class="gallery-slide" data-caption="数字隧道过渡区"><img src="../assets/case-guoke-hall-11.webp" alt="国科能源（滁州）有限公司企业展厅 · 数字隧道过渡区" loading="lazy" width="1200" height="675" decoding="async"></div>
+                <div class="gallery-slide" data-caption="沉浸式数字隧道"><img src="../assets/case-guoke-hall-12.webp" alt="国科能源（滁州）有限公司企业展厅 · 沉浸式数字隧道" loading="lazy" width="1200" height="675" decoding="async"></div>
+                <div class="gallery-slide" data-caption="企业介绍大屏与幕墙展区"><img src="../assets/case-guoke-hall-13.webp" alt="国科能源（滁州）有限公司企业展厅 · 企业介绍大屏与幕墙展区" loading="lazy" width="1200" height="675" decoding="async"></div>
+                <div class="gallery-slide" data-caption="企业简介与数字展项墙"><img src="../assets/case-guoke-hall-14.webp" alt="国科能源（滁州）有限公司企业展厅 · 企业简介与数字展项墙" loading="lazy" width="1200" height="675" decoding="async"></div>
+                <div class="gallery-slide" data-caption="企业图文展墙"><img src="../assets/case-guoke-hall-15.webp" alt="国科能源（滁州）有限公司企业展厅 · 企业图文展墙" loading="lazy" width="1200" height="675" decoding="async"></div>
+                <div class="gallery-slide" data-caption="品牌展墙与红色展区"><img src="../assets/case-guoke-hall-16.webp" alt="国科能源（滁州）有限公司企业展厅 · 品牌展墙与红色展区" loading="lazy" width="1200" height="675" decoding="async"></div>
+                <div class="gallery-slide" data-caption="尾厅荣誉展示区"><img src="../assets/case-guoke-hall-17.webp" alt="国科能源（滁州）有限公司企业展厅 · 尾厅荣誉展示区" loading="lazy" width="1200" height="675" decoding="async"></div>
+                </div>
+                <span class="swipe-hint">左右滑动</span>
+                <span class="gallery-count" aria-live="polite">01 / 17</span>
+                <div class="gallery-nav">
+                  <button class="gallery-btn prev" type="button" aria-label="上一张"><svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+                  <button class="gallery-btn next" type="button" aria-label="下一张"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+                </div>
+              </div>
+              <div class="case-copy">
+                <span class="case-number">03</span>
+                <p class="case-category">企业展厅 · 全案设计</p>
+                <h3>国科能源（滁州）有限公司企业展厅</h3>
+                <p class="case-tagline">「创新科技 绽放未来」· 绿白科技叙事空间</p>
+                <p class="case-description">为国科能源（滁州）有限公司打造的企业展厅全案——序厅形象屏、中心弧形大屏、沉浸式数字隧道、红色文化与荣誉尾厅一体规划。</p>
+                <div class="case-meta"><span>展陈策划</span><span>空间设计</span><span>多媒体互动</span></div>
+              </div>
+            </article>
+            <article class="case-card" data-case-title="周口市烟草专卖局办公园区形象升级改造">
+              <div class="gallery" aria-label="周口市烟草专卖局办公园区形象升级改造项目图片轮播">
+                <div class="gallery-track" role="button" tabindex="0" aria-label="点击放大当前图片">
+                <div class="gallery-slide is-active" data-caption="一层大厅形象墙 · 方案（绿版）现场效果"><img src="../assets/case-zhoukou-wall-30.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 一层大厅形象墙 · 方案（绿版）现场效果" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="户外主题小品 · 造型示意"><img src="../assets/case-zhoukou-wall-09.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 户外主题小品 · 造型示意" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="主入口墙面标识字 · 现场合成"><img src="../assets/case-zhoukou-wall-11.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 主入口墙面标识字 · 现场合成" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="广场 LOGO 景墙 · 效果图（正面）"><img src="../assets/case-zhoukou-wall-13.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 广场 LOGO 景墙 · 效果图（正面）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="广场 LOGO 景墙 · 效果图（侧面）"><img src="../assets/case-zhoukou-wall-14.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 广场 LOGO 景墙 · 效果图（侧面）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="广场 LOGO 景墙 · 效果图（俯瞰）"><img src="../assets/case-zhoukou-wall-15.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 广场 LOGO 景墙 · 效果图（俯瞰）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="停车区指引落地牌"><img src="../assets/case-zhoukou-wall-16.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 停车区指引落地牌" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="户外宣传栏 · 方案一"><img src="../assets/case-zhoukou-wall-17.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 户外宣传栏 · 方案一" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="户外宣传栏 · 方案二"><img src="../assets/case-zhoukou-wall-18.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 户外宣传栏 · 方案二" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="户外宣传栏 · 方案三"><img src="../assets/case-zhoukou-wall-19.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 户外宣传栏 · 方案三" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="户外宣传栏 · 方案四"><img src="../assets/case-zhoukou-wall-20.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 户外宣传栏 · 方案四" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="户外宣传栏 · 现场合成效果"><img src="../assets/case-zhoukou-wall-21.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 户外宣传栏 · 现场合成效果" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="户外提示牌 · 双牌组合方案"><img src="../assets/case-zhoukou-wall-22.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 户外提示牌 · 双牌组合方案" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="户外提示牌 · 单牌方案"><img src="../assets/case-zhoukou-wall-23.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 户外提示牌 · 单牌方案" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="楼宇索引牌"><img src="../assets/case-zhoukou-wall-24.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 楼宇索引牌" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="走廊指引牌"><img src="../assets/case-zhoukou-wall-25.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 走廊指引牌" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="办公门牌"><img src="../assets/case-zhoukou-wall-26.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 办公门牌" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="室内展示牌"><img src="../assets/case-zhoukou-wall-27.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 室内展示牌" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="楼层号牌"><img src="../assets/case-zhoukou-wall-28.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 楼层号牌" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="一层大厅形象墙 · 方案（绿版）设计图"><img src="../assets/case-zhoukou-wall-29.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 一层大厅形象墙 · 方案（绿版）设计图" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="一层大厅形象墙 · 方案（白版）设计图"><img src="../assets/case-zhoukou-wall-31.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 一层大厅形象墙 · 方案（白版）设计图" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="一层大厅形象墙 · 方案（白版）现场效果"><img src="../assets/case-zhoukou-wall-32.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 一层大厅形象墙 · 方案（白版）现场效果" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="一层大厅形象墙 · 背面方案（绿版）现场效果"><img src="../assets/case-zhoukou-wall-33.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 一层大厅形象墙 · 背面方案（绿版）现场效果" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="一层大厅形象墙 · 背面方案（绿版）设计图"><img src="../assets/case-zhoukou-wall-34.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 一层大厅形象墙 · 背面方案（绿版）设计图" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="一层大厅形象墙 · 背面方案（绿版）现场效果（另一角度）"><img src="../assets/case-zhoukou-wall-35.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 一层大厅形象墙 · 背面方案（绿版）现场效果（另一角度）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="一层大厅形象墙 · 背面方案（白版）设计图"><img src="../assets/case-zhoukou-wall-36.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 一层大厅形象墙 · 背面方案（白版）设计图" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="一层大厅形象墙 · 背面方案（白版）现场效果"><img src="../assets/case-zhoukou-wall-37.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 一层大厅形象墙 · 背面方案（白版）现场效果" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="一层大厅墙面宣传栏 · 方案一"><img src="../assets/case-zhoukou-wall-38.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 一层大厅墙面宣传栏 · 方案一" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="一层大厅墙面宣传栏 · 方案二（数据版）"><img src="../assets/case-zhoukou-wall-39.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 一层大厅墙面宣传栏 · 方案二（数据版）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="三层电梯厅形象墙 ·「不忘初心 砥砺前行」方案"><img src="../assets/case-zhoukou-wall-40.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 三层电梯厅形象墙 ·「不忘初心 砥砺前行」方案" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="三层电梯厅形象墙 · 现场合成"><img src="../assets/case-zhoukou-wall-41.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 三层电梯厅形象墙 · 现场合成" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="三层党建室 · 文化墙方案（一）"><img src="../assets/case-zhoukou-wall-42.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 三层党建室 · 文化墙方案（一）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="三层党建室 · 文化墙方案（二）"><img src="../assets/case-zhoukou-wall-43.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 三层党建室 · 文化墙方案（二）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="三层党建室 · 文化墙方案（三）"><img src="../assets/case-zhoukou-wall-44.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 三层党建室 · 文化墙方案（三）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="三层党建室 · 党徽形象墙方案"><img src="../assets/case-zhoukou-wall-45.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 三层党建室 · 党徽形象墙方案" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="三层党建室 · 空间效果（一）"><img src="../assets/case-zhoukou-wall-46.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 三层党建室 · 空间效果（一）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="三层党建室 · 空间效果（二）"><img src="../assets/case-zhoukou-wall-47.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 三层党建室 · 空间效果（二）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="三层党建室 · 空间效果（三）"><img src="../assets/case-zhoukou-wall-48.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 三层党建室 · 空间效果（三）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="三层党建室 · 空间效果（四）"><img src="../assets/case-zhoukou-wall-49.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 三层党建室 · 空间效果（四）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="三层党建室 · 空间效果（五）"><img src="../assets/case-zhoukou-wall-50.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 三层党建室 · 空间效果（五）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="三层党建室 · 空间效果（六）"><img src="../assets/case-zhoukou-wall-51.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 三层党建室 · 空间效果（六）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="三层党建室 · 空间效果（七）"><img src="../assets/case-zhoukou-wall-52.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 三层党建室 · 空间效果（七）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="三层党建室 · 空间效果（八）"><img src="../assets/case-zhoukou-wall-53.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 三层党建室 · 空间效果（八）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="三层党建室 · 空间效果（九）"><img src="../assets/case-zhoukou-wall-54.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 三层党建室 · 空间效果（九）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="三层会议室背景墙 · 方案"><img src="../assets/case-zhoukou-wall-55.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 三层会议室背景墙 · 方案" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="三层会议室背景墙 · 效果图"><img src="../assets/case-zhoukou-wall-56.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 三层会议室背景墙 · 效果图" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="四层电梯厅形象墙 · 方案"><img src="../assets/case-zhoukou-wall-57.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 四层电梯厅形象墙 · 方案" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="四层电梯厅形象墙 · 效果图"><img src="../assets/case-zhoukou-wall-58.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 四层电梯厅形象墙 · 效果图" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="六层会议室背景墙 · 方案"><img src="../assets/case-zhoukou-wall-59.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 六层会议室背景墙 · 方案" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="六层会议室背景墙 · 效果图"><img src="../assets/case-zhoukou-wall-60.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 六层会议室背景墙 · 效果图" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="七层会议室背景墙 · 方案"><img src="../assets/case-zhoukou-wall-61.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 七层会议室背景墙 · 方案" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="七层会议室背景墙 · 效果图"><img src="../assets/case-zhoukou-wall-62.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 七层会议室背景墙 · 效果图" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="办公区海报展示框 · 方案（一）"><img src="../assets/case-zhoukou-wall-63.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 办公区海报展示框 · 方案（一）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="办公区海报展示框 · 方案（二）"><img src="../assets/case-zhoukou-wall-64.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 办公区海报展示框 · 方案（二）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="贵宾休息室 · 效果图（一）"><img src="../assets/case-zhoukou-wall-66.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 贵宾休息室 · 效果图（一）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="贵宾休息室 · 效果图（二）"><img src="../assets/case-zhoukou-wall-67.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 贵宾休息室 · 效果图（二）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="二层休息区 · 水吧方案"><img src="../assets/case-zhoukou-wall-68.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 二层休息区 · 水吧方案" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="二层休息区 · 效果图（一）"><img src="../assets/case-zhoukou-wall-69.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 二层休息区 · 效果图（一）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="二层休息区 · 效果图（二）"><img src="../assets/case-zhoukou-wall-70.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 二层休息区 · 效果图（二）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="室内吊顶 · 铝扣板装置"><img src="../assets/case-zhoukou-wall-71.webp" alt="周口市烟草专卖局办公园区形象升级改造 · 室内吊顶 · 铝扣板装置" loading="lazy" width="1280" height="720" decoding="async"></div>
+
+
+
+                </div>
+                <span class="swipe-hint">左右滑动</span>
+                <span class="gallery-count" aria-live="polite">01 / 60</span>
+                <div class="gallery-nav">
+                  <button class="gallery-btn prev" type="button" aria-label="上一张"><svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+                  <button class="gallery-btn next" type="button" aria-label="下一张"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+                </div>
+              </div>
+              <div class="case-copy">
+                <span class="case-number">04</span>
+                <p class="case-category">文化墙 · 设计施工一体化</p>
+                <h3>周口市烟草专卖局办公园区形象升级改造</h3>
+                <p class="case-tagline">「感恩实干 创新图强」· 从标识导视到文化墙的一体化落地</p>
+                <p class="case-description">周口市烟草专卖局（公司）办公园区形象升级改造全案：户外标识导视与主题小品、一层大厅形象墙、三层电梯厅与党建室、各层会议室背景墙、贵宾休息室与二层休息区文化氛围的一体化设计，含平面图纸、设计方案与效果呈现。</p>
+                <div class="case-meta"><span>方案设计</span><span>标识导视</span><span>文化墙</span><span>全案落地</span></div>
+              </div>
+            </article>
+            <article class="case-card" data-case-title="六安烟草普法宣传教育基地">
+              <div class="gallery" aria-label="六安烟草普法宣传教育基地项目图片轮播">
+                <div class="gallery-track" role="button" tabindex="0" aria-label="点击放大当前图片">
+                <div class="gallery-slide is-active" data-caption="序厅 · 古风卷轴 LED 主背景（一）"><img src="../assets/case-luan-pufa-02.webp" alt="六安烟草普法宣传教育基地 · 序厅 · 古风卷轴 LED 主背景（一）" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="序厅入口 · 基地形象外观"><img src="../assets/case-luan-pufa-01.webp" alt="六安烟草普法宣传教育基地 · 序厅入口 · 基地形象外观" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="序厅 · 古风卷轴 LED 主背景（二）"><img src="../assets/case-luan-pufa-03.webp" alt="六安烟草普法宣传教育基地 · 序厅 · 古风卷轴 LED 主背景（二）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="秉初心展区 · 烟草行业文化主屏"><img src="../assets/case-luan-pufa-04.webp" alt="六安烟草普法宣传教育基地 · 秉初心展区 · 烟草行业文化主屏" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="秉初心展区 · 图文展墙与企业形象"><img src="../assets/case-luan-pufa-05.webp" alt="六安烟草普法宣传教育基地 · 秉初心展区 · 图文展墙与企业形象" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="秉初心展区 · 品牌文化展墙"><img src="../assets/case-luan-pufa-06.webp" alt="六安烟草普法宣传教育基地 · 秉初心展区 · 品牌文化展墙" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="共筑梦展区 · 法的渊源曲面屏"><img src="../assets/case-luan-pufa-07.webp" alt="六安烟草普法宣传教育基地 · 共筑梦展区 · 法的渊源曲面屏" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="共筑梦展区 · 法治文化传承廊道"><img src="../assets/case-luan-pufa-08.webp" alt="六安烟草普法宣传教育基地 · 共筑梦展区 · 法治文化传承廊道" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="共筑梦展区 · 法治文化展墙"><img src="../assets/case-luan-pufa-09.webp" alt="六安烟草普法宣传教育基地 · 共筑梦展区 · 法治文化展墙" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="共筑梦展区 · 新时代法治思想展区"><img src="../assets/case-luan-pufa-10.webp" alt="六安烟草普法宣传教育基地 · 共筑梦展区 · 新时代法治思想展区" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="共筑梦展区 · 学法知法屏墙（一）"><img src="../assets/case-luan-pufa-11.webp" alt="六安烟草普法宣传教育基地 · 共筑梦展区 · 学法知法屏墙（一）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="共筑梦展区 · 学法知法屏墙（二）"><img src="../assets/case-luan-pufa-12.webp" alt="六安烟草普法宣传教育基地 · 共筑梦展区 · 学法知法屏墙（二）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="共筑梦展区 · 学法知法屏墙（三）"><img src="../assets/case-luan-pufa-13.webp" alt="六安烟草普法宣传教育基地 · 共筑梦展区 · 学法知法屏墙（三）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="共筑梦展区 · 释法明理展区（一）"><img src="../assets/case-luan-pufa-14.webp" alt="六安烟草普法宣传教育基地 · 共筑梦展区 · 释法明理展区（一）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="共筑梦展区 · 释法明理展区（二）"><img src="../assets/case-luan-pufa-15.webp" alt="六安烟草普法宣传教育基地 · 共筑梦展区 · 释法明理展区（二）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="共筑梦展区 · 释法明理展区（三）"><img src="../assets/case-luan-pufa-16.webp" alt="六安烟草普法宣传教育基地 · 共筑梦展区 · 释法明理展区（三）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="共筑梦展区 ·「一法一条例四办法」投影墙"><img src="../assets/case-luan-pufa-17.webp" alt="六安烟草普法宣传教育基地 · 共筑梦展区 ·「一法一条例四办法」投影墙" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="共筑梦展区 · 烟草运输与销售展区"><img src="../assets/case-luan-pufa-18.webp" alt="六安烟草普法宣传教育基地 · 共筑梦展区 · 烟草运输与销售展区" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="共筑梦展区 · 沉浸式影院入口"><img src="../assets/case-luan-pufa-19.webp" alt="六安烟草普法宣传教育基地 · 共筑梦展区 · 沉浸式影院入口" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="共筑梦展区 · 沉浸式影院（一）"><img src="../assets/case-luan-pufa-20.webp" alt="六安烟草普法宣传教育基地 · 共筑梦展区 · 沉浸式影院（一）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="共筑梦展区 · 沉浸式影院（二）"><img src="../assets/case-luan-pufa-21.webp" alt="六安烟草普法宣传教育基地 · 共筑梦展区 · 沉浸式影院（二）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="共筑梦展区 · 普法文化建设展区"><img src="../assets/case-luan-pufa-22.webp" alt="六安烟草普法宣传教育基地 · 共筑梦展区 · 普法文化建设展区" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="共筑梦展区 · 普法互动展项"><img src="../assets/case-luan-pufa-23.webp" alt="六安烟草普法宣传教育基地 · 共筑梦展区 · 普法互动展项" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="共筑梦展区 · 与法同行展区"><img src="../assets/case-luan-pufa-24.webp" alt="六安烟草普法宣传教育基地 · 共筑梦展区 · 与法同行展区" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="共筑梦展区 ·「烟法知多少」互动竞答"><img src="../assets/case-luan-pufa-25.webp" alt="六安烟草普法宣传教育基地 · 共筑梦展区 ·「烟法知多少」互动竞答" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="共筑梦展区 · 领导签字留言台"><img src="../assets/case-luan-pufa-26.webp" alt="六安烟草普法宣传教育基地 · 共筑梦展区 · 领导签字留言台" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="共筑梦展区 · 电子留言与线上展厅"><img src="../assets/case-luan-pufa-27.webp" alt="六安烟草普法宣传教育基地 · 共筑梦展区 · 电子留言与线上展厅" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="共筑梦展区 · 展区结尾与线上展厅"><img src="../assets/case-luan-pufa-28.webp" alt="六安烟草普法宣传教育基地 · 共筑梦展区 · 展区结尾与线上展厅" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="明德厅 · 普法教育课堂（一）"><img src="../assets/case-luan-pufa-29.webp" alt="六安烟草普法宣传教育基地 · 明德厅 · 普法教育课堂（一）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="明德厅 · 普法教育课堂（二）"><img src="../assets/case-luan-pufa-30.webp" alt="六安烟草普法宣传教育基地 · 明德厅 · 普法教育课堂（二）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="明德厅 · 多媒体会议室"><img src="../assets/case-luan-pufa-31.webp" alt="六安烟草普法宣传教育基地 · 明德厅 · 多媒体会议室" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="明德厅 · 职工书屋长廊"><img src="../assets/case-luan-pufa-32.webp" alt="六安烟草普法宣传教育基地 · 明德厅 · 职工书屋长廊" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="明德厅 · 职工书屋阅读区"><img src="../assets/case-luan-pufa-33.webp" alt="六安烟草普法宣传教育基地 · 明德厅 · 职工书屋阅读区" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="明德厅 · 水吧"><img src="../assets/case-luan-pufa-34.webp" alt="六安烟草普法宣传教育基地 · 明德厅 · 水吧" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="明德厅 · 水吧与阅读区长卷"><img src="../assets/case-luan-pufa-35.webp" alt="六安烟草普法宣传教育基地 · 明德厅 · 水吧与阅读区长卷" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="明德厅 · 研讨区"><img src="../assets/case-luan-pufa-36.webp" alt="六安烟草普法宣传教育基地 · 明德厅 · 研讨区" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="明德厅 · 楼梯间造景"><img src="../assets/case-luan-pufa-37.webp" alt="六安烟草普法宣传教育基地 · 明德厅 · 楼梯间造景" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="明德厅 · 书屋阅读区（另一角度）"><img src="../assets/case-luan-pufa-38.webp" alt="六安烟草普法宣传教育基地 · 明德厅 · 书屋阅读区（另一角度）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="明德厅 · 二层休息区"><img src="../assets/case-luan-pufa-39.webp" alt="六安烟草普法宣传教育基地 · 明德厅 · 二层休息区" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="明德厅 · 乒乓球活动区"><img src="../assets/case-luan-pufa-40.webp" alt="六安烟草普法宣传教育基地 · 明德厅 · 乒乓球活动区" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="明德厅 · 健身房"><img src="../assets/case-luan-pufa-41.webp" alt="六安烟草普法宣传教育基地 · 明德厅 · 健身房" loading="lazy" width="1280" height="720" decoding="async"></div>
+                </div>
+                <span class="swipe-hint">左右滑动</span>
+                <span class="gallery-count" aria-live="polite">01 / 41</span>
+                <div class="gallery-nav">
+                  <button class="gallery-btn prev" type="button" aria-label="上一张"><svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+                  <button class="gallery-btn next" type="button" aria-label="下一张"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+                </div>
+              </div>
+              <div class="case-copy">
+                <span class="case-number">05</span>
+                <p class="case-category">普法展馆 · 数字展陈</p>
+                <h3>六安烟草普法宣传教育基地</h3>
+                <p class="case-tagline">「明法笃行 知行合一」· 四大篇章法治文化展馆</p>
+                <p class="case-description">为安徽省烟草公司六安市公司打造的普法宣传教育基地——序厅「初相识」、烟草文化「秉初心」、法治文化「共筑梦」与员工活动「明德厅」四大篇章一体规划，含古风卷轴 LED 主背景、沉浸式影院、互动竞答、线上展厅等数字展项。</p>
+                <div class="case-meta"><span>展陈策划</span><span>空间设计</span><span>多媒体展项</span><span>全案落地</span></div>
+                <div class="case-actions"><a class="external-link" href="https://bluebirdw.my-place.us/videos/20261014-185229.m4v" target="_blank" rel="noopener noreferrer">点击观看<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 5h5v5M19 5l-8 8M19 13v6H5V5h6" stroke="currentColor" stroke-width="1.7"/></svg></a></div>
+              </div>
+            </article>
+            <article class="case-card" data-case-title="安徽烟草专卖主题展馆">
+              <div class="gallery" aria-label="安徽烟草专卖主题展馆空间效果图">
+                <div class="gallery-track" role="button" tabindex="0" aria-label="点击放大当前图片">
+                <div class="gallery-slide is-active" data-caption="「统一领导 垂直管理 专卖专营」主题展墙与大事记时间轴"><img src="../assets/case-ahzhanguan-04.webp" alt="安徽烟草专卖主题展馆 · 「统一领导 垂直管理 专卖专营」主题展墙与大事记时间轴" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="序厅 · 主题影片大屏与图文展墙"><img src="../assets/case-ahzhanguan-01.webp" alt="安徽烟草专卖主题展馆 · 序厅 · 主题影片大屏与图文展墙" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="序厅 · 图文展墙与灯箱"><img src="../assets/case-ahzhanguan-02.webp" alt="安徽烟草专卖主题展馆 · 序厅 · 图文展墙与灯箱" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="序厅 · 主题形象墙与展台"><img src="../assets/case-ahzhanguan-03.webp" alt="安徽烟草专卖主题展馆 · 序厅 · 主题形象墙与展台" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="展区 · 图文展墙与多媒体屏"><img src="../assets/case-ahzhanguan-05.webp" alt="安徽烟草专卖主题展馆 · 展区 · 图文展墙与多媒体屏" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="展区 · 弧形吊顶与图文展墙"><img src="../assets/case-ahzhanguan-06.webp" alt="安徽烟草专卖主题展馆 · 展区 · 弧形吊顶与图文展墙" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="展区 · 展墙灯箱与展台"><img src="../assets/case-ahzhanguan-07.webp" alt="安徽烟草专卖主题展馆 · 展区 · 展墙灯箱与展台" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="展区 · 大屏与图文展墙"><img src="../assets/case-ahzhanguan-08.webp" alt="安徽烟草专卖主题展馆 · 展区 · 大屏与图文展墙" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="初创篇展区 · 红色主题历史图文墙"><img src="../assets/case-ahzhanguan-09.webp" alt="安徽烟草专卖主题展馆 · 初创篇展区 · 红色主题历史图文墙" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="展区 · 图文展墙与玻璃展柜"><img src="../assets/case-ahzhanguan-10.webp" alt="安徽烟草专卖主题展馆 · 展区 · 图文展墙与玻璃展柜" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="展区 · 历史图文与场景还原"><img src="../assets/case-ahzhanguan-11.webp" alt="安徽烟草专卖主题展馆 · 展区 · 历史图文与场景还原" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="展区 · 图文展墙与展柜（一）"><img src="../assets/case-ahzhanguan-12.webp" alt="安徽烟草专卖主题展馆 · 展区 · 图文展墙与展柜（一）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="展区 · 玻璃展柜与沉浸空间"><img src="../assets/case-ahzhanguan-13.webp" alt="安徽烟草专卖主题展馆 · 展区 · 玻璃展柜与沉浸空间" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="展区 · 图文展墙与展柜（二）"><img src="../assets/case-ahzhanguan-14.webp" alt="安徽烟草专卖主题展馆 · 展区 · 图文展墙与展柜（二）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="展区 · 主题展墙与中央展台"><img src="../assets/case-ahzhanguan-15.webp" alt="安徽烟草专卖主题展馆 · 展区 · 主题展墙与中央展台" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="「专卖执法队伍建设」展墙与环形吊顶"><img src="../assets/case-ahzhanguan-16.webp" alt="安徽烟草专卖主题展馆 · 「专卖执法队伍建设」展墙与环形吊顶" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="中庭 · 绿色玻璃展柱与多媒体展墙"><img src="../assets/case-ahzhanguan-17.webp" alt="安徽烟草专卖主题展馆 · 中庭 · 绿色玻璃展柱与多媒体展墙" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="中庭 · 展柱与图文展墙"><img src="../assets/case-ahzhanguan-18.webp" alt="安徽烟草专卖主题展馆 · 中庭 · 展柱与图文展墙" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="展区 · 圆柱展柱与图文展墙"><img src="../assets/case-ahzhanguan-19.webp" alt="安徽烟草专卖主题展馆 · 展区 · 圆柱展柱与图文展墙" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="发展篇展区 · 绿色展墙与图文"><img src="../assets/case-ahzhanguan-20.webp" alt="安徽烟草专卖主题展馆 · 发展篇展区 · 绿色展墙与图文" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="「基础建设」图文展墙与展柜"><img src="../assets/case-ahzhanguan-21.webp" alt="安徽烟草专卖主题展馆 · 「基础建设」图文展墙与展柜" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="展区 · 图文展墙与展柜（三）"><img src="../assets/case-ahzhanguan-22.webp" alt="安徽烟草专卖主题展馆 · 展区 · 图文展墙与展柜（三）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="VR 展区 · 案件场景互动体验"><img src="../assets/case-ahzhanguan-23.webp" alt="安徽烟草专卖主题展馆 · VR 展区 · 案件场景互动体验" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="展区 · 图文展墙与灯箱屏"><img src="../assets/case-ahzhanguan-24.webp" alt="安徽烟草专卖主题展馆 · 展区 · 图文展墙与灯箱屏" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="展区 · 蓝色图文展墙与展台"><img src="../assets/case-ahzhanguan-25.webp" alt="安徽烟草专卖主题展馆 · 展区 · 蓝色图文展墙与展台" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="展区 · 蓝色图文长廊"><img src="../assets/case-ahzhanguan-26.webp" alt="安徽烟草专卖主题展馆 · 展区 · 蓝色图文长廊" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="展区 · 历史长卷与图文展墙"><img src="../assets/case-ahzhanguan-27.webp" alt="安徽烟草专卖主题展馆 · 展区 · 历史长卷与图文展墙" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="展区 · 图文展墙与灯箱（一）"><img src="../assets/case-ahzhanguan-28.webp" alt="安徽烟草专卖主题展馆 · 展区 · 图文展墙与灯箱（一）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="展区 · 历史长卷图文墙与展柜"><img src="../assets/case-ahzhanguan-29.webp" alt="安徽烟草专卖主题展馆 · 展区 · 历史长卷图文墙与展柜" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="展区 · 环形吊顶与图文展墙"><img src="../assets/case-ahzhanguan-30.webp" alt="安徽烟草专卖主题展馆 · 展区 · 环形吊顶与图文展墙" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="展区 · 蓝色主题图文展墙"><img src="../assets/case-ahzhanguan-31.webp" alt="安徽烟草专卖主题展馆 · 展区 · 蓝色主题图文展墙" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="展区 · 图文展墙与展台"><img src="../assets/case-ahzhanguan-32.webp" alt="安徽烟草专卖主题展馆 · 展区 · 图文展墙与展台" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="沉浸式展区 · 弧形影厅"><img src="../assets/case-ahzhanguan-33.webp" alt="安徽烟草专卖主题展馆 · 沉浸式展区 · 弧形影厅" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="展区 · 城市夜景多媒体展墙"><img src="../assets/case-ahzhanguan-34.webp" alt="安徽烟草专卖主题展馆 · 展区 · 城市夜景多媒体展墙" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="展区 · 图文展墙与展柜（四）"><img src="../assets/case-ahzhanguan-35.webp" alt="安徽烟草专卖主题展馆 · 展区 · 图文展墙与展柜（四）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="「7.15 特大卷烟制假案件」成果展墙"><img src="../assets/case-ahzhanguan-36.webp" alt="安徽烟草专卖主题展馆 · 「7.15 特大卷烟制假案件」成果展墙" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="沉浸式展区 · 球形环幕与图文展墙"><img src="../assets/case-ahzhanguan-37.webp" alt="安徽烟草专卖主题展馆 · 沉浸式展区 · 球形环幕与图文展墙" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="展区 · 暖色图文展墙与多媒体屏"><img src="../assets/case-ahzhanguan-38.webp" alt="安徽烟草专卖主题展馆 · 展区 · 暖色图文展墙与多媒体屏" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="展区 · 图文展墙与互动展台"><img src="../assets/case-ahzhanguan-39.webp" alt="安徽烟草专卖主题展馆 · 展区 · 图文展墙与互动展台" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="展区 · 图文展墙与灯箱（二）"><img src="../assets/case-ahzhanguan-40.webp" alt="安徽烟草专卖主题展馆 · 展区 · 图文展墙与灯箱（二）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="展区 · 木质图文展墙"><img src="../assets/case-ahzhanguan-41.webp" alt="安徽烟草专卖主题展馆 · 展区 · 木质图文展墙" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="展区 · 图文展墙与展台（二）"><img src="../assets/case-ahzhanguan-42.webp" alt="安徽烟草专卖主题展馆 · 展区 · 图文展墙与展台（二）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="展区 · 蓝色图文展墙与大屏"><img src="../assets/case-ahzhanguan-43.webp" alt="安徽烟草专卖主题展馆 · 展区 · 蓝色图文展墙与大屏" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="展区 · 展墙与多媒体屏"><img src="../assets/case-ahzhanguan-44.webp" alt="安徽烟草专卖主题展馆 · 展区 · 展墙与多媒体屏" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="沉浸式展区 · 弧形环幕"><img src="../assets/case-ahzhanguan-45.webp" alt="安徽烟草专卖主题展馆 · 沉浸式展区 · 弧形环幕" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="沉浸式展区 · 星空穹顶与环形展台"><img src="../assets/case-ahzhanguan-46.webp" alt="安徽烟草专卖主题展馆 · 沉浸式展区 · 星空穹顶与环形展台" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="外立面改造 · 白天方案（一）"><img src="../assets/case-ahzhanguan-47.webp" alt="安徽烟草专卖主题展馆 · 外立面改造 · 白天方案（一）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="外立面改造 · 白天方案（二）"><img src="../assets/case-ahzhanguan-48.webp" alt="安徽烟草专卖主题展馆 · 外立面改造 · 白天方案（二）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="外立面改造 · 白天方案（三）"><img src="../assets/case-ahzhanguan-49.webp" alt="安徽烟草专卖主题展馆 · 外立面改造 · 白天方案（三）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="外立面改造 · 夜景方案（一）"><img src="../assets/case-ahzhanguan-50.webp" alt="安徽烟草专卖主题展馆 · 外立面改造 · 夜景方案（一）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="外立面改造 · 夜景方案（二）"><img src="../assets/case-ahzhanguan-51.webp" alt="安徽烟草专卖主题展馆 · 外立面改造 · 夜景方案（二）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="外立面改造 · 夜景方案（三）"><img src="../assets/case-ahzhanguan-52.webp" alt="安徽烟草专卖主题展馆 · 外立面改造 · 夜景方案（三）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                </div>
+                <span class="swipe-hint">左右滑动</span>
+                <span class="gallery-count" aria-live="polite">01 / 52</span>
+                <div class="gallery-nav">
+                  <button class="gallery-btn prev" type="button" aria-label="上一张"><svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+                  <button class="gallery-btn next" type="button" aria-label="下一张"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+                </div>
+              </div>
+              <div class="case-copy">
+                <span class="case-number">06</span>
+                <p class="case-category">主题展馆 · 全案设计</p>
+                <h3>安徽烟草专卖主题展馆</h3>
+                <p class="case-tagline">「溯源大历史 展示大成果」· 初创 / 发展 / 嬗变 / VR 四大展区</p>
+                <p class="case-description">以「烟草专卖」为主题的整体展馆设计——序厅统领全馆，初创篇、发展篇、嬗变篇三大展区梳理行业历程与专卖执法成果，并设 VR 展厅与沉浸式影音空间；同步完成建筑外立面改造方案（白天与夜景）。</p>
+                <div class="case-meta"><span>展陈策划</span><span>空间设计</span><span>多媒体展项</span><span>外立面改造</span></div>
+                <div class="case-actions"><a class="external-link" href="https://bluebirdw.my-place.us/videos/20261014-183858.mp4" target="_blank" rel="noopener noreferrer">点击观看<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 5h5v5M19 5l-8 8M19 13v6H5V5h6" stroke="currentColor" stroke-width="1.7"/></svg></a></div>
+              </div>
+            </article>
+            <article class="case-card" data-case-title="砀山检察院《梨树之下》职工书屋">
+              <div class="gallery" aria-label="砀山检察院《梨树之下》职工书屋空间效果图">
+                <div class="gallery-track" role="button" tabindex="0" aria-label="点击放大当前图片">
+                <div class="gallery-slide is-active" data-caption="中庭 ·「梨树之下」梨树与环形座凳"><img src="../assets/case-lishu-shuwu-01.webp" alt="砀山检察院《梨树之下》职工书屋 · 中庭 ·「梨树之下」梨树与环形座凳" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="走廊 · 书架墙与通透厅廊"><img src="../assets/case-lishu-shuwu-02.webp" alt="砀山检察院《梨树之下》职工书屋 · 走廊 · 书架墙与通透厅廊" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="主厅 ·「职工书屋」形象墙"><img src="../assets/case-lishu-shuwu-03.webp" alt="砀山检察院《梨树之下》职工书屋 · 主厅 ·「职工书屋」形象墙" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="书架长廊"><img src="../assets/case-lishu-shuwu-04.webp" alt="砀山检察院《梨树之下》职工书屋 · 书架长廊" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="「梨树之下」主题书架墙"><img src="../assets/case-lishu-shuwu-05.webp" alt="砀山检察院《梨树之下》职工书屋 · 「梨树之下」主题书架墙" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="梨树中庭 · 主题墙与山水壁画"><img src="../assets/case-lishu-shuwu-06.webp" alt="砀山检察院《梨树之下》职工书屋 · 梨树中庭 · 主题墙与山水壁画" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="阅读区 · 长桌与格栅吊顶"><img src="../assets/case-lishu-shuwu-07.webp" alt="砀山检察院《梨树之下》职工书屋 · 阅读区 · 长桌与格栅吊顶" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="阅读区 · 阅览桌椅与书架"><img src="../assets/case-lishu-shuwu-08.webp" alt="砀山检察院《梨树之下》职工书屋 · 阅读区 · 阅览桌椅与书架" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="阅览区 · 临窗座区"><img src="../assets/case-lishu-shuwu-09.webp" alt="砀山检察院《梨树之下》职工书屋 · 阅览区 · 临窗座区" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="党建室 · 主题天花与红色文化墙"><img src="../assets/case-lishu-shuwu-10.webp" alt="砀山检察院《梨树之下》职工书屋 · 党建室 · 主题天花与红色文化墙" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="党建室 · 长桌与书架墙"><img src="../assets/case-lishu-shuwu-11.webp" alt="砀山检察院《梨树之下》职工书屋 · 党建室 · 长桌与书架墙" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="党建室 · 会议区与展示屏"><img src="../assets/case-lishu-shuwu-12.webp" alt="砀山检察院《梨树之下》职工书屋 · 党建室 · 会议区与展示屏" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="党建室 · 会议桌椅与主题墙"><img src="../assets/case-lishu-shuwu-13.webp" alt="砀山检察院《梨树之下》职工书屋 · 党建室 · 会议桌椅与主题墙" loading="lazy" width="1280" height="720" decoding="async"></div>
+                </div>
+                <span class="swipe-hint">左右滑动</span>
+                <span class="gallery-count" aria-live="polite">01 / 13</span>
+                <div class="gallery-nav">
+                  <button class="gallery-btn prev" type="button" aria-label="上一张"><svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+                  <button class="gallery-btn next" type="button" aria-label="下一张"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+                </div>
+              </div>
+              <div class="case-copy">
+                <span class="case-number">07</span>
+                <p class="case-category">职工书屋 · 空间设计</p>
+                <h3>砀山检察院《梨树之下》职工书屋</h3>
+                <p class="case-tagline">「梨树之下」· 阅读与党建一体的职工书屋</p>
+                <p class="case-description">为砀山县人民检察院打造的职工书屋——以梨树为意象，中庭置梨树与环形座凳，书架墙与通透长廊贯通，含阅读区、临窗座区与党建活动室；「梨树之下」主题墙与山水壁画点题地域文化。</p>
+                <div class="case-meta"><span>空间设计</span><span>陈设布展</span><span>党建空间</span><span>全案落地</span></div>
+              </div>
+            </article>
+            <article class="case-card" data-case-title="周口市西华烟草专卖局烟草文化升级改造">
+              <div class="gallery" aria-label="周口市西华烟草专卖局烟草文化升级改造设计效果图">
+                <div class="gallery-track" role="button" tabindex="0" aria-label="点击放大当前图片">
+                <div class="gallery-slide is-active" data-caption="广场形象标识 · 山水主题墙"><img src="../assets/case-xihua-qiye-01.webp" alt="周口市西华烟草专卖局烟草文化升级改造 · 广场形象标识 · 山水主题墙" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="广场宣传栏（一）"><img src="../assets/case-xihua-qiye-02.webp" alt="周口市西华烟草专卖局烟草文化升级改造 · 广场宣传栏（一）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="广场宣传栏（二）"><img src="../assets/case-xihua-qiye-03.webp" alt="周口市西华烟草专卖局烟草文化升级改造 · 广场宣传栏（二）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="广场宣传栏（三）"><img src="../assets/case-xihua-qiye-04.webp" alt="周口市西华烟草专卖局烟草文化升级改造 · 广场宣传栏（三）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="三楼小会议室 · 党建元素墙"><img src="../assets/case-xihua-qiye-05.webp" alt="周口市西华烟草专卖局烟草文化升级改造 · 三楼小会议室 · 党建元素墙" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="四楼会议室 · 背景形象墙"><img src="../assets/case-xihua-qiye-06.webp" alt="周口市西华烟草专卖局烟草文化升级改造 · 四楼会议室 · 背景形象墙" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="二楼楼梯口文化墙"><img src="../assets/case-xihua-qiye-07.webp" alt="周口市西华烟草专卖局烟草文化升级改造 · 二楼楼梯口文化墙" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="三楼楼梯口文化墙"><img src="../assets/case-xihua-qiye-08.webp" alt="周口市西华烟草专卖局烟草文化升级改造 · 三楼楼梯口文化墙" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="四楼楼梯口文化墙"><img src="../assets/case-xihua-qiye-09.webp" alt="周口市西华烟草专卖局烟草文化升级改造 · 四楼楼梯口文化墙" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="二楼楼梯 · 企业文化展示"><img src="../assets/case-xihua-qiye-10.webp" alt="周口市西华烟草专卖局烟草文化升级改造 · 二楼楼梯 · 企业文化展示" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="三楼楼梯 · 企业文化展示"><img src="../assets/case-xihua-qiye-11.webp" alt="周口市西华烟草专卖局烟草文化升级改造 · 三楼楼梯 · 企业文化展示" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="四楼楼梯 · 企业文化展示"><img src="../assets/case-xihua-qiye-12.webp" alt="周口市西华烟草专卖局烟草文化升级改造 · 四楼楼梯 · 企业文化展示" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="广场侧面文化墙"><img src="../assets/case-xihua-qiye-13.webp" alt="周口市西华烟草专卖局烟草文化升级改造 · 广场侧面文化墙" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="职工之家外立面"><img src="../assets/case-xihua-qiye-14.webp" alt="周口市西华烟草专卖局烟草文化升级改造 · 职工之家外立面" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="职工之家餐厅 · 文化墙"><img src="../assets/case-xihua-qiye-15.webp" alt="周口市西华烟草专卖局烟草文化升级改造 · 职工之家餐厅 · 文化墙" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="职工之家厨房 · 制度墙"><img src="../assets/case-xihua-qiye-16.webp" alt="周口市西华烟草专卖局烟草文化升级改造 · 职工之家厨房 · 制度墙" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="职工之家转角 · 企业文化墙"><img src="../assets/case-xihua-qiye-17.webp" alt="周口市西华烟草专卖局烟草文化升级改造 · 职工之家转角 · 企业文化墙" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="职工之家卫生间标识"><img src="../assets/case-xihua-qiye-18.webp" alt="周口市西华烟草专卖局烟草文化升级改造 · 职工之家卫生间标识" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="职工之家二楼健身区"><img src="../assets/case-xihua-qiye-19.webp" alt="周口市西华烟草专卖局烟草文化升级改造 · 职工之家二楼健身区" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="办公室楼顶口号"><img src="../assets/case-xihua-qiye-20.webp" alt="周口市西华烟草专卖局烟草文化升级改造 · 办公室楼顶口号" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="黄泛区餐厅 · 文化墙"><img src="../assets/case-xihua-qiye-21.webp" alt="周口市西华烟草专卖局烟草文化升级改造 · 黄泛区餐厅 · 文化墙" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="黄泛区一楼走廊文化"><img src="../assets/case-xihua-qiye-22.webp" alt="周口市西华烟草专卖局烟草文化升级改造 · 黄泛区一楼走廊文化" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="黄泛区二楼走廊文化"><img src="../assets/case-xihua-qiye-23.webp" alt="周口市西华烟草专卖局烟草文化升级改造 · 黄泛区二楼走廊文化" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="黄泛区三楼走廊文化"><img src="../assets/case-xihua-qiye-24.webp" alt="周口市西华烟草专卖局烟草文化升级改造 · 黄泛区三楼走廊文化" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="黄泛区一楼楼梯文化"><img src="../assets/case-xihua-qiye-25.webp" alt="周口市西华烟草专卖局烟草文化升级改造 · 黄泛区一楼楼梯文化" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="黄泛区二楼楼梯文化"><img src="../assets/case-xihua-qiye-26.webp" alt="周口市西华烟草专卖局烟草文化升级改造 · 黄泛区二楼楼梯文化" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="黄泛区三楼楼梯文化"><img src="../assets/case-xihua-qiye-27.webp" alt="周口市西华烟草专卖局烟草文化升级改造 · 黄泛区三楼楼梯文化" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="黄泛区党员会议室"><img src="../assets/case-xihua-qiye-28.webp" alt="周口市西华烟草专卖局烟草文化升级改造 · 黄泛区党员会议室" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="黄泛区星火驿站门头 · 设计方案"><img src="../assets/case-xihua-qiye-29.webp" alt="周口市西华烟草专卖局烟草文化升级改造 · 黄泛区星火驿站门头 · 设计方案" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="黄泛区星火驿站门头 · 现场合成"><img src="../assets/case-xihua-qiye-30.webp" alt="周口市西华烟草专卖局烟草文化升级改造 · 黄泛区星火驿站门头 · 现场合成" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="黄泛区入口廊道文化（一）"><img src="../assets/case-xihua-qiye-31.webp" alt="周口市西华烟草专卖局烟草文化升级改造 · 黄泛区入口廊道文化（一）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="黄泛区入口廊道文化（二）"><img src="../assets/case-xihua-qiye-32.webp" alt="周口市西华烟草专卖局烟草文化升级改造 · 黄泛区入口廊道文化（二）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="黄泛区入口廊道文化（三）"><img src="../assets/case-xihua-qiye-33.webp" alt="周口市西华烟草专卖局烟草文化升级改造 · 黄泛区入口廊道文化（三）" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="黄泛区企业文化提升"><img src="../assets/case-xihua-qiye-34.webp" alt="周口市西华烟草专卖局烟草文化升级改造 · 黄泛区企业文化提升" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="黄泛区星火驿站 · 党建联盟"><img src="../assets/case-xihua-qiye-35.webp" alt="周口市西华烟草专卖局烟草文化升级改造 · 黄泛区星火驿站 · 党建联盟" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="黄泛区星火驿站 · 企业文化"><img src="../assets/case-xihua-qiye-36.webp" alt="周口市西华烟草专卖局烟草文化升级改造 · 黄泛区星火驿站 · 企业文化" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="黄泛区正对大门墙体 · 现场合成"><img src="../assets/case-xihua-qiye-37.webp" alt="周口市西华烟草专卖局烟草文化升级改造 · 黄泛区正对大门墙体 · 现场合成" loading="lazy" width="1280" height="720" decoding="async"></div>
+                </div>
+                <span class="swipe-hint">左右滑动</span>
+                <span class="gallery-count" aria-live="polite">01 / 37</span>
+                <div class="gallery-nav">
+                  <button class="gallery-btn prev" type="button" aria-label="上一张"><svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+                  <button class="gallery-btn next" type="button" aria-label="下一张"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+                </div>
+              </div>
+              <div class="case-copy">
+                <span class="case-number">08</span>
+                <p class="case-category">企业文化 · 设计施工一体化</p>
+                <h3>周口市西华烟草专卖局烟草文化升级改造</h3>
+                <p class="case-tagline">西华县局院内 · 黄泛区两处院落文化整体提升</p>
+                <p class="case-description">周口市西华县烟草专卖局院内文化与黄泛区院内文化两处整体提升——含广场形象标识与宣传栏、会议室党建墙、楼梯与廊道文化、职工之家（餐厅 / 厨房 / 转角 / 健身区 / 卫生间标识）、黄泛区星火驿站门头与党建联盟空间等，从设计到施工一体化实施。</p>
+                <div class="case-meta"><span>文化建设</span><span>空间设计</span><span>标识制作</span><span>施工落地</span></div>
+              </div>
+            </article>
+
+
+
+
+
+
+      </div>
+    </section>
+
+    <section class="panel" id="panel-video" role="tabpanel" aria-labelledby="tab-video" hidden>
+      <div class="panel-heading"><h2>影视与视频内容</h2><p>FILM &amp; VIDEO CONTENT · 09 PROJECTS</p></div>
+      <div class="case-list">
+        <article class="case-card" data-case-title="宿州烟草现场会快剪">
+          <div class="gallery" aria-label="宿州烟草现场会快剪影片画面">
+            <div class="gallery-track" role="button" tabindex="0" aria-label="点击放大当前画面">
+              <div class="gallery-slide is-active" data-caption="影片画面 · 灵璧分会场"><img src="../assets/work-5152a5a4.webp" alt="宿州烟草现场会快剪画面① 会场全景"></div>
+              <div class="gallery-slide" data-caption="影片画面 · 成果展示区"><img src="../assets/work-3e8ecf4c.webp" alt="宿州烟草现场会快剪画面② 成果展示区" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="影片画面 · 主题分享"><img src="../assets/work-70497431.webp" alt="宿州烟草现场会快剪画面③ 主题分享" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="影片画面 · 展示大屏"><img src="../assets/work-4ca0c8c2.webp" alt="宿州烟草现场会快剪画面④ 展示大屏" loading="lazy"></div>
+            </div>
+            <span class="gallery-play" aria-hidden="true"><span><svg viewBox="0 0 24 24" fill="none"><path d="M8 5.4v13.2L19 12 8 5.4z" fill="currentColor"/></svg></span></span>
+            <span class="swipe-hint">左右滑动</span>
+            <span class="gallery-count" aria-live="polite">01 / 04</span>
+            <div class="gallery-nav">
+              <button class="gallery-btn prev" type="button" aria-label="上一张"><svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+              <button class="gallery-btn next" type="button" aria-label="下一张"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+            </div>
+          </div>
+          <div class="case-copy">
+            <span class="case-number">01</span>
+            <p class="case-category">影视与视频内容 · 活动记录</p>
+            <h3>宿州烟草<br>现场会快剪</h3>
+            <p class="case-tagline">全省系统安全“四化”建设成果展示会 · <span style="white-space:nowrap;">灵璧分会场</span></p>
+            <p class="case-description">会议现场快剪。以现场纪实手法记录分会场的成果展示与交流环节，兼顾会场氛围与细节表达，成片节奏明快，适合会后回顾与传播。</p>
+            <div class="case-meta"><span>现场纪实</span><span>活动快剪</span><span>1080P</span></div>
+            <div class="case-actions">
+              <a class="external-link" href="https://bluebirdw.my-place.us/videos/%E5%AE%BF%E5%B7%9E%E7%83%9F%E8%8D%89%E7%8E%B0%E5%9C%BA%E4%BC%9A%E5%BF%AB%E5%89%AA.mp4" target="_blank" rel="noopener noreferrer">观看视频<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 5h5v5M19 5l-8 8M19 13v6H5V5h6" stroke="currentColor" stroke-width="1.7"/></svg></a>
+            </div>
+          </div>
+        </article>
+        <article class="case-card" data-case-title="怀远蓝莓广告10秒">
+          <div class="gallery" aria-label="怀远蓝莓广告影片画面">
+            <div class="gallery-track" role="button" tabindex="0" aria-label="点击放大当前画面">
+              <div class="gallery-slide is-active" data-caption="广告画面 · 品牌与主张"><img src="../assets/case-1516f9c0.webp" alt="怀远蓝莓广告画面品牌与主张"></div>
+              <div class="gallery-slide" data-caption="广告画面 · 产品与模特"><img src="../assets/case-7da5c4bf.webp" alt="怀远蓝莓广告画面产品与模特" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="广告画面 · 饮用体验"><img src="../assets/case-7a119cb4.webp" alt="怀远蓝莓广告画面饮用体验" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="广告画面 · 原料蓝莓"><img src="../assets/case-3ef940ba.webp" alt="怀远蓝莓广告画面原料蓝莓" loading="lazy"></div>
+            </div>
+            <span class="gallery-play" aria-hidden="true"><span><svg viewBox="0 0 24 24" fill="none"><path d="M8 5.4v13.2L19 12 8 5.4z" fill="currentColor"/></svg></span></span>
+            <span class="swipe-hint">左右滑动</span>
+            <span class="gallery-count" aria-live="polite">01 / 04</span>
+            <div class="gallery-nav">
+              <button class="gallery-btn prev" type="button" aria-label="上一张"><svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+              <button class="gallery-btn next" type="button" aria-label="下一张"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+            </div>
+          </div>
+          <div class="case-copy">
+            <span class="case-number">02</span>
+            <p class="case-category">影视与视频内容 · 商业广告</p>
+            <h3>怀远蓝莓广告<br>10秒</h3>
+            <p class="case-tagline">阿慈蓝莓酵素饮料 · “酵”醒你的原动力</p>
+            <p class="case-description">10 秒短视频广告。以新鲜蓝莓入镜开场，产品与模特自然衔接，饮用体验收尾，10 秒内完成“原料—产品—体验”的完整叙事，适合社交平台投放与电商详情页使用。</p>
+            <div class="case-meta"><span>商业广告</span><span>短视频</span><span>10秒成片</span><span>产品TVC</span></div>
+            <div class="case-actions">
+              <a class="external-link" href="https://bluebirdw.my-place.us/videos/%E9%98%BF%E5%85%B9%E8%93%9D%E8%8E%9310s%E5%B9%BF%E5%91%8A.mp4" target="_blank" rel="noopener noreferrer">观看视频<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 5h5v5M19 5l-8 8M19 13v6H5V5h6" stroke="currentColor" stroke-width="1.7"/></svg></a>
+            </div>
+          </div>
+        </article>
+        <article class="case-card" data-case-title="灵璧烟草安全四化成果汇报">
+          <div class="gallery" aria-label="灵璧烟草安全四化成果汇报影片画面">
+            <div class="gallery-track" role="button" tabindex="0" aria-label="点击放大当前画面">
+              <div class="gallery-slide is-active" data-caption="影片画面 · 片头主题幕"><img src="../assets/case-c168ae4d.webp" alt="灵璧烟草安全四化成果汇报影片画面片头主题幕"></div>
+              <div class="gallery-slide" data-caption="影片画面 · 推进会现场"><img src="../assets/case-ea4a9c1a.webp" alt="灵璧烟草安全四化成果汇报影片画面推进会现场" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="影片画面 · 基层办公场景"><img src="../assets/case-336e931a.webp" alt="灵璧烟草安全四化成果汇报影片画面基层办公场景" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="影片画面 · 片尾主题"><img src="../assets/case-f54d0b6d.webp" alt="灵璧烟草安全四化成果汇报影片画面片尾主题" loading="lazy"></div>
+            </div>
+            <span class="gallery-play" aria-hidden="true"><span><svg viewBox="0 0 24 24" fill="none"><path d="M8 5.4v13.2L19 12 8 5.4z" fill="currentColor"/></svg></span></span>
+            <span class="swipe-hint">左右滑动</span>
+            <span class="gallery-count" aria-live="polite">01 / 04</span>
+            <div class="gallery-nav">
+              <button class="gallery-btn prev" type="button" aria-label="上一张"><svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+              <button class="gallery-btn next" type="button" aria-label="下一张"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+            </div>
+          </div>
+          <div class="case-copy">
+            <span class="case-number">03</span>
+            <p class="case-category">影视与视频内容 · 成果汇报</p>
+            <h3>灵璧烟草安全<br>“四化”建设<br>成果汇报</h3>
+            <p class="case-tagline">汇报影片 · 「人杰地“灵” 安全如“璧”」</p>
+            <p class="case-description">成果汇报影片（3分42秒 / 1080P）。以成果影像墙与片头主题幕开场，串联推进会现场、制度规程与基层纪实画面，并以三维视觉包装呈现安全“四化”建设脉络，风格稳重、信息清晰。</p>
+            <div class="case-meta"><span>成果汇报</span><span>企业影片</span><span>1080P</span><span>3分42秒</span></div>
+            <div class="case-actions">
+              <a class="external-link" href="https://bluebirdw.my-place.us/videos/%E7%81%B5%E7%92%A7%E7%83%9F%E8%8D%89%E5%AE%89%E5%85%A8%E5%9B%9B%E5%8C%96%E6%88%90%E6%9E%9C%E6%B1%87%E6%8A%A5.mp4" target="_blank" rel="noopener noreferrer">观看视频<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 5h5v5M19 5l-8 8M19 13v6H5V5h6" stroke="currentColor" stroke-width="1.7"/></svg></a>
+            </div>
+          </div>
+        </article>
+            <article class="case-card" data-case-title="红星美凯龙微短剧">
+              <div class="gallery" aria-label="红星美凯龙微短剧影片画面">
+                <div class="gallery-track" role="button" tabindex="0" aria-label="点击放大当前画面">
+                <div class="gallery-slide is-active" data-caption="第1集 · 别把爱变得理所当然"><img src="../assets/case-hxmk-ep01.webp" alt="红星美凯龙微短剧 · 第1集 · 别把爱变得理所当然" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="第2集 · 单方面的付出永远比不是双向奔赴"><img src="../assets/case-hxmk-ep02.webp" alt="红星美凯龙微短剧 · 第2集 · 单方面的付出永远比不是双向奔赴" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="第3集 · 房产证只写一个人的名字你愿意吗"><img src="../assets/case-hxmk-ep03.webp" alt="红星美凯龙微短剧 · 第3集 · 房产证只写一个人的名字你愿意吗" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="第4集 · 怀孕九个月了，老公最近回家是越来越晚"><img src="../assets/case-hxmk-ep04.webp" alt="红星美凯龙微短剧 · 第4集 · 怀孕九个月了，老公最近回家是越来越晚" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="第5集 · 抠门男友"><img src="../assets/case-hxmk-ep05.webp" alt="红星美凯龙微短剧 · 第5集 · 抠门男友" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="第6集 · 再给你一个机会，你还会选择和他结婚吗"><img src="../assets/case-hxmk-ep06.webp" alt="红星美凯龙微短剧 · 第6集 · 再给你一个机会，你还会选择和他结婚吗" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="第7集 · 长久的爱情都藏在细节里"><img src="../assets/case-hxmk-ep07.webp" alt="红星美凯龙微短剧 · 第7集 · 长久的爱情都藏在细节里" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="第8集 · 最好的爱情，是懂得给对方一个台阶"><img src="../assets/case-hxmk-ep08.webp" alt="红星美凯龙微短剧 · 第8集 · 最好的爱情，是懂得给对方一个台阶" loading="lazy" width="1280" height="720" decoding="async"></div>
+                </div>
+                <span class="gallery-play" aria-hidden="true"><span><svg viewBox="0 0 24 24" fill="none"><path d="M8 5.4v13.2L19 12 8 5.4z" fill="currentColor"/></svg></span></span>
+                <span class="swipe-hint">左右滑动</span>
+                <span class="gallery-count" aria-live="polite">01 / 08</span>
+                <div class="gallery-nav">
+                  <button class="gallery-btn prev" type="button" aria-label="上一张"><svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+                  <button class="gallery-btn next" type="button" aria-label="下一张"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+                </div>
+              </div>
+              <div class="case-copy">
+                <span class="case-number">04</span>
+                <p class="case-category">影视与视频内容 · 品牌微短剧</p>
+                <h3>红星美凯龙微短剧</h3>
+                <p class="case-tagline">「信地红星美凯龙」品牌定制 · 8 集情感微短剧</p>
+                <p class="case-description">为家居卖场定制的情感微短剧系列，共 8 集。每集聚焦一个亲密关系议题——从「别把爱变得理所当然」到「懂得给对方一个台阶」，用生活化场景与真实对话推进叙事，适配短视频平台传播；本案例逐集截取影片画面，下方附 8 集播放入口。</p>
+                <div class="case-meta"><span>品牌微短剧</span><span>脚本策划</span><span>实景拍摄</span><span>短视频传播</span></div>
+              </div>
+                        <div class="case-episodes" aria-label="红星美凯龙微短剧8 集播放">
+            <a class="external-link" href="https://bluebirdw.my-place.us/videos/20261014-1906_%E7%BA%A2%E6%98%9F%E7%BE%8E%E5%87%AF%E9%BE%99%E5%BE%AE%E7%9F%AD%E5%89%A7/22.6.23%E4%BF%A1%E5%9C%B0%E7%BA%A2%E6%98%9F%E7%BE%8E%E5%87%AF%E9%BE%99-%E5%88%AB%E6%8A%8A%E7%88%B1%E5%8F%98%E5%BE%97%E7%90%86%E6%89%80%E5%BD%93%E7%84%B6%EF%BC%8C%E7%88%B1%E6%98%AF%E7%9B%B8%E4%BA%92%E7%9A%84.mp4" target="_blank" rel="noopener noreferrer"><b>第1集</b> 别把爱变得理所当然<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 5.4v13.2L19 12 8 5.4z" fill="currentColor"/></svg></a><a class="external-link" href="https://bluebirdw.my-place.us/videos/20261014-1906_%E7%BA%A2%E6%98%9F%E7%BE%8E%E5%87%AF%E9%BE%99%E5%BE%AE%E7%9F%AD%E5%89%A7/22.6.23%E4%BF%A1%E5%9C%B0%E7%BA%A2%E6%98%9F%E7%BE%8E%E5%87%AF%E9%BE%99-%E5%8D%95%E6%96%B9%E9%9D%A2%E7%9A%84%E4%BB%98%E5%87%BA%E6%B0%B8%E8%BF%9C%E6%AF%94%E4%B8%8D%E6%98%AF%E5%8F%8C%E5%90%91%E5%A5%94%E8%B5%B4.mp4" target="_blank" rel="noopener noreferrer"><b>第2集</b> 单方面的付出永远比不是双向奔赴<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 5.4v13.2L19 12 8 5.4z" fill="currentColor"/></svg></a><a class="external-link" href="https://bluebirdw.my-place.us/videos/20261014-1906_%E7%BA%A2%E6%98%9F%E7%BE%8E%E5%87%AF%E9%BE%99%E5%BE%AE%E7%9F%AD%E5%89%A7/22.6.23%E4%BF%A1%E5%9C%B0%E7%BA%A2%E6%98%9F%E7%BE%8E%E5%87%AF%E9%BE%99-%E6%88%BF%E4%BA%A7%E8%AF%81%E5%8F%AA%E5%86%99%E4%B8%80%E4%B8%AA%E4%BA%BA%E7%9A%84%E5%90%8D%E5%AD%97%20%E4%BD%A0%E6%84%BF%E6%84%8F%E5%90%97.mp4" target="_blank" rel="noopener noreferrer"><b>第3集</b> 房产证只写一个人的名字你愿意吗<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 5.4v13.2L19 12 8 5.4z" fill="currentColor"/></svg></a><a class="external-link" href="https://bluebirdw.my-place.us/videos/20261014-1906_%E7%BA%A2%E6%98%9F%E7%BE%8E%E5%87%AF%E9%BE%99%E5%BE%AE%E7%9F%AD%E5%89%A7/22.6.23%E4%BF%A1%E5%9C%B0%E7%BA%A2%E6%98%9F%E7%BE%8E%E5%87%AF%E9%BE%99-%E6%80%80%E5%AD%95%E4%B9%9D%E4%B8%AA%E6%9C%88%E4%BA%86%EF%BC%8C%E8%80%81%E5%85%AC%E6%9C%80%E8%BF%91%E5%9B%9E%E5%AE%B6%E6%98%AF%E8%B6%8A%E6%9D%A5%E8%B6%8A%E6%99%9A.mp4" target="_blank" rel="noopener noreferrer"><b>第4集</b> 怀孕九个月了，老公最近回家是越来越晚<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 5.4v13.2L19 12 8 5.4z" fill="currentColor"/></svg></a><a class="external-link" href="https://bluebirdw.my-place.us/videos/20261014-1906_%E7%BA%A2%E6%98%9F%E7%BE%8E%E5%87%AF%E9%BE%99%E5%BE%AE%E7%9F%AD%E5%89%A7/22.6.23%E4%BF%A1%E5%9C%B0%E7%BA%A2%E6%98%9F%E7%BE%8E%E5%87%AF%E9%BE%99-%E6%8A%A0%E9%97%A8%E7%94%B7%E5%8F%8B.mp4" target="_blank" rel="noopener noreferrer"><b>第5集</b> 抠门男友<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 5.4v13.2L19 12 8 5.4z" fill="currentColor"/></svg></a><a class="external-link" href="https://bluebirdw.my-place.us/videos/20261014-1906_%E7%BA%A2%E6%98%9F%E7%BE%8E%E5%87%AF%E9%BE%99%E5%BE%AE%E7%9F%AD%E5%89%A7/22.6.23%E4%BF%A1%E5%9C%B0%E7%BA%A2%E6%98%9F%E7%BE%8E%E5%87%AF%E9%BE%99-%E5%86%8D%E7%BB%99%E4%BD%A0%E4%B8%80%E4%B8%AA%E6%9C%BA%E4%BC%9A%EF%BC%8C%E4%BD%A0%E8%BF%98%E4%BC%9A%E9%80%89%E6%8B%A9%E5%92%8C%E4%BB%96%E7%BB%93%E5%A9%9A%E5%90%97.mp4" target="_blank" rel="noopener noreferrer"><b>第6集</b> 再给你一个机会，你还会选择和他结婚吗<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 5.4v13.2L19 12 8 5.4z" fill="currentColor"/></svg></a><a class="external-link" href="https://bluebirdw.my-place.us/videos/20261014-1906_%E7%BA%A2%E6%98%9F%E7%BE%8E%E5%87%AF%E9%BE%99%E5%BE%AE%E7%9F%AD%E5%89%A7/22.6.23%E4%BF%A1%E5%9C%B0%E7%BA%A2%E6%98%9F%E7%BE%8E%E5%87%AF%E9%BE%99-%E9%95%BF%E4%B9%85%E7%9A%84%E7%88%B1%E6%83%85%E9%83%BD%E8%97%8F%E5%9C%A8%E7%BB%86%E8%8A%82%E9%87%8C.mp4" target="_blank" rel="noopener noreferrer"><b>第7集</b> 长久的爱情都藏在细节里<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 5.4v13.2L19 12 8 5.4z" fill="currentColor"/></svg></a><a class="external-link" href="https://bluebirdw.my-place.us/videos/20261014-1906_%E7%BA%A2%E6%98%9F%E7%BE%8E%E5%87%AF%E9%BE%99%E5%BE%AE%E7%9F%AD%E5%89%A7/22.6.23%E4%BF%A1%E5%9C%B0%E7%BA%A2%E6%98%9F%E7%BE%8E%E5%87%AF%E9%BE%99-%E6%9C%80%E5%A5%BD%E7%9A%84%E7%88%B1%E6%83%85%EF%BC%8C%E6%98%AF%E6%87%82%E5%BE%97%E7%BB%99%E5%AF%B9%E6%96%B9%E4%B8%80%E4%B8%AA%E5%8F%B0%E9%98%B6.mp4" target="_blank" rel="noopener noreferrer"><b>第8集</b> 最好的爱情，是懂得给对方一个台阶<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 5.4v13.2L19 12 8 5.4z" fill="currentColor"/></svg></a></div>
+            </article>
+            <article class="case-card" data-case-title="云南中烟宣传片《疫情期间的故事》">
+              <div class="gallery" aria-label="云南中烟宣传片《疫情期间的故事》影片画面">
+                <div class="gallery-track" role="button" tabindex="0" aria-label="点击放大当前画面">
+                <div class="gallery-slide is-active" data-caption="第1集 · 高考"><img src="../assets/case-ynzy-ep01.webp" alt="云南中烟宣传片《疫情期间的故事》 · 第1集 · 高考" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="第2集 · 瓜农"><img src="../assets/case-ynzy-ep02.webp" alt="云南中烟宣传片《疫情期间的故事》 · 第2集 · 瓜农" loading="lazy" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="第3集 · 小店"><img src="../assets/case-ynzy-ep03.webp" alt="云南中烟宣传片《疫情期间的故事》 · 第3集 · 小店" loading="lazy" width="1280" height="720" decoding="async"></div>
+                </div>
+                <span class="gallery-play" aria-hidden="true"><span><svg viewBox="0 0 24 24" fill="none"><path d="M8 5.4v13.2L19 12 8 5.4z" fill="currentColor"/></svg></span></span>
+                <span class="swipe-hint">左右滑动</span>
+                <span class="gallery-count" aria-live="polite">01 / 03</span>
+                <div class="gallery-nav">
+                  <button class="gallery-btn prev" type="button" aria-label="上一张"><svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+                  <button class="gallery-btn next" type="button" aria-label="下一张"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+                </div>
+              </div>
+              <div class="case-copy">
+                <span class="case-number">05</span>
+                <p class="case-category">影视与视频内容 · 品牌宣传片</p>
+                <h3>云南中烟宣传片《疫情期间的故事》</h3>
+                <p class="case-tagline">「高考 · 瓜农 · 小店」三个真实故事 · 三集系列</p>
+                <p class="case-description">云南中烟疫情期间的系列宣传片，三集分别讲述高考、瓜农与小店三个普通人的故事——以纪实镜头记录特殊时期里的坚持与互助，用真实人物串起品牌温度。</p>
+                <div class="case-meta"><span>品牌宣传片</span><span>纪实叙事</span><span>系列短片</span><span>1080P</span></div>
+              </div>
+              <div class="case-episodes is-3" aria-label="云南中烟宣传片《疫情期间的故事》三集播放">
+                <a class="external-link" href="https://bluebirdw.my-place.us/up-fzev3z/files/20261014-205340.mp4" target="_blank" rel="noopener noreferrer"><b>第1集</b> 高考<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 5.4v13.2L19 12 8 5.4z" fill="currentColor"/></svg></a><a class="external-link" href="https://bluebirdw.my-place.us/up-fzev3z/files/20261014-205520.mp4" target="_blank" rel="noopener noreferrer"><b>第2集</b> 瓜农<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 5.4v13.2L19 12 8 5.4z" fill="currentColor"/></svg></a><a class="external-link" href="https://bluebirdw.my-place.us/videos/20261014-205039.mp4" target="_blank" rel="noopener noreferrer"><b>第3集</b> 小店<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 5.4v13.2L19 12 8 5.4z" fill="currentColor"/></svg></a>
+              </div>
+            </article>
+<article class="case-card" data-case-title="西门子家电企业宣传片">
+              <div class="gallery" aria-label="西门子家电企业宣传片影片画面">
+                <div class="gallery-track" role="button" tabindex="0" aria-label="点击放大当前画面">
+                <div class="gallery-slide is-active" data-caption="第1集 · 百年厨房"><img src="../assets/case-siemens-ep01.webp" alt="西门子家电企业宣传片 · 第1集 · 百年厨房" width="1280" height="720" decoding="async"></div>
+                <div class="gallery-slide" data-caption="第2集 · 洗碗机历史"><img src="../assets/case-siemens-ep02.webp" alt="西门子家电企业宣传片 · 第2集 · 洗碗机历史" width="1280" height="720" loading="lazy" decoding="async"></div>
+                <div class="gallery-slide" data-caption="第3集 · 烟机历史"><img src="../assets/case-siemens-ep03.webp" alt="西门子家电企业宣传片 · 第3集 · 烟机历史" width="1280" height="720" loading="lazy" decoding="async"></div>
+                </div>
+                <span class="gallery-play" aria-hidden="true"><span><svg viewBox="0 0 24 24" fill="none"><path d="M8 5.4v13.2L19 12 8 5.4z" fill="currentColor"/></svg></span></span>
+                <span class="swipe-hint">左右滑动</span>
+                <span class="gallery-count" aria-live="polite">01 / 03</span>
+                <div class="gallery-nav">
+                  <button class="gallery-btn prev" type="button" aria-label="上一张"><svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+                  <button class="gallery-btn next" type="button" aria-label="下一张"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+                </div>
+              </div>
+              <div class="case-copy">
+                <span class="case-number">06</span>
+                <p class="case-category">影视与视频内容 · 企业宣传片</p>
+                <h3>西门子家电企业宣传片</h3>
+                <p class="case-tagline">「百年厨房 · 洗碗机历史 · 烟机历史」三个篇章</p>
+                <p class="case-description">西门子家电品牌宣传片，三集分别回溯百年厨房、洗碗机与烟机的技术演进——从 1962 年自动电磁灶诞生，到智能热风自清洁技术上市，用产品史串起品牌的技术底蕴。</p>
+                <div class="case-meta"><span>品牌宣传片</span><span>产品历史</span><span>三集系列</span><span>1080P</span></div>
+              </div>
+              <div class="case-episodes is-3" aria-label="西门子家电企业宣传片三集播放">
+                <a class="external-link" href="https://bluebirdw.my-place.us/videos/20261014-210309.mp4" target="_blank" rel="noopener noreferrer"><b>第1集</b> 百年厨房<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 5.4v13.2L19 12 8 5.4z" fill="currentColor"/></svg></a><a class="external-link" href="https://bluebirdw.my-place.us/videos/20261014-210031.mp4" target="_blank" rel="noopener noreferrer"><b>第2集</b> 洗碗机历史<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 5.4v13.2L19 12 8 5.4z" fill="currentColor"/></svg></a><a class="external-link" href="https://bluebirdw.my-place.us/videos/20261014-210532.mp4" target="_blank" rel="noopener noreferrer"><b>第3集</b> 烟机历史<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 5.4v13.2L19 12 8 5.4z" fill="currentColor"/></svg></a>
+              </div>
+            </article>
+        <article class="case-card" data-case-title="远风电卡宣传片">
+          <div class="gallery" aria-label="远风电卡宣传片影片画面">
+            <div class="gallery-track" role="button" tabindex="0" aria-label="点击放大当前画面">
+              <div class="gallery-slide is-active" data-caption="电动重卡 · “风光储充”一体化智慧能源站"><img src="../assets/case-yuanfeng-01.webp" alt="远风电卡宣传片 · 电动重卡 · “风光储充”一体化智慧能源站" width="1280" height="720" decoding="async"></div>
+              <div class="gallery-slide" data-caption="清洁能源动力系统产品 · 智能制造产线"><img src="../assets/case-yuanfeng-02.webp" alt="远风电卡宣传片 · 清洁能源动力系统产品 · 智能制造产线" width="1280" height="720" loading="lazy" decoding="async"></div>
+              <div class="gallery-slide" data-caption="技术与服务团队"><img src="../assets/case-yuanfeng-03.webp" alt="远风电卡宣传片 · 技术与服务团队" width="1280" height="720" loading="lazy" decoding="async"></div>
+              <div class="gallery-slide" data-caption="电动重卡车队运行场景"><img src="../assets/case-yuanfeng-04.webp" alt="远风电卡宣传片 · 电动重卡车队运行场景" width="1280" height="720" loading="lazy" decoding="async"></div>
+            </div>
+            <span class="gallery-play" aria-hidden="true"><span><svg viewBox="0 0 24 24" fill="none"><path d="M8 5.4v13.2L19 12 8 5.4z" fill="currentColor"/></svg></span></span>
+            <span class="swipe-hint">左右滑动</span>
+            <span class="gallery-count" aria-live="polite">01 / 04</span>
+            <div class="gallery-nav">
+              <button class="gallery-btn prev" type="button" aria-label="上一张"><svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+              <button class="gallery-btn next" type="button" aria-label="下一张"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+            </div>
+          </div>
+          <div class="case-copy">
+            <span class="case-number">07</span>
+            <p class="case-category">影视与视频内容 · 企业宣传片</p>
+            <h3>远风电卡宣传片</h3>
+            <p class="case-tagline">清洁能源动力系统 · 电动重卡</p>
+            <p class="case-description">远风电卡企业宣传片——从清洁能源动力系统的智能制造，到“风光储充”一体化智慧能源站，再到电动重卡的运行场景，用工业影像呈现品牌在绿色运力上的整体布局。</p>
+            <div class="case-meta"><span>企业宣传片</span><span>工业影像</span><span>绿色运力</span><span>2分55秒</span></div>
+            <div class="case-actions">
+              <a class="external-link" href="https://bluebirdw.my-place.us/videos/%E8%BF%9C%E9%A3%8E%E7%94%B5%E5%8D%A1%E5%AE%A3%E4%BC%A0%E7%89%87.mp4" target="_blank" rel="noopener noreferrer">观看视频<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 5h5v5M19 5l-8 8M19 13v6H5V5h6" stroke="currentColor" stroke-width="1.7"/></svg></a>
+            </div>
+          </div>
+        </article>
+        <article class="case-card" data-case-title="讯飞产品宣传片">
+          <div class="gallery" aria-label="讯飞产品宣传片影片画面">
+            <div class="gallery-track" role="button" tabindex="0" aria-label="点击放大当前画面">
+              <div class="gallery-slide is-active" data-caption="第1集 · 讯飞数字阅读"><img src="../assets/case-xunfei-ep01.webp" alt="讯飞产品宣传片 · 第1集 · 讯飞数字阅读" width="1280" height="720" decoding="async"></div>
+              <div class="gallery-slide" data-caption="第2集 · 讯飞家庭云棒"><img src="../assets/case-xunfei-ep02.webp" alt="讯飞产品宣传片 · 第2集 · 讯飞家庭云棒" width="1280" height="720" loading="lazy" decoding="async"></div>
+              <div class="gallery-slide" data-caption="第3集 · 讯飞单词通"><img src="../assets/case-xunfei-ep03.webp" alt="讯飞产品宣传片 · 第3集 · 讯飞单词通" width="1280" height="720" loading="lazy" decoding="async"></div>
+              <div class="gallery-slide" data-caption="第4集 · 讯飞AI营销云"><img src="../assets/case-xunfei-ep04.webp" alt="讯飞产品宣传片 · 第4集 · 讯飞AI营销云" width="1280" height="720" loading="lazy" decoding="async"></div>
+            </div>
+            <span class="gallery-play" aria-hidden="true"><span><svg viewBox="0 0 24 24" fill="none"><path d="M8 5.4v13.2L19 12 8 5.4z" fill="currentColor"/></svg></span></span>
+            <span class="swipe-hint">左右滑动</span>
+            <span class="gallery-count" aria-live="polite">01 / 04</span>
+            <div class="gallery-nav">
+              <button class="gallery-btn prev" type="button" aria-label="上一张"><svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+              <button class="gallery-btn next" type="button" aria-label="下一张"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+            </div>
+          </div>
+          <div class="case-copy">
+            <span class="case-number">08</span>
+            <p class="case-category">影视与视频内容 · 产品宣传片</p>
+            <h3>讯飞产品宣传片</h3>
+            <p class="case-tagline">「数字阅读 · 家庭云棒 · 单词通 · AI营销云」四集产品片</p>
+            <p class="case-description">讯飞四款产品的系列宣传片——数字阅读、家庭云棒、单词通与 AI 营销云，分别以真实使用场景与技术画面，呈现 AI 在不同产品上的落地方式。</p>
+            <div class="case-meta"><span>产品宣传片</span><span>AI 科技</span><span>四集系列</span><span>1080P</span></div>
+          </div>
+          <div class="case-episodes" aria-label="讯飞产品宣传片四集播放">
+              <a class="external-link" href="https://bluebirdw.my-place.us/videos/%E8%AE%AF%E9%A3%9E%E6%95%B0%E5%AD%97%E9%98%85%E8%AF%BB.mp4" target="_blank" rel="noopener noreferrer"><b>第1集</b> 讯飞数字阅读<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 5.4v13.2L19 12 8 5.4z" fill="currentColor"/></svg></a>
+              <a class="external-link" href="https://bluebirdw.my-place.us/videos/%E8%AE%AF%E9%A3%9E%E5%AE%B6%E5%BA%AD%E4%BA%91%E6%A3%92.mp4" target="_blank" rel="noopener noreferrer"><b>第2集</b> 讯飞家庭云棒<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 5.4v13.2L19 12 8 5.4z" fill="currentColor"/></svg></a>
+              <a class="external-link" href="https://bluebirdw.my-place.us/videos/%E8%AE%AF%E9%A3%9E%E5%8D%95%E8%AF%8D%E9%80%9A.mp4" target="_blank" rel="noopener noreferrer"><b>第3集</b> 讯飞单词通<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 5.4v13.2L19 12 8 5.4z" fill="currentColor"/></svg></a>
+              <a class="external-link" href="https://bluebirdw.my-place.us/videos/%E8%AE%AF%E9%A3%9EAI%E8%90%A5%E9%94%80%E4%BA%91.mp4" target="_blank" rel="noopener noreferrer"><b>第4集</b> 讯飞AI营销云<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 5.4v13.2L19 12 8 5.4z" fill="currentColor"/></svg></a>
+          </div>
+        </article>
+        <article class="case-card" data-case-title="江淮迪光汽车宣传片">
+          <div class="gallery" aria-label="江淮迪光汽车宣传片影片画面">
+            <div class="gallery-track" role="button" tabindex="0" aria-label="点击放大当前画面">
+              <div class="gallery-slide is-active" data-caption="车内场景 · 中控大屏"><img src="../assets/case-jianghuai-01.webp" alt="江淮迪光汽车宣传片 · 车内场景 · 中控大屏" width="1280" height="720" decoding="async"></div>
+              <div class="gallery-slide" data-caption="海边场景 · 车辆造型"><img src="../assets/case-jianghuai-02.webp" alt="江淮迪光汽车宣传片 · 海边场景 · 车辆造型" width="1280" height="720" loading="lazy" decoding="async"></div>
+              <div class="gallery-slide" data-caption="骑行场景 · 享受自然的拥抱"><img src="../assets/case-jianghuai-03.webp" alt="江淮迪光汽车宣传片 · 骑行场景 · 享受自然的拥抱" width="1280" height="720" loading="lazy" decoding="async"></div>
+              <div class="gallery-slide" data-caption="折叠车出行"><img src="../assets/case-jianghuai-04.webp" alt="江淮迪光汽车宣传片 · 折叠车出行" width="1280" height="720" loading="lazy" decoding="async"></div>
+            </div>
+            <span class="gallery-play" aria-hidden="true"><span><svg viewBox="0 0 24 24" fill="none"><path d="M8 5.4v13.2L19 12 8 5.4z" fill="currentColor"/></svg></span></span>
+            <span class="swipe-hint">左右滑动</span>
+            <span class="gallery-count" aria-live="polite">01 / 04</span>
+            <div class="gallery-nav">
+              <button class="gallery-btn prev" type="button" aria-label="上一张"><svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+              <button class="gallery-btn next" type="button" aria-label="下一张"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+            </div>
+          </div>
+          <div class="case-copy">
+            <span class="case-number">09</span>
+            <p class="case-category">影视与视频内容 · 企业宣传片</p>
+            <h3>江淮迪光汽车宣传片</h3>
+            <p class="case-tagline">车内智能座舱 · 生活方式影像</p>
+            <p class="case-description">江淮迪光汽车宣传片——以海边、公路与骑行场景串联，车内中控大屏交互与户外出行画面交替出现，用生活方式影像呈现品牌主张。</p>
+            <div class="case-meta"><span>企业宣传片</span><span>生活方式影像</span><span>竖屏 4K</span><span>1分54秒</span></div>
+            <div class="case-actions">
+              <a class="external-link" href="https://bluebirdw.my-place.us/videos/%E6%B1%9F%E6%B7%AE%E8%BF%AA%E5%85%89%E5%AE%A3%E4%BC%A0%E7%89%87.mp4" target="_blank" rel="noopener noreferrer">观看视频<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 5h5v5M19 5l-8 8M19 13v6H5V5h6" stroke="currentColor" stroke-width="1.7"/></svg></a>
+            </div>
+          </div>
+        </article>
+
+
+
+
+      </div>
+    </section>
+
+    <section class="panel" id="panel-event" role="tabpanel" aria-labelledby="tab-event" hidden>
+      <div class="panel-heading"><h2>活动与会务</h2><p>EVENTS & CONFERENCES · 09 PROJECTS</p></div>
+      <div class="case-list">
+        <article class="case-card" data-case-title="全省系统专卖监管现代化建设现场推进会">
+          <div class="gallery" aria-label="全省系统专卖监管现代化建设现场推进会项目图片轮播">
+            <div class="gallery-track" role="button" tabindex="0" aria-label="点击放大当前图片">
+              <div class="gallery-slide is-active" data-caption="大会主会场"><img src="../assets/work-89dd7772.webp" alt="全省系统专卖监管现代化建设现场推进会主会场"></div>
+              <div class="gallery-slide" data-caption="成果展板参观"><img src="../assets/img-ee1db91e.webp" alt="参会人员参观专卖监管现代化建设成果展板" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="会议场馆外景"><img src="../assets/img-ea966af7.webp" alt="全省系统专卖监管现代化建设现场推进会场馆外景" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="大会舞台"><img src="../assets/img-a58dc4bd.webp" alt="全省系统专卖监管现代化建设现场推进会舞台与视觉系统" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="现场展陈空间"><img src="../assets/img-5d4d1157.webp" alt="大会现场展陈物料与成果展示空间" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="大会现场"><img src="../assets/img-ed947a7f.webp" alt="全省系统专卖监管现代化建设现场推进会观众席" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="会议进行中"><img src="../assets/img-7e9fa62a.webp" alt="千人级大会进行中的主会场与观众" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="全场实景"><img src="../assets/img-c81542bd.webp" alt="全省系统专卖监管现代化建设现场推进会全场实景" loading="lazy"></div>
+            </div>
+            <span class="swipe-hint">左右滑动</span>
+            <span class="gallery-count" aria-live="polite">01 / 08</span>
+            <div class="gallery-nav">
+              <button class="gallery-btn prev" type="button" aria-label="上一张"><svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+              <button class="gallery-btn next" type="button" aria-label="下一张"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+            </div>
+          </div>
+          <div class="case-copy">
+            <span class="case-number">01</span>
+            <p class="case-category">活动与会务 · 全案服务</p>
+            <h3>全省系统专卖监管现代化建设现场推进会</h3>
+            <p class="case-tagline">千人级大会 · 全案会务落地</p>
+            <p class="case-description">全省系统专卖监管现代化建设现场推进会——从会议策划、视觉体系、展陈物料到现场执行的全案会务服务，千人级大会落地。</p>
+            <div class="case-meta"><span>策划</span><span>视觉</span><span>空间</span><span>物料</span><span>执行</span><span>传播</span></div>
+          </div>
+        </article>
+
+        <article class="case-card" data-case-title="安徽烟草商业安全“四化”建设成果交流会">
+          <div class="gallery" aria-label="安徽烟草商业安全四化建设成果交流会项目图片轮播">
+            <div class="gallery-track" role="button" tabindex="0" aria-label="点击放大当前图片">
+              <div class="gallery-slide is-active" data-caption="大会主会场"><img src="../assets/case-68bcf862.webp" alt="安徽烟草商业安全四化建设成果交流会大会主会场"></div>
+              <div class="gallery-slide" data-caption="主题交流"><img src="../assets/case-781b9a27.webp" alt="安徽烟草商业安全四化建设成果交流会主题交流环节" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="主题展陈"><img src="../assets/case-faab3e47.webp" alt="安徽烟草商业安全四化建设成果交流会主题展陈装置" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="会场全景"><img src="../assets/case-81f71086.webp" alt="安徽烟草商业安全四化建设成果交流会会场全景" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="交流会现场"><img src="../assets/case-b6d2c286.webp" alt="安徽烟草商业安全四化建设成果交流会现场实景" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="会务接待"><img src="../assets/case-1b999991.webp" alt="安徽烟草商业安全四化建设成果交流会会务接待区" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="会务细节"><img src="../assets/case-7fc804a6.webp" alt="安徽烟草商业安全四化建设成果交流会会务布置细节" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="现场观摩"><img src="../assets/case-25303cce.webp" alt="安徽烟草商业安全四化建设成果交流会现场观摩环节" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="展陈细节"><img src="../assets/case-37042269.webp" alt="安徽烟草商业安全四化建设成果交流会展陈布置细节" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="观摩交流"><img src="../assets/case-5bb6b76d.webp" alt="安徽烟草商业安全四化建设成果交流会观摩交流现场" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="户外观摩"><img src="../assets/case-1b39dd4b.webp" alt="安徽烟草商业安全四化建设成果交流会户外观摩现场" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="专题交流"><img src="../assets/case-ff956f24.webp" alt="安徽烟草商业安全四化建设成果交流会专题交流现场" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="成果资料"><img src="../assets/case-7498a50d.webp" alt="安徽烟草商业安全四化建设成果交流会成果资料展示" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="会议合影"><img src="../assets/case-c21b88b4.webp" alt="安徽烟草商业安全四化建设成果交流会参会人员合影" loading="lazy"></div>
+            </div>
+            <span class="swipe-hint">左右滑动</span>
+            <span class="gallery-count" aria-live="polite">01 / 14</span>
+            <div class="gallery-nav">
+              <button class="gallery-btn prev" type="button" aria-label="上一张"><svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+              <button class="gallery-btn next" type="button" aria-label="下一张"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+            </div>
+          </div>
+          <div class="case-copy">
+            <span class="case-number">02</span>
+            <p class="case-category">活动与会务 · 全案服务</p>
+            <h3>安徽烟草商业安全“四化”建设成果交流会</h3>
+            <p class="case-tagline">深耕“四化”建设 · 筑牢安全根基</p>
+            <p class="case-description">安徽烟草商业安全“四化”建设成果交流会——深耕“四化”建设、筑牢安全根基，会议策划、现场观摩、展陈布置与会务执行的全案服务。</p>
+            <div class="case-meta"><span>策划</span><span>视觉</span><span>观摩</span><span>展陈</span><span>执行</span><span>传播</span></div>
+          </div>
+        </article>
+        <article class="case-card" data-case-title="国科能源安庆储能电池智能制造基地投产仪式">
+          <div class="gallery" aria-label="国科能源安庆储能电池智能制造基地投产仪式项目图片轮播">
+            <div class="gallery-track" role="button" tabindex="0" aria-label="点击放大当前图片">
+              <div class="gallery-slide is-active" data-caption="投产仪式主舞台"><img src="../assets/case-3a32355e.webp" alt="国科能源安庆储能电池智能制造基地投产仪式主舞台"></div>
+              <div class="gallery-slide" data-caption="工厂外景与迎宾"><img src="../assets/case-0e8599f7.webp" alt="国科能源安庆工厂外景与嘉宾迎宾" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="嘉宾参观智能产线"><img src="../assets/case-dd5b0389.webp" alt="嘉宾参观国科能源安庆基地智能产线" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="产线参观"><img src="../assets/case-b66f7d4b.webp" alt="国科能源安庆基地全自动化产线参观" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="开场文艺演出"><img src="../assets/case-9b3cd97e.webp" alt="投产仪式开场文艺演出" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="主持人开场"><img src="../assets/case-a9b2daf9.webp" alt="「国科智造 满电启航」投产仪式主持人开场" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="政府领导致辞"><img src="../assets/case-7c33ae69.webp" alt="政府领导在投产仪式上致辞" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="国科能源董事长致辞"><img src="../assets/case-facf4ef5.webp" alt="国科能源董事长胡晓明在投产仪式上致辞" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="战略合作签约"><img src="../assets/case-a038cc96.webp" alt="国科能源战略合作签约仪式" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="投产启动仪式"><img src="../assets/case-421039e1.webp" alt="国科能源安庆基地投产启动仪式" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="大会现场全景"><img src="../assets/case-6e509489.webp" alt="国科能源安庆基地投产仪式大会现场全景" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="会场嘉宾席"><img src="../assets/case-839ae955.webp" alt="投产仪式会场嘉宾席" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="参会嘉宾席"><img src="../assets/case-42bbed3a.webp" alt="投产仪式参会嘉宾席" loading="lazy"></div>
+            </div>
+            <span class="swipe-hint">左右滑动</span>
+            <span class="gallery-count" aria-live="polite">01 / 13</span>
+            <div class="gallery-nav">
+              <button class="gallery-btn prev" type="button" aria-label="上一张"><svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+              <button class="gallery-btn next" type="button" aria-label="下一张"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+            </div>
+          </div>
+          <div class="case-copy">
+            <span class="case-number">03</span>
+            <p class="case-category">活动与会务 · 全案服务</p>
+            <h3>国科能源安庆储能电池智能制造基地投产仪式</h3>
+            <p class="case-tagline">「国科智造 满电启航」· 10GWh 储能基地投产</p>
+            <p class="case-description">「国科智造 满电启航」——国科能源安庆储能电池智能制造基地投产仪式暨产品推介会。主视觉体系、舞台空间、会务流程与现场执行；102Ah／314Ah／587Ah 三大主力电芯现场发布，多家头部储能集成商与能源集团签署战略合作协议。</p>
+            <div class="case-meta"><span>策划</span><span>视觉</span><span>空间</span><span>执行</span></div>
+          </div>
+        </article>
+        <article class="case-card" data-case-title="西门子超级品牌节">
+          <div class="gallery" aria-label="西门子超级品牌节活动图片轮播">
+            <div class="gallery-track" role="button" tabindex="0" aria-label="点击放大当前图片">
+              <div class="gallery-slide is-active" data-caption="展台全景 · 品牌主视觉"><img src="../assets/work-894384ab.webp" alt="西门子超级品牌节白天展台全景"></div>
+              <div class="gallery-slide" data-caption="主持人开场"><img src="../assets/work-940ab660.webp" alt="西门子超级品牌节主持人开场" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="开幕剪彩 · 开业庆典"><img src="../assets/work-aea1100e.webp" alt="西门子超级品牌节开幕剪彩仪式" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="现场互动 · 产品体验"><img src="../assets/work-89d5cc34.webp" alt="西门子超级品牌节现场产品互动" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="现场演出 · 舞蹈表演"><img src="../assets/work-5d22b313.webp" alt="西门子超级品牌节现场舞蹈演出" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="演出近景 · 舞台时刻"><img src="../assets/work-a795b89e.webp" alt="西门子超级品牌节舞蹈演出近景" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="现场人气 · 观众互动"><img src="../assets/work-3405d6fd.webp" alt="西门子超级品牌节现场人气" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="夜色中的展台 · 亮灯氛围"><img src="../assets/work-75388529.webp" alt="西门子超级品牌节夜色中的展台" loading="lazy"></div>
+            </div>
+            <span class="swipe-hint">左右滑动</span>
+            <span class="gallery-count" aria-live="polite">01 / 08</span>
+            <div class="gallery-nav">
+              <button class="gallery-btn prev" type="button" aria-label="上一张"><svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+              <button class="gallery-btn next" type="button" aria-label="下一张"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+            </div>
+          </div>
+          <div class="case-copy">
+            <span class="case-number">04</span>
+            <p class="case-category">活动与会务 · 全案服务</p>
+            <h3>西门子<br>超级品牌节</h3>
+            <p class="case-tagline">蓝白主场 · 从展台到舞台的一整天不间断</p>
+            <p class="case-description">商场中庭品牌活动全案执行。以品牌蓝白为主色搭建展台与舞台，白天以展台体验与互动聚客，晚间以现场演出与亮灯延续氛围，兼顾到场人流与现场秩序。</p>
+            <div class="case-meta"><span>品牌活动</span><span>展台搭建</span><span>现场执行</span><span>演艺统筹</span></div>
+          </div>
+        </article>
+        <article class="case-card" data-case-title="德国AEG电器开业典礼">
+          <div class="gallery" aria-label="德国AEG电器开业典礼活动图片轮播">
+            <div class="gallery-track" role="button" tabindex="0" aria-label="点击放大当前图片">
+              <div class="gallery-slide is-active" data-caption="舞台全景 · 红毯启幕"><img src="../assets/case-88512d53.webp" alt="德国AEG电器开业典礼舞台全景"></div>
+              <div class="gallery-slide" data-caption="剪彩仪式 · 嘉宾致辞"><img src="../assets/case-1289954e.webp" alt="德国AEG电器开业典礼剪彩仪式" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="嘉宾致辞 · 品牌分享"><img src="../assets/case-ceb02ac6.webp" alt="德国AEG电器开业典礼嘉宾致辞" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="主持人开场"><img src="../assets/case-fbb0b8be.webp" alt="德国AEG电器开业典礼主持人" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="产品展区 · 全系家电"><img src="../assets/case-c8f4648f.webp" alt="德国AEG电器开业典礼产品展区" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="展区导览 · 洗护区"><img src="../assets/case-a946c649.webp" alt="德国AEG电器开业典礼洗护展区" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="宴会现场 · 宴会厅"><img src="../assets/case-719f5e2a.webp" alt="德国AEG电器开业典礼宴会厅" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="宴会答谢 · 甜品台"><img src="../assets/case-3d48a7b4.webp" alt="德国AEG电器开业典礼甜品台" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="现场环节 · 嘉宾互动"><img src="../assets/case-004e7dc9.webp" alt="德国AEG电器开业典礼嘉宾互动" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="展区导览 · 产品细节"><img src="../assets/case-6753cc21.webp" alt="德国AEG电器开业典礼产品细节" loading="lazy"></div>
+            </div>
+            <span class="swipe-hint">左右滑动</span>
+            <span class="gallery-count" aria-live="polite">01 / 10</span>
+            <div class="gallery-nav">
+              <button class="gallery-btn prev" type="button" aria-label="上一张"><svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+              <button class="gallery-btn next" type="button" aria-label="下一张"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+            </div>
+          </div>
+          <div class="case-copy">
+            <span class="case-number">05</span>
+            <p class="case-category">活动与会务 · 全案服务</p>
+            <h3>德国AEG电器<br>开业典礼</h3>
+            <p class="case-tagline">德国品质 · 百年家电的红毯启幕</p>
+            <p class="case-description">AEG 合肥政务区红星美凯龙体验店开业典礼全案执行。以红毯通道与主视觉大屏搭建仪式舞台，剪彩与致辞环节之后，由模特导览产品展区呈现全系家电，典礼结束接宴会答谢，兼顾品牌调性与到场体验。</p>
+            <div class="case-meta"><span>品牌活动</span><span>舞台搭建</span><span>现场执行</span><span>宴会统筹</span></div>
+          </div>
+        </article>
+        <article class="case-card" data-case-title="新形势下政法烟草联合打假新课题研讨会">
+          <div class="gallery" aria-label="新形势下政法烟草联合打假新课题研讨会项目图片轮播">
+            <div class="gallery-track" role="button" tabindex="0" aria-label="点击放大当前图片">
+              <div class="gallery-slide is-active" data-caption="大会会场全景"><img src="../assets/case-a563ed31.webp" alt="新形势下政法烟草联合打假新课题研讨会大会会场全景"></div>
+              <div class="gallery-slide" data-caption="主舞台与主题背屏"><img src="../assets/case-e4b04d54.webp" alt="新形势下政法烟草联合打假新课题研讨会主舞台与主题背屏" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="舞台三屏视觉"><img src="../assets/case-472805fc.webp" alt="新形势下政法烟草联合打假新课题研讨会舞台三屏视觉" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="迎宾主题背景板"><img src="../assets/case-9b7a3301.webp" alt="新形势下政法烟草联合打假新课题研讨会迎宾主题背景板" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="走廊导视立牌"><img src="../assets/case-18e15927.webp" alt="新形势下政法烟草联合打假新课题研讨会走廊导视立牌" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="导视立牌阵列"><img src="../assets/case-a31a145d.webp" alt="新形势下政法烟草联合打假新课题研讨会导视立牌阵列" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="长廊导视与引导"><img src="../assets/case-5f2f3763.webp" alt="新形势下政法烟草联合打假新课题研讨会长廊导视与引导" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="场外成果展板"><img src="../assets/case-fcba15f8.webp" alt="新形势下政法烟草联合打假新课题研讨会场外成果展板" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="成果展板长廊"><img src="../assets/case-8c23552b.webp" alt="新形势下政法烟草联合打假新课题研讨会成果展板长廊" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="会前会场布置"><img src="../assets/case-cd3bb5e8.webp" alt="新形势下政法烟草联合打假新课题研讨会会前会场布置" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="会场全景（后区视角）"><img src="../assets/case-1717c6c8.webp" alt="新形势下政法烟草联合打假新课题研讨会会场全景（后区视角）" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="「甜润中国行」主题茶歇"><img src="../assets/case-0cd7844e.webp" alt="新形势下政法烟草联合打假新课题研讨会「甜润中国行」主题茶歇" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="茶艺展示服务"><img src="../assets/case-5de158a3.webp" alt="新形势下政法烟草联合打假新课题研讨会茶艺展示服务" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="茶歇茶艺台"><img src="../assets/case-b90abadd.webp" alt="新形势下政法烟草联合打假新课题研讨会茶歇茶艺台" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="场馆迎宾景观"><img src="../assets/case-2eed654c.webp" alt="新形势下政法烟草联合打假新课题研讨会场馆迎宾景观" loading="lazy"></div>
+            </div>
+            <span class="swipe-hint">左右滑动</span>
+            <span class="gallery-count" aria-live="polite">01 / 15</span>
+            <div class="gallery-nav">
+              <button class="gallery-btn prev" type="button" aria-label="上一张"><svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+              <button class="gallery-btn next" type="button" aria-label="下一张"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+            </div>
+          </div>
+          <div class="case-copy">
+            <span class="case-number">06</span>
+            <p class="case-category">活动与会务 · 全案服务</p>
+            <h3>新形势下政法烟草联合打假新课题研讨会</h3>
+            <p class="case-tagline">「政法烟草联合打假“安徽模式”」· 安徽·庐江</p>
+            <p class="case-description">「新形势下政法烟草联合打假新课题研讨会」会务全案服务：大会主视觉与三屏背景板设计、会场空间布置、迎宾背景墙与走廊导视立牌、场外成果展板展陈，并统筹主题茶歇与茶艺接待服务，全流程落地执行。</p>
+            <div class="case-meta"><span>策划</span><span>视觉</span><span>空间</span><span>展陈</span><span>物料</span><span>执行</span></div>
+          </div>
+        </article>
+        <article class="case-card" data-case-title="火星人集成灶开业盛典">
+          <div class="gallery" aria-label="火星人集成灶开业盛典项目图片轮播">
+            <div class="gallery-track" role="button" tabindex="0" aria-label="点击放大当前图片">
+              <div class="gallery-slide is-active" data-caption="主舞台「盛大开业」与弦乐演奏"><img src="../assets/case-e24ff51e.webp" alt="火星人集成灶开业盛典主舞台「盛大开业」与弦乐演奏"></div>
+              <div class="gallery-slide" data-caption="启动球仪式"><img src="../assets/case-fbecef83.webp" alt="火星人集成灶开业盛典启动球仪式" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="启动球仪式（全景）"><img src="../assets/case-96c8b39d.webp" alt="火星人集成灶开业盛典启动球仪式（全景）" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="旗舰店揭牌暨新品发布"><img src="../assets/case-a1855ebb.webp" alt="火星人集成灶开业盛典旗舰店揭牌暨新品发布" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="主视觉大屏与主题演绎"><img src="../assets/case-0618c6ad.webp" alt="火星人集成灶开业盛典主视觉大屏与主题演绎" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="「建筑美学 人生几何」主题演绎"><img src="../assets/case-4f29ba2a.webp" alt="火星人集成灶开业盛典「建筑美学 人生几何」主题演绎" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="「合肥旗舰店盛大开业」主视觉"><img src="../assets/case-a21d4b3b.webp" alt="火星人集成灶开业盛典「合肥旗舰店盛大开业」主视觉" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="鼓上舞演艺"><img src="../assets/case-9e48f325.webp" alt="火星人集成灶开业盛典鼓上舞演艺" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="主题甜品台"><img src="../assets/case-4dff2aed.webp" alt="火星人集成灶开业盛典主题甜品台" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="嘉宾席与媒体席"><img src="../assets/case-458af193.webp" alt="火星人集成灶开业盛典嘉宾席与媒体席" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="桌面花艺布置"><img src="../assets/case-2fb85638.webp" alt="火星人集成灶开业盛典桌面花艺布置" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="商场中庭舞台全景"><img src="../assets/case-a6066438.webp" alt="火星人集成灶开业盛典商场中庭舞台全景" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="会场观礼区布置"><img src="../assets/case-c442bf5b.webp" alt="火星人集成灶开业盛典会场观礼区布置" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="中庭俯瞰现场"><img src="../assets/case-72a61671.webp" alt="火星人集成灶开业盛典中庭俯瞰现场" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="二层视角现场"><img src="../assets/case-569710e6.webp" alt="火星人集成灶开业盛典二层视角现场" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="嘉宾观礼现场"><img src="../assets/case-50560a1b.webp" alt="火星人集成灶开业盛典嘉宾观礼现场" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="开业花篮氛围"><img src="../assets/case-17be6f9d.webp" alt="火星人集成灶开业盛典开业花篮氛围" loading="lazy"></div>
+            </div>
+            <span class="swipe-hint">左右滑动</span>
+            <span class="gallery-count" aria-live="polite">01 / 17</span>
+            <div class="gallery-nav">
+              <button class="gallery-btn prev" type="button" aria-label="上一张"><svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+              <button class="gallery-btn next" type="button" aria-label="下一张"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+            </div>
+          </div>
+          <div class="case-copy">
+            <span class="case-number">07</span>
+            <p class="case-category">活动与会务 · 全案服务</p>
+            <h3>火星人集成灶开业盛典</h3>
+            <p class="case-tagline">合肥旗舰店盛大开业 ·「建筑美学 人生几何」主题演绎</p>
+            <p class="case-description">「火星人集成灶合肥旗舰店开业盛典暨集成洗碗机新品发布会」会务全案服务：商场中庭舞台搭建与主视觉设计、主题打卡区与甜品台布置、嘉宾席媒体席接待、弦乐与鼓上舞演艺，并统筹启动球与揭牌仪式、开业花篮及现场氛围物料落地执行。</p>
+            <div class="case-meta"><span>策划</span><span>视觉</span><span>空间</span><span>演艺</span><span>仪式</span><span>执行</span></div>
+          </div>
+        </article>
+        <article class="case-card" data-case-title="西门子滁州内购会">
+          <div class="gallery" aria-label="西门子滁州内购会项目图片轮播">
+            <div class="gallery-track" role="button" tabindex="0" aria-label="点击放大当前图片">
+              <div class="gallery-slide is-active" data-caption="舞台主视觉与品牌联名（SIEMENS × 苏宁易购）"><img src="../assets/case-3a553571.webp" alt="西门子滁州内购会舞台主视觉与品牌联名（SIEMENS × 苏宁易购）"></div>
+              <div class="gallery-slide" data-caption="「理想生活 触手可及」主题大屏"><img src="../assets/case-1b88cc25.webp" alt="西门子滁州内购会「理想生活 触手可及」主题大屏" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="舞台全景 · SIEMENS 主题灯光"><img src="../assets/case-81c56e92.webp" alt="西门子滁州内购会舞台全景 · SIEMENS 主题灯光" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="夜场舞台与展台陈列"><img src="../assets/case-284f90c2.webp" alt="西门子滁州内购会夜场舞台与展台陈列" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="主持人现场串场"><img src="../assets/case-a27fb808.webp" alt="西门子滁州内购会主持人现场串场" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="舞台与展台全景"><img src="../assets/case-192bd9ad.webp" alt="西门子滁州内购会舞台与展台全景" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="主持人现场"><img src="../assets/case-4142372e.webp" alt="西门子滁州内购会主持人现场" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="「Design Studio」展区与舞台近景"><img src="../assets/case-7d495687.webp" alt="西门子滁州内购会「Design Studio」展区与舞台近景" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="现场乐队演出"><img src="../assets/case-247afdf3.webp" alt="西门子滁州内购会现场乐队演出" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="乐队演出 · 近景"><img src="../assets/case-6eb02e86.webp" alt="西门子滁州内购会乐队演出 · 近景" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="乐队演出 · 全景"><img src="../assets/case-00cf324e.webp" alt="西门子滁州内购会乐队演出 · 全景" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="演出现场与观演人群"><img src="../assets/case-80e82450.webp" alt="西门子滁州内购会演出现场与观演人群" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="舞台侧面现场"><img src="../assets/case-8439c395.webp" alt="西门子滁州内购会舞台侧面现场" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="门店内购现场 · 主持导购"><img src="../assets/case-3bbad978.webp" alt="西门子滁州内购会门店内购现场 · 主持导购" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="舞台模特展示"><img src="../assets/case-c8235591.webp" alt="西门子滁州内购会舞台模特展示" loading="lazy"></div>
+            </div>
+            <span class="swipe-hint">左右滑动</span>
+            <span class="gallery-count" aria-live="polite">01 / 15</span>
+            <div class="gallery-nav">
+              <button class="gallery-btn prev" type="button" aria-label="上一张"><svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+              <button class="gallery-btn next" type="button" aria-label="下一张"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+            </div>
+          </div>
+          <div class="case-copy">
+            <span class="case-number">08</span>
+            <p class="case-category">活动与会务 · 全案服务</p>
+            <h3>西门子滁州内购会</h3>
+            <p class="case-tagline">「理想生活 触手可及」· SIEMENS × 苏宁易购</p>
+            <p class="case-description">「西门子家电 × 苏宁易购内购会」全案执行：门店选购体验与夜场舞台搭建、SIEMENS 品牌主视觉与「理想生活 触手可及」主题灯箱、主持人串场与模特展示、现场乐队演出及氛围统筹。</p>
+            <div class="case-meta"><span>品牌活动</span><span>展台搭建</span><span>舞台演艺</span><span>现场执行</span></div>
+          </div>
+        </article>
+        <article class="case-card" data-case-title="校长张弛明星见面会">
+          <div class="gallery" aria-label="校长张弛明星见面会项目图片轮播">
+            <div class="gallery-track" role="button" tabindex="0" aria-label="点击放大当前图片">
+              <div class="gallery-slide is-active" data-caption="张弛现场 · 读粉丝应援留言"><img src="../assets/case-d8ae07b1.webp" alt="校长张弛明星见面会张弛现场 · 读粉丝应援留言"></div>
+              <div class="gallery-slide" data-caption="主舞台与「星动合肥 大牌嗨购夜」主视觉"><img src="../assets/case-8fad2a43.webp" alt="校长张弛明星见面会主舞台与「星动合肥 大牌嗨购夜」主视觉" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="礼仪阵容与主视觉背景板"><img src="../assets/case-e1265af0.webp" alt="校长张弛明星见面会礼仪阵容与主视觉背景板" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="舞台光影 · 独舞时刻"><img src="../assets/case-2aacc481.webp" alt="校长张弛明星见面会舞台光影 · 独舞时刻" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="舞蹈演艺"><img src="../assets/case-ca808243.webp" alt="校长张弛明星见面会舞蹈演艺" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="舞台演艺与主视觉"><img src="../assets/case-47a2f5e1.webp" alt="校长张弛明星见面会舞台演艺与主视觉" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="舞台舞蹈 · 侧场视角"><img src="../assets/case-b89bc0b7.webp" alt="校长张弛明星见面会舞台舞蹈 · 侧场视角" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="张弛与主持人台上互动"><img src="../assets/case-30fe253b.webp" alt="校长张弛明星见面会张弛与主持人台上互动" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="张弛舞台分享"><img src="../assets/case-793b2eb1.webp" alt="校长张弛明星见面会张弛舞台分享" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="舞台合影"><img src="../assets/case-6d7dd5fb.webp" alt="校长张弛明星见面会舞台合影" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="粉丝应援手牌"><img src="../assets/case-42789cbb.webp" alt="校长张弛明星见面会粉丝应援手牌" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="应援现场 · 张弛与粉丝同框"><img src="../assets/case-822f3645.webp" alt="校长张弛明星见面会应援现场 · 张弛与粉丝同框" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="嘉宾献花环节"><img src="../assets/case-26058eee.webp" alt="校长张弛明星见面会嘉宾献花环节" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="商场中庭现场全景"><img src="../assets/case-422380b4.webp" alt="校长张弛明星见面会商场中庭现场全景" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="中庭观演区"><img src="../assets/case-ff25b46d.webp" alt="校长张弛明星见面会中庭观演区" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="观众席现场"><img src="../assets/case-9631979c.webp" alt="校长张弛明星见面会观众席现场" loading="lazy"></div>
+              <div class="gallery-slide" data-caption="观众席近景"><img src="../assets/case-e4135ccf.webp" alt="校长张弛明星见面会观众席近景" loading="lazy"></div>
+            </div>
+            <span class="swipe-hint">左右滑动</span>
+            <span class="gallery-count" aria-live="polite">01 / 17</span>
+            <div class="gallery-nav">
+              <button class="gallery-btn prev" type="button" aria-label="上一张"><svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+              <button class="gallery-btn next" type="button" aria-label="下一张"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+            </div>
+          </div>
+          <div class="case-copy">
+            <span class="case-number">09</span>
+            <p class="case-category">活动与会务 · 全案服务</p>
+            <h3>校长张弛明星见面会</h3>
+            <p class="case-tagline">「星动合肥 大牌嗨购夜」·「很高兴遇见你」见面会现场</p>
+            <p class="case-description">商场中庭明星见面会全案执行：「星动合肥 大牌嗨购夜」主舞台与主视觉搭建、LED 大屏与灯光渲染、礼仪与舞蹈演艺、嘉宾接待与献花环节，并统筹粉丝应援区域与现场秩序，以「很高兴遇见你」主题贯穿全场氛围。</p>
+            <div class="case-meta"><span>明星活动</span><span>舞台搭建</span><span>视觉设计</span><span>演艺统筹</span><span>现场执行</span></div>
+          </div>
+        </article>
+
+        
+
+      </div>
+    </section>
+  </main>
+
+  <footer>合肥九龙文化传播有限责任公司</footer>
+
+  <div class="lightbox" role="dialog" aria-modal="true" aria-label="项目大图查看器" aria-hidden="true">
+    <button class="lightbox-close" type="button" aria-label="关闭大图"><svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8"/></svg></button>
+    <button class="lightbox-btn prev" type="button" aria-label="上一张大图"><svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+    <figure class="lightbox-figure">
+      <img src="../assets/work-770684ed.webp" alt="项目大图">
+      <figcaption>项目大图</figcaption>
+    </figure>
+    <button class="lightbox-btn next" type="button" aria-label="下一张大图"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8"/></svg></button>
+  </div>
+
+  <script>
+    (function () {
+      var tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
+      var panels = Array.prototype.slice.call(document.querySelectorAll('[role="tabpanel"]'));
+      var tabByHash = {
+        '#ai': document.getElementById('tab-ai'),
+        '#space': document.getElementById('tab-space'),
+        '#video': document.getElementById('tab-video'),
+        '#event': document.getElementById('tab-event')
+      };
+      tabs.forEach(function (tab, index) {
+        tab.addEventListener('click', function () { activateTab(tab, true); });
+        tab.addEventListener('keydown', function (event) {
+          var nextIndex = index;
+          if (event.key === 'ArrowRight' || event.key === 'ArrowDown') nextIndex = (index + 1) % tabs.length;
+          else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') nextIndex = (index - 1 + tabs.length) % tabs.length;
+          else if (event.key === 'Home') nextIndex = 0;
+          else if (event.key === 'End') nextIndex = tabs.length - 1;
+          else return;
+          event.preventDefault();
+          activateTab(tabs[nextIndex], true);
+          tabs[nextIndex].focus();
+        });
+      });
+      function getTabHash(tab) {
+        return '#' + tab.id.replace('tab-', '');
+      }
+      function activateTab(tab, updateHash) {
+        tabs.forEach(function (item) {
+          var selected = item === tab;
+          item.setAttribute('aria-selected', String(selected));
+          item.tabIndex = selected ? 0 : -1;
+        });
+        panels.forEach(function (panel) { panel.hidden = panel.id !== tab.getAttribute('aria-controls'); });
+        if (updateHash && window.location.hash !== getTabHash(tab)) window.location.hash = getTabHash(tab);
+      }
+      function activateFromHash() {
+        activateTab(tabByHash[window.location.hash.toLowerCase()] || tabs[0], false);
+      }
+      window.addEventListener('hashchange', activateFromHash);
+      activateFromHash();
+
+      var galleries = [];
+      document.querySelectorAll('.gallery').forEach(function (gallery) {
+        var slides = Array.prototype.slice.call(gallery.querySelectorAll('.gallery-slide'));
+        var count = gallery.querySelector('.gallery-count');
+        var current = 0;
+        var startX = null;
+        var swiped = false;
+        function show(index) {
+          current = (index + slides.length) % slides.length;
+          slides.forEach(function (slide, i) { slide.classList.toggle('is-active', i === current); });
+          count.textContent = String(current + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0');
+        }
+        gallery.querySelector('.prev').addEventListener('click', function () { show(current - 1); });
+        gallery.querySelector('.next').addEventListener('click', function () { show(current + 1); });
+        var track = gallery.querySelector('.gallery-track');
+        track.addEventListener('click', function () {
+          if (swiped) { swiped = false; return; }
+          openLightbox(gallery, current);
+        });
+        track.addEventListener('keydown', function (event) { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openLightbox(gallery, current); } });
+        gallery.addEventListener('touchstart', function (event) { startX = event.changedTouches[0].clientX; swiped = false; }, { passive: true });
+        gallery.addEventListener('touchend', function (event) {
+          if (startX === null) return;
+          var delta = event.changedTouches[0].clientX - startX;
+          if (Math.abs(delta) > 48) { swiped = true; show(current + (delta < 0 ? 1 : -1)); }
+          startX = null;
+        }, { passive: true });
+        galleries.push({ element: gallery, slides: slides, show: show, getCurrent: function () { return current; } });
+      });
+
+      var lightbox = document.querySelector('.lightbox');
+      var lightboxImage = lightbox.querySelector('img');
+      var lightboxCaption = lightbox.querySelector('figcaption');
+      var activeGallery = null;
+      var lightboxIndex = 0;
+      var lastFocused = null;
+      function openLightbox(galleryElement, index) {
+        activeGallery = galleries.find(function (item) { return item.element === galleryElement; });
+        lightboxIndex = index;
+        lastFocused = document.activeElement;
+        renderLightbox();
+        lightbox.classList.add('is-open');
+        lightbox.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('modal-open');
+        lightbox.querySelector('.lightbox-close').focus();
+      }
+      function renderLightbox() {
+        var slide = activeGallery.slides[lightboxIndex];
+        var source = slide.querySelector('img');
+        var caseTitle = activeGallery.element.closest('.case-card').getAttribute('data-case-title');
+        lightboxImage.src = source.src;
+        lightboxImage.alt = source.alt;
+        lightboxCaption.textContent = caseTitle + ' · ' + slide.getAttribute('data-caption') + ' · ' + String(lightboxIndex + 1).padStart(2, '0') + '/' + String(activeGallery.slides.length).padStart(2, '0');
+      }
+      function stepLightbox(delta) {
+        lightboxIndex = (lightboxIndex + delta + activeGallery.slides.length) % activeGallery.slides.length;
+        renderLightbox();
+        activeGallery.show(lightboxIndex);
+      }
+      function closeLightbox() {
+        lightbox.classList.remove('is-open');
+        lightbox.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('modal-open');
+        lightboxImage.src = '../assets/work-770684ed.webp';
+        lightboxImage.alt = '项目大图';
+        if (lastFocused) lastFocused.focus();
+      }
+      lightbox.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
+      lightbox.querySelector('.prev').addEventListener('click', function () { stepLightbox(-1); });
+      lightbox.querySelector('.next').addEventListener('click', function () { stepLightbox(1); });
+      lightbox.addEventListener('click', function (event) { if (event.target === lightbox) closeLightbox(); });
+      document.addEventListener('keydown', function (event) {
+        if (!lightbox.classList.contains('is-open')) return;
+        if (event.key === 'Escape') closeLightbox();
+        else if (event.key === 'ArrowLeft') stepLightbox(-1);
+        else if (event.key === 'ArrowRight') stepLightbox(1);
+      });
+    })();
+  </script>
+</body>
+</html>

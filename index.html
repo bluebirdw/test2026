@@ -584,15 +584,57 @@
       border: 1px solid var(--hairline);
     }
     .team-grid--single { grid-template-columns: minmax(0, 1fr); }
-    /* 单个成员的模块：卡片铺满整行（与 team-grid--single 保持一致） */
-    .team-grid > .team-card:only-child { grid-column: 1 / -1; }
-    /* 奇数个成员的模块（≥3 人）：最后一张不再跨列，保持与其他成员卡同宽 */
-    .team-grid > .team-card:last-child:nth-child(odd):not(:only-child) { grid-column: auto; }
+    .team-grid > .team-card:last-child:nth-child(odd) { grid-column: 1 / -1; }
     @media (min-width: 1041px) {
-      /* 空位格：用与卡片同色的面板补齐（留白版，无徽标） */
-      .team-grid:has(> .team-card:last-child:nth-child(odd):not(:only-child))::after {
+      .team-modules { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 24px; }
+      .team-modules > .team-module { grid-column: 1 / -1; }
+      .team-modules > .team-module--pair-left { grid-column: 1; grid-row: 2; }
+      .team-modules > .team-module--pair-right { grid-column: 2; grid-row: 2; }
+      .team-module--paired { display: grid; grid-template-rows: auto 1fr; }
+      .team-module--paired .team-module-head {
+        grid-template-columns: 96px minmax(0, 1fr);
+        grid-template-rows: auto auto;
+        align-content: start;
+        min-height: 116px;
+      }
+      .team-module--paired .team-module-en { grid-column: 2; justify-self: start; line-height: 1.45; }
+      .team-module--paired .team-grid--single { grid-template-columns: minmax(0, 1fr); }
+      .team-module--paired .team-grid--single::after { content: none !important; }
+      .team-grid--single { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .team-grid > .team-card:last-child:nth-child(odd) { grid-column: auto; }
+      .team-grid--featured { grid-template-columns: minmax(0, 1fr); }
+      .team-grid--featured > .team-card:last-child:nth-child(odd) { grid-column: 1 / -1; }
+      .team-grid--featured::after { content: none !important; }
+      .team-matrix-rain {
+        position: relative;
+        min-height: 520px;
+        overflow: hidden;
+        isolation: isolate;
+        background:
+          radial-gradient(circle at center, rgba(8,9,11,.6) 0 26%, rgba(8,9,11,.78) 52%, rgba(8,9,11,.92) 100%),
+          url("assets/bg-45114d43.png") center / min(46%, 250px) auto no-repeat,
+          var(--surface);
+        box-shadow: inset 0 0 84px rgba(0,0,0,.46);
+      }
+      .team-matrix-rain::after {
         content: "";
-        background-color: var(--surface);
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        pointer-events: none;
+        background: radial-gradient(circle at center, transparent 24%, rgba(3,4,5,.28) 76%, rgba(3,4,5,.58) 100%);
+      }
+      .team-matrix-rain canvas {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        display: block;
+        width: 100%;
+        height: 100%;
+        opacity: .76;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .team-matrix-rain canvas { opacity: .5; }
       }
     }
     .team-card {
@@ -1325,7 +1367,7 @@
 
     <header class="masthead" aria-label="页面信息">
       <div class="brand-lockup" aria-label="九龙文化">
-        <img class="brand-logo" src="assets/brand-45114d43.png" alt="九龙文化标志" />
+        <img class="brand-logo" src="assets/bg-45114d43.png" alt="九龙文化标志" />
         <span class="brand-lockup__text"><strong>九龙文化</strong><span>JIULONG CULTURE / AI ERA</span></span>
       </div>
       <p class="status">SMALL TEAM · BIG CAPABILITY</p>
@@ -1334,7 +1376,7 @@
     <div class="hero-stage">
       <section class="hero-copy" aria-label="九龙战队品牌主张">
         <div class="brand-lockup hero-brand" aria-label="九龙战队品牌">
-          <img class="brand-logo" src="assets/brand-45114d43.png" alt="九龙文化标志" />
+          <img class="brand-logo" src="assets/bg-45114d43.png" alt="九龙文化标志" />
           <span class="brand-lockup__text"><strong>九龙战队</strong><span>JIULONG SQUAD · HEFEI</span></span>
         </div>
         <h1 id="hero-title"><span class="hero-line">少一点公司架子，</span><span class="hero-line">多一点<span class="red">真正做事的人。</span></span></h1>
@@ -1402,7 +1444,7 @@
         <div class="team-modules">
           <section class="team-module reveal" aria-labelledby="team-module-01">
             <header class="team-module-head"><span class="team-module-no">MODULE 01</span><h3 id="team-module-01">管理与商务核心</h3><span class="team-module-en">MANAGEMENT / BUSINESS</span></header>
-            <div class="team-grid team-grid--single">
+            <div class="team-grid team-grid--single team-grid--featured">
               <article class="team-card">
                 <figure class="member-photo"><img src="assets/team-8980c5e7.webp" alt="王璐个人形象照" loading="lazy" decoding="async" /></figure>
                 <div class="member-content"><div class="member-index"><strong>J01</strong><span>BUSINESS / STRATEGY</span></div><div class="member-name-row"><h3 class="member-name">王璐</h3><img class="member-school-seal" src="assets/seal-c59419cf.png" alt="北京大学校徽" /></div><p class="member-tag">核心全能型选手 / 商务与战略</p><div class="member-fact"><span class="member-label">核心能力</span><p>商务拓展与操盘 / 战略统筹 / 项目策划 / 媒介经营管理</p></div><div class="member-fact member-style"><span class="member-label">个人风格</span><p>运筹帷幄的团队核心，以极致商务视野开疆拓土，把一切可能化为现实。</p></div><p class="member-bio">九龙战队的核心灵魂与商务主帅。秉持“先做人，后做事，追求完美”的信念，凭借深厚的媒介经营管理背景与全栈战略视野，不仅是项目统筹的顶层操盘手，更在商务最前沿披荆斩棘，为团队破局开路。</p></div>
@@ -1410,7 +1452,7 @@
             </div>
           </section>
 
-          <section class="team-module reveal" aria-labelledby="team-module-02">
+          <section class="team-module team-module--paired team-module--pair-left reveal" aria-labelledby="team-module-02">
             <header class="team-module-head"><span class="team-module-no">MODULE 02</span><h3 id="team-module-02">党建与企业文化品牌战略</h3><span class="team-module-en">PARTY BUILDING / CULTURE / BRAND</span></header>
             <div class="team-grid team-grid--single">
               <article class="team-card">
@@ -1424,7 +1466,7 @@
             <header class="team-module-head"><span class="team-module-no">MODULE 03</span><h3 id="team-module-03">AI、硬件与软件架构</h3><span class="team-module-en">AI / HARDWARE / SOFTWARE</span></header>
             <div class="team-grid">
               <article class="team-card">
-                <figure class="member-photo"><img src="assets/team-6257e17c.webp" alt="袁子健硅谷背景个人形象照" loading="lazy" decoding="async" /></figure>
+                <figure class="member-photo"><img src="assets/team-1b0bbf95.webp" alt="袁子健个人形象照" loading="lazy" decoding="async" /></figure>
                 <div class="member-content"><div class="member-index"><strong>J03</strong><span>GLOBAL / AI ENGINEERING</span></div><h3 class="member-name">袁子健<span class="member-nationality">美籍<svg class="member-flag" viewBox="0 0 30 20" role="img" aria-label="美国国旗"><rect width="30" height="20" fill="#fff"/><g fill="#c8102e"><rect width="30" height="1.54"/><rect y="3.08" width="30" height="1.54"/><rect y="6.16" width="30" height="1.54"/><rect y="9.24" width="30" height="1.54"/><rect y="12.32" width="30" height="1.54"/><rect y="15.4" width="30" height="1.54"/><rect y="18.46" width="30" height="1.54"/></g><rect width="12.6" height="10.78" fill="#16437e"/><g fill="#fff"><circle cx="2" cy="2" r=".55"/><circle cx="5" cy="2" r=".55"/><circle cx="8" cy="2" r=".55"/><circle cx="11" cy="2" r=".55"/><circle cx="3.5" cy="4.7" r=".55"/><circle cx="6.5" cy="4.7" r=".55"/><circle cx="9.5" cy="4.7" r=".55"/><circle cx="2" cy="7.4" r=".55"/><circle cx="5" cy="7.4" r=".55"/><circle cx="8" cy="7.4" r=".55"/><circle cx="11" cy="7.4" r=".55"/></g></svg></span></h3><p class="member-tag">国际硅谷智造型选手 / 跨国架构与AI工程</p><div class="member-fact"><span class="member-label">核心能力</span><p>美国硅谷多年从业背景 / 企业级产品研发（CRM / ITSM / ALM） / C++ &amp; Java &amp; Python全栈 / 数据库架构 / AI Vibe Coding智能编程 / 跨文化技术协同</p></div><div class="member-fact member-style"><span class="member-label">个人风格</span><p>融汇硅谷前沿标准与国际视野，以AI范式重构企业级软件的极致效能。</p></div><p class="member-bio">作为团队的美国籍技术专家，拥有硅谷多年的深厚研发与架构背景。深耕企业级产品研发，精通底层技术与数据库架构。更将国际化的工程视野与AI Vibe Coding智能编程范式完美融合，为团队注入面向全球的前沿技术动能。</p></div>
               </article>
               <article class="team-card">
@@ -1438,7 +1480,7 @@
             </div>
           </section>
 
-          <section class="team-module reveal" aria-labelledby="team-module-04">
+          <section class="team-module team-module--paired team-module--pair-right reveal" aria-labelledby="team-module-04">
             <header class="team-module-head"><span class="team-module-no">MODULE 04</span><h3 id="team-module-04">项目管理与投标统筹</h3><span class="team-module-en">PROJECT / TENDER</span></header>
             <div class="team-grid team-grid--single">
               <article class="team-card">
@@ -1498,7 +1540,8 @@
             </div>
           </section>
         </div>
-        </div>
+        <p class="team-note">袁子健形象照将在确认后更新。</p>
+      </div>
     </section>
 
     <section class="chapter" id="services" aria-labelledby="services-title">
@@ -1538,7 +1581,7 @@
           <article class="work-card work-card--photo" data-work-category="space">
             <a class="work-card-link" href="cases/#space" aria-label="查看六安烟草安全文化宣教室案例">
               <div class="work-media" data-work-carousel>
-                <img class="work-slide is-active" src="assets/work-770684ed.webp" alt="六安烟草安全文化宣教室入口效果" />
+                <img class="work-slide is-active" src="assets/cases/images/liuan-cover.webp" alt="六安烟草安全文化宣教室入口效果" />
                 <img class="work-slide" src="assets/work-5a2269cf.webp" alt="六安烟草安全文化宣教室走廊空间" loading="lazy" />
                 <img class="work-slide" src="assets/work-ed122f35.webp" alt="六安烟草安全文化宣教室主题展示墙" loading="lazy" />
                 <img class="work-slide" src="assets/work-c95fecca.webp" alt="六安烟草安全文化宣教室VR互动区" loading="lazy" />
@@ -1560,30 +1603,44 @@
             </div>
           </article>
 
-          <article class="work-card work-card--abstract work-card--ai" data-work-category="ai">
+          <article class="work-card work-card--photo work-card--ai" data-work-category="ai">
             <a class="work-card-link" href="cases/#ai" aria-label="查看企业AI智能体案例">
-              <div class="work-media"></div><div class="work-card-shade"></div>
+              <div class="work-media" data-work-carousel>
+                <img class="work-slide is-active" src="assets/work-d65812de.webp" alt="ServiceTrack ITSM智能运维平台登录界面" />
+                <img class="work-slide" src="assets/work-a4b0d2b1.webp" alt="ServiceTrack ITSM智能运维平台产品功能界面" loading="lazy" />
+                <img class="work-slide" src="assets/work-e26f5f6c.webp" alt="ServiceTrack ITSM智能运维平台工作台" loading="lazy" />
+                <img class="work-slide" src="assets/work-f3bbb2ae.webp" alt="ServiceTrack ITSM智能运维平台工单管理界面" loading="lazy" />
+                <img class="work-slide" src="assets/work-b97d9da8.webp" alt="ServiceTrack ITSM智能运维平台试用界面" loading="lazy" />
+              </div><div class="work-card-shade"></div>
               <div class="work-card-content"><div class="work-card-top"><span class="work-card-type">AI / ENTERPRISE</span><span class="work-card-no">02</span></div><div class="work-card-bottom"><h3>企业AI智能体</h3><p class="work-card-copy">整理内部资料、搭建知识库与智能问答，让沉淀的知识成为可调用的生产力。</p><div class="work-card-tags"><span>知识库</span><span>Agent设计</span><span>本地部署</span><span>系统开发</span></div></div></div>
             </a>
+            <div class="work-carousel-controls" aria-label="企业AI智能体案例图片轮播">
+              <button class="work-carousel-button" type="button" data-carousel-prev aria-label="上一张图片"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4 6.5 10l6 6"/></svg></button>
+              <div class="work-dots" aria-label="选择图片">
+                <button class="work-dot" type="button" aria-label="第1张图片" aria-current="true"></button><button class="work-dot" type="button" aria-label="第2张图片" aria-current="false"></button><button class="work-dot" type="button" aria-label="第3张图片" aria-current="false"></button><button class="work-dot" type="button" aria-label="第4张图片" aria-current="false"></button><button class="work-dot" type="button" aria-label="第5张图片" aria-current="false"></button>
+              </div>
+              <button class="work-carousel-button" type="button" data-carousel-next aria-label="下一张图片"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m7.5 4 6 6-6 6"/></svg></button>
+            </div>
           </article>
 
-          <article class="work-card work-card--film" data-work-category="video">
+          <article class="work-card work-card--photo work-card--film" data-work-category="video">
             <a class="work-card-link" href="cases/#video" aria-label="查看企业宣传片案例">
               <div class="work-media" data-work-carousel>
-                <img class="work-slide is-active" src="assets/work-5152a5a4.webp" alt="企业宣传片画面① 会场全景">
-                <img class="work-slide" src="assets/work-3e8ecf4c.webp" alt="企业宣传片画面② 成果展示区" loading="lazy">
-                <img class="work-slide" src="assets/work-70497431.webp" alt="企业宣传片画面③ 主题分享" loading="lazy">
-                <img class="work-slide" src="assets/work-4ca0c8c2.webp" alt="企业宣传片画面④ 展示大屏" loading="lazy">
+                <img class="work-slide is-active" src="assets/work-5152a5a4.webp" alt="宿州烟草现场会快剪视频画面一" />
+                <img class="work-slide" src="assets/work-3e8ecf4c.webp" alt="宿州烟草现场会快剪视频画面二" loading="lazy" />
+                <img class="work-slide" src="assets/work-70497431.webp" alt="宿州烟草现场会快剪视频画面三" loading="lazy" />
+                <img class="work-slide" src="assets/work-4ca0c8c2.webp" alt="宿州烟草现场会快剪视频画面四" loading="lazy" />
+                <img class="work-slide" src="assets/work-1516f9c0.webp" alt="怀远蓝莓广告视频画面一" loading="lazy" />
+                <img class="work-slide" src="assets/work-7da5c4bf.webp" alt="怀远蓝莓广告视频画面二" loading="lazy" />
+                <img class="work-slide" src="assets/work-7a119cb4.webp" alt="怀远蓝莓广告视频画面三" loading="lazy" />
+                <img class="work-slide" src="assets/work-3ef940ba.webp" alt="怀远蓝莓广告视频画面四" loading="lazy" />
               </div><div class="work-card-shade"></div>
               <div class="work-card-content"><div class="work-card-top"><span class="work-card-type">FILM / BRAND</span><span class="work-card-no">03</span></div><div class="work-card-bottom"><h3>企业宣传片</h3><p class="work-card-copy">从品牌理解与脚本策划开始，而不是从摄影机开始。</p><div class="work-card-tags"><span>策划</span><span>脚本</span><span>分镜</span><span>拍摄</span><span>剪辑</span><span>AIGC</span></div></div></div>
             </a>
             <div class="work-carousel-controls" aria-label="企业宣传片案例图片轮播">
               <button class="work-carousel-button" type="button" data-carousel-prev aria-label="上一张图片"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4 6.5 10l6 6"/></svg></button>
               <div class="work-dots" aria-label="选择图片">
-                <button class="work-dot" type="button" aria-label="第1张图片" aria-current="true"></button>
-                <button class="work-dot" type="button" aria-label="第2张图片" aria-current="false"></button>
-                <button class="work-dot" type="button" aria-label="第3张图片" aria-current="false"></button>
-                <button class="work-dot" type="button" aria-label="第4张图片" aria-current="false"></button>
+                <button class="work-dot" type="button" aria-label="第1张图片" aria-current="true"></button><button class="work-dot" type="button" aria-label="第2张图片" aria-current="false"></button><button class="work-dot" type="button" aria-label="第3张图片" aria-current="false"></button><button class="work-dot" type="button" aria-label="第4张图片" aria-current="false"></button><button class="work-dot" type="button" aria-label="第5张图片" aria-current="false"></button><button class="work-dot" type="button" aria-label="第6张图片" aria-current="false"></button><button class="work-dot" type="button" aria-label="第7张图片" aria-current="false"></button><button class="work-dot" type="button" aria-label="第8张图片" aria-current="false"></button>
               </div>
               <button class="work-carousel-button" type="button" data-carousel-next aria-label="下一张图片"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m7.5 4 6 6-6 6"/></svg></button>
             </div>
@@ -1592,14 +1649,14 @@
           <article class="work-card work-card--photo work-card--event" data-work-category="event">
             <a class="work-card-link" href="cases/#event" aria-label="查看品牌活动与发布会案例">
               <div class="work-media" data-work-carousel>
-                <img class="work-slide is-active" src="assets/work-894384ab.webp" alt="西门子超级品牌节白天展台全景" />
-                <img class="work-slide" src="assets/work-940ab660.webp" alt="西门子超级品牌节主持人开场" loading="lazy" />
-                <img class="work-slide" src="assets/work-aea1100e.webp" alt="西门子超级品牌节开幕剪彩仪式" loading="lazy" />
-                <img class="work-slide" src="assets/work-89d5cc34.webp" alt="西门子超级品牌节现场产品互动" loading="lazy" />
-                <img class="work-slide" src="assets/work-5d22b313.webp" alt="西门子超级品牌节现场舞蹈演出" loading="lazy" />
-                <img class="work-slide" src="assets/work-a795b89e.webp" alt="西门子超级品牌节舞蹈演出近景" loading="lazy" />
-                <img class="work-slide" src="assets/work-3405d6fd.webp" alt="西门子超级品牌节现场人气" loading="lazy" />
-                <img class="work-slide" src="assets/work-75388529.webp" alt="西门子超级品牌节夜色中的展台" loading="lazy" />
+                <img class="work-slide is-active" src="assets/work-89dd7772.webp" alt="全省系统专卖监管现代化建设现场推进会会场全景" />
+                <img class="work-slide" src="assets/work-ee1db91e.webp" alt="全省系统专卖监管现代化建设现场推进会主题展板" loading="lazy" />
+                <img class="work-slide" src="assets/work-ea966af7.webp" alt="全省系统专卖监管现代化建设现场推进会场地外景" loading="lazy" />
+                <img class="work-slide" src="assets/work-a58dc4bd.webp" alt="全省系统专卖监管现代化建设现场推进会舞台" loading="lazy" />
+                <img class="work-slide" src="assets/work-5d4d1157.webp" alt="全省系统专卖监管现代化建设现场推进会现场展示" loading="lazy" />
+                <img class="work-slide" src="assets/work-ed947a7f.webp" alt="全省系统专卖监管现代化建设现场推进会参会现场一" loading="lazy" />
+                <img class="work-slide" src="assets/work-7e9fa62a.webp" alt="全省系统专卖监管现代化建设现场推进会参会现场二" loading="lazy" />
+                <img class="work-slide" src="assets/work-c81542bd.webp" alt="全省系统专卖监管现代化建设现场推进会参会现场三" loading="lazy" />
               </div>
               <div class="work-card-shade"></div>
               <div class="work-card-content"><div class="work-card-top"><span class="work-card-type">EVENT / EXPERIENCE</span><span class="work-card-no">04</span></div><div class="work-card-bottom"><h3>品牌活动与发布会</h3><p class="work-card-copy">从一个想法，到一场完整的现场体验，再到后续传播。</p><div class="work-card-tags"><span>策划</span><span>视觉</span><span>空间</span><span>物料</span><span>执行</span><span>传播</span></div></div></div>
@@ -1671,8 +1728,8 @@
 
     <footer class="site-footer" id="footer">
       <div class="footer-inner">
-        <div class="footer-main"><div class="footer-brand"><img class="brand-logo" src="assets/brand-45114d43.png" alt="九龙文化标志" /><div><h2>九龙战队</h2><p>不需要很多人，只需要对的人。</p></div></div><div class="footer-services"><span>AI智能软件</span><span>文化展示空间</span><span>影视与视频</span><span>活动与会务</span></div></div>
-        <div class="footer-bottom"><span class="footer-bottom__brand"><img class="brand-logo" src="assets/brand-45114d43.png" alt="" /><span>合肥九龙文化传播有限责任公司 · © 2026 JIULONG SQUAD</span></span><button class="back-top" type="button" id="back-top">返回顶部 ↑</button></div>
+        <div class="footer-main"><div class="footer-brand"><img class="brand-logo" src="assets/bg-45114d43.png" alt="九龙文化标志" /><div><h2>九龙战队</h2><p>不需要很多人，只需要对的人。</p></div></div><div class="footer-services"><span>AI智能软件</span><span>文化展示空间</span><span>影视与视频</span><span>活动与会务</span></div></div>
+        <div class="footer-bottom"><span class="footer-bottom__brand"><img class="brand-logo" src="assets/bg-45114d43.png" alt="" /><span>合肥九龙文化传播有限责任公司 · © 2026 JIULONG SQUAD</span></span><button class="back-top" type="button" id="back-top">返回顶部 ↑</button></div>
       </div>
     </footer>
   </div>
@@ -1835,6 +1892,157 @@
         if (carouselLink) carouselLink.addEventListener('click', function (event) { if (touchMoved) { event.preventDefault(); touchMoved = false; } });
         startCarousel();
       });
+
+      var desktopTeamMedia = window.matchMedia('(min-width: 1041px)');
+      var matrixSlots = [];
+      var matrixCharacters = '0123456789<>/{}[];:=+-*#$%&@九龙AI';
+
+      function stopMatrixRain() {
+        matrixSlots.forEach(function (slot) {
+          slot._matrixStopped = true;
+          if (slot._matrixFrame) window.cancelAnimationFrame(slot._matrixFrame);
+          if (slot._matrixResize) slot._matrixResize.disconnect();
+          slot.remove();
+        });
+        matrixSlots = [];
+      }
+
+      function createMatrixRain(grid, slotIndex) {
+        var slot = document.createElement('div');
+        var canvas = document.createElement('canvas');
+        var context = canvas.getContext('2d');
+        var drops = [];
+        var speeds = [];
+        var fontSize = 18;
+        var width = 0;
+        var height = 0;
+        var lastFrame = 0;
+        var isVisible = true;
+        slot.className = 'team-matrix-rain';
+        slot.setAttribute('aria-hidden', 'true');
+        canvas.setAttribute('aria-hidden', 'true');
+        slot.appendChild(canvas);
+        grid.appendChild(slot);
+
+        function randomCharacter() {
+          return matrixCharacters.charAt(Math.floor(Math.random() * matrixCharacters.length));
+        }
+
+        function resizeCanvas() {
+          var rect = slot.getBoundingClientRect();
+          var ratio = Math.min(window.devicePixelRatio || 1, 2);
+          width = Math.max(1, Math.round(rect.width));
+          height = Math.max(1, Math.round(rect.height));
+          canvas.width = Math.round(width * ratio);
+          canvas.height = Math.round(height * ratio);
+          context.setTransform(ratio, 0, 0, ratio, 0, 0);
+          context.clearRect(0, 0, width, height);
+          var columnCount = Math.ceil(width / fontSize);
+          drops = [];
+          speeds = [];
+          for (var i = 0; i < columnCount; i += 1) {
+            drops.push(-Math.random() * (height / fontSize + 18));
+            speeds.push(.55 + Math.random() * .72);
+          }
+        }
+
+        function drawStaticRain() {
+          context.clearRect(0, 0, width, height);
+          context.font = '600 ' + fontSize + 'px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
+          context.textAlign = 'center';
+          for (var column = 0; column < drops.length; column += 1) {
+            var start = Math.floor(Math.random() * 10) - 4;
+            var length = 5 + Math.floor(Math.random() * 7);
+            for (var row = 0; row < length; row += 1) {
+              var alpha = .08 + (row / length) * .46;
+              context.fillStyle = row === length - 1 ? 'rgba(247,246,243,.72)' : 'rgba(227,34,25,' + alpha.toFixed(2) + ')';
+              context.fillText(randomCharacter(), column * fontSize + fontSize / 2, (start + row) * fontSize);
+            }
+          }
+        }
+
+        function drawRain(timestamp) {
+          if (slot._matrixStopped) return;
+          if (!isVisible || document.hidden) {
+            slot._matrixFrame = window.requestAnimationFrame(drawRain);
+            return;
+          }
+          if (timestamp - lastFrame < 54) {
+            slot._matrixFrame = window.requestAnimationFrame(drawRain);
+            return;
+          }
+          lastFrame = timestamp;
+          context.globalCompositeOperation = 'destination-out';
+          context.fillStyle = 'rgba(0,0,0,.16)';
+          context.fillRect(0, 0, width, height);
+          context.globalCompositeOperation = 'source-over';
+          context.font = '600 ' + fontSize + 'px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
+          context.textAlign = 'center';
+          for (var i = 0; i < drops.length; i += 1) {
+            var x = i * fontSize + fontSize / 2;
+            var y = drops[i] * fontSize;
+            context.fillStyle = Math.random() > .84 ? 'rgba(247,246,243,.9)' : 'rgba(227,34,25,.72)';
+            context.fillText(randomCharacter(), x, y);
+            if (Math.random() > .88) {
+              context.fillStyle = 'rgba(247,246,243,.96)';
+              context.fillText(randomCharacter(), x, y + fontSize);
+            }
+            drops[i] += speeds[i];
+            if (y > height + fontSize * 8 && Math.random() > .93) {
+              drops[i] = -Math.random() * 22;
+              speeds[i] = .55 + Math.random() * .72;
+            }
+          }
+          slot._matrixFrame = window.requestAnimationFrame(drawRain);
+        }
+
+        resizeCanvas();
+        if (reducedMotion) {
+          drawStaticRain();
+        } else {
+          slot._matrixFrame = window.requestAnimationFrame(drawRain);
+        }
+        if ('ResizeObserver' in window) {
+          slot._matrixResize = new ResizeObserver(function () {
+            resizeCanvas();
+            if (reducedMotion) drawStaticRain();
+          });
+          slot._matrixResize.observe(slot);
+        }
+        if ('IntersectionObserver' in window) {
+          var visibilityObserver = new IntersectionObserver(function (entries) {
+            isVisible = entries[0] ? entries[0].isIntersecting : true;
+          }, { rootMargin: '180px 0px' });
+          visibilityObserver.observe(slot);
+          var previousDisconnect = slot._matrixResize;
+          slot._matrixResize = {
+            disconnect: function () {
+              if (previousDisconnect) previousDisconnect.disconnect();
+              visibilityObserver.disconnect();
+            }
+          };
+        }
+        slot.style.setProperty('--matrix-delay', (slotIndex * 240) + 'ms');
+        matrixSlots.push(slot);
+      }
+
+      function syncMatrixRain() {
+        stopMatrixRain();
+        if (!desktopTeamMedia.matches) return;
+        var grids = Array.prototype.slice.call(document.querySelectorAll('.team-grid'));
+        var slotIndex = 0;
+        grids.forEach(function (grid) {
+          var cards = Array.prototype.slice.call(grid.children).filter(function (child) { return child.classList.contains('team-card'); });
+          if (!cards.length || cards.length % 2 === 0) return;
+          if (grid.classList.contains('team-grid--featured') || grid.closest('.team-module--paired')) return;
+          createMatrixRain(grid, slotIndex);
+          slotIndex += 1;
+        });
+      }
+
+      syncMatrixRain();
+      if (desktopTeamMedia.addEventListener) desktopTeamMedia.addEventListener('change', syncMatrixRain);
+      else desktopTeamMedia.addListener(syncMatrixRain);
 
       var copyButton = document.getElementById('copy-brief');
       var feedback = document.getElementById('copy-feedback');
