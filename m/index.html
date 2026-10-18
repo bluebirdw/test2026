@@ -829,21 +829,14 @@
         else { unbind(); }
       }
 
-      /* 默认自动开启：先有声 → 被拦则静音起播 → 静音也被拦则等首次交互 */
+      /* 加载即尝试有声播放；被浏览器策略拦截则等用户首次交互（不做静音起播，避免"看着在播却没声音"） */
       var userPaused = false;
-      function muteFallback() {
-        audio.muted = true;
-        var p = audio.play();
-        if (p && typeof p.then === 'function') {
-          p.then(function () { arm(); }).catch(function () { audio.muted = false; arm(); });
-        } else { audio.muted = false; arm(); }
-      }
       function autoStart() {
         if (userPaused || !audio.paused) return;
         var p = audio.play();
         if (!p || typeof p.then !== 'function') { if (audio.paused) arm(); return; }
         p.then(function () { unbind(); }).catch(function (err) {
-          if (err && err.name === 'NotAllowedError') { muteFallback(); }
+          if (err && err.name === 'NotAllowedError') { arm(); }
           else { audio.addEventListener('canplay', function () { autoStart(); }, { once: true }); arm(); }
         });
       }
