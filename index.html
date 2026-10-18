@@ -2155,6 +2155,12 @@
       var audio = document.getElementById('bgm-audio');
       var btn = document.getElementById('bgm-toggle');
       if (!audio || !btn) return;
+
+      /* 三首背景音乐，每次进站随机选一首 */
+      var BGM_TRACKS = ['assets/bgm.mp3', 'assets/bgm-2.mp3', 'assets/bgm-3.mp3'];
+      var bgmPick = BGM_TRACKS[Math.floor(Math.random() * BGM_TRACKS.length)];
+      if (audio.getAttribute('src') !== bgmPick) { audio.src = bgmPick; audio.load(); }
+
       audio.volume = 0.55;
 
       function paint(playing) {
