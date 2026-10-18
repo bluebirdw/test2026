@@ -1342,7 +1342,60 @@
       .footer-brand .brand-logo { width: 58px; height: 58px; }
       .footer-bottom__brand { align-items: flex-start; }
     }
-  </style>
+        /* ===== 背景音乐悬浮控制器 ===== */
+      .bgm-fab{
+        position:fixed; right:24px; bottom:24px; z-index:50;
+        width:56px; height:56px; padding:0; margin:0; border-radius:50%;
+        display:grid; place-items:center; cursor:pointer;
+        background:rgba(17,17,21,.80);
+        -webkit-backdrop-filter:blur(14px) saturate(1.2); backdrop-filter:blur(14px) saturate(1.2);
+        border:1px solid rgba(245,244,241,.14);
+        box-shadow:0 10px 30px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.06);
+        color:#f5f4f1; -webkit-tap-highlight-color:transparent;
+        transition:transform .35s var(--ease, ease), border-color .35s var(--ease, ease), box-shadow .45s var(--ease, ease);
+      }
+      .bgm-fab:hover{ transform:translateY(-2px); border-color:rgba(245,244,241,.26); }
+      .bgm-fab:focus-visible{ outline:2px solid rgba(229,46,46,.85); outline-offset:3px; }
+      .bgm-fab[data-state="playing"]{
+        border-color:rgba(229,46,46,.42);
+        box-shadow:0 0 0 1px rgba(229,46,46,.16), 0 10px 30px rgba(0,0,0,.55), 0 0 26px rgba(229,46,46,.32), inset 0 1px 0 rgba(255,255,255,.06);
+      }
+      .bgm-fab[data-state="playing"]::after{
+        content:""; position:absolute; inset:-6px; border-radius:50%; pointer-events:none;
+        border:1px solid rgba(229,46,46,.30);
+        animation:bgm-halo 3.6s var(--ease, ease) infinite;
+      }
+      .bgm-disc{ display:block; width:40px; height:40px; will-change:transform; }
+      .bgm-disc svg{ display:block; width:100%; height:100%; }
+      .bgm-fab[data-state="playing"] .bgm-disc{ animation:bgm-spin 7s linear infinite; }
+      .bgm-state{ position:absolute; inset:0; display:grid; place-items:center; pointer-events:none; opacity:0; transition:opacity .3s var(--ease, ease); }
+      .bgm-fab[data-state="paused"] .bgm-state{ opacity:1; }
+      .bgm-state i{ display:grid; place-items:center; width:24px; height:24px; border-radius:50%; background:rgba(9,10,12,.86); color:rgba(245,244,241,.92); }
+      .bgm-state svg{ width:14px; height:14px; display:block; }
+      .bgm-tip{
+        position:absolute; right:calc(100% + 12px); top:50%;
+        transform:translateY(-50%) translateX(6px);
+        white-space:nowrap; font-size:12px; letter-spacing:.06em; line-height:1;
+        padding:7px 11px; border-radius:999px;
+        background:rgba(12,13,14,.78); border:1px solid rgba(245,244,241,.14);
+        color:rgba(245,244,241,.86);
+        -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+        opacity:0; pointer-events:none;
+        transition:opacity .28s var(--ease, ease), transform .28s var(--ease, ease);
+      }
+      .bgm-fab:hover .bgm-tip, .bgm-fab:focus-visible .bgm-tip{ opacity:1; transform:translateY(-50%) translateX(0); }
+      @keyframes bgm-spin{ to{ transform:rotate(360deg); } }
+      @keyframes bgm-halo{ 0%,100%{ opacity:.28; transform:scale(.96); } 50%{ opacity:.72; transform:scale(1.06); } }
+      @media (prefers-reduced-motion: reduce){
+        .bgm-fab[data-state="playing"] .bgm-disc{ animation:none; }
+        .bgm-fab[data-state="playing"]::after{ animation:none; opacity:.5; }
+      }
+      @media (max-width:720px){
+        .bgm-fab{ width:50px; height:50px; }
+        .bgm-disc{ width:36px; height:36px; }
+        .bgm-tip{ display:none; }
+      }
+</style>
 </head>
 <body>
   <main class="hero" aria-labelledby="hero-title">
@@ -1734,7 +1787,28 @@
     </footer>
   </div>
 
-  <script>
+    <!-- ===== 背景音乐（悬浮控制） ===== -->
+  <audio id="bgm-audio" src="assets/bgm.mp3" loop preload="auto" playsinline></audio>
+  <button class="bgm-fab" id="bgm-toggle" type="button" data-state="paused" aria-pressed="false" aria-label="播放背景音乐">
+    <span class="bgm-disc" aria-hidden="true">
+      <svg viewBox="0 0 48 48" fill="none">
+        <circle cx="24" cy="24" r="21.5" fill="#0b0b0e"/>
+        <circle cx="24" cy="24" r="21.5" stroke="rgba(245,244,241,.16)"/>
+        <circle cx="24" cy="24" r="16" stroke="rgba(245,244,241,.10)"/>
+        <circle cx="24" cy="24" r="12.5" stroke="rgba(227,34,25,.55)"/>
+        <circle cx="24" cy="24" r="9.5" stroke="rgba(245,244,241,.08)"/>
+        <circle cx="24" cy="24" r="5" fill="#e32219"/>
+        <circle cx="24" cy="24" r="1.6" fill="#08090a"/>
+        <path d="M24 2.5v3M24 42.5v3M2.5 24h3M42.5 24h3" stroke="rgba(229,46,46,.55)" stroke-width="1.4" stroke-linecap="round"/>
+      </svg>
+    </span>
+    <span class="bgm-state" aria-hidden="true">
+      <i><svg viewBox="0 0 24 24" fill="none"><path d="M4 9.5h3.2L12 5.5v13l-4.8-4H4z" fill="currentColor"/><path d="M16 9.5l5 5M21 9.5l-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></i>
+    </span>
+    <span class="bgm-tip" role="tooltip">背景音乐</span>
+  </button>
+
+<script>
     (function () {
       var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       var root = document.documentElement;
@@ -2063,6 +2137,56 @@
 
       var backTop = document.getElementById('back-top');
       if (backTop) backTop.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: reducedMotion ? 'auto' : 'smooth' }); });
+    }());
+  </script>
+  <script>
+    /* 背景音乐控制（独立脚本，不影响页面滚动与锚点逻辑） */
+    (function () {
+      var audio = document.getElementById('bgm-audio');
+      var btn = document.getElementById('bgm-toggle');
+      if (!audio || !btn) return;
+      audio.volume = 0.55;
+
+      function paint(playing) {
+        btn.setAttribute('data-state', playing ? 'playing' : 'paused');
+        btn.setAttribute('aria-pressed', playing ? 'true' : 'false');
+        btn.setAttribute('aria-label', playing ? '暂停背景音乐' : '播放背景音乐');
+      }
+      function play() {
+        var p = audio.play();
+        if (p && typeof p.catch === 'function') p.catch(function () {});
+        return p;
+      }
+      audio.addEventListener('play', function () { paint(true); });
+      audio.addEventListener('playing', function () { paint(true); });
+      audio.addEventListener('pause', function () { paint(false); });
+
+      // 自动播放被拦截时：等用户第一次任意交互再播
+      var events = ['pointerdown', 'touchstart', 'touchend', 'click', 'keydown'];
+      function unbind() { events.forEach(function (t) { document.removeEventListener(t, unlock, true); }); }
+      function unlock(e) {
+        if (e && e.target && e.target.closest && e.target.closest('#bgm-toggle')) return; // 交给按钮自己处理
+        if (!audio.paused) { unbind(); return; }
+        var p = audio.play();
+        if (p && typeof p.then === 'function') { p.then(unbind).catch(function () {}); }
+        else { unbind(); }
+      }
+      function arm() { events.forEach(function (t) { document.addEventListener(t, unlock, true); }); }
+
+      var attempt = play();
+      if (attempt && typeof attempt.then === 'function') {
+        attempt.then(function () { unbind(); }).catch(function () { arm(); });
+      } else if (audio.paused) { arm(); }
+
+      // 微信 / iOS WebView 兼容
+      document.addEventListener('WeixinJSBridgeReady', function () { if (audio.paused) play(); }, false);
+      if (window.WeixinJSBridge && typeof window.WeixinJSBridge.invoke === 'function' && audio.paused) play();
+      if (document.readyState === 'complete') { if (audio.paused) play(); }
+      else { window.addEventListener('load', function () { if (audio.paused) play(); }); }
+
+      // 点击切换播放 / 暂停
+      btn.addEventListener('click', function () { if (audio.paused) { play(); } else { audio.pause(); } });
+      paint(!audio.paused);
     }());
   </script>
 </body>
