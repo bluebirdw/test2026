@@ -1354,35 +1354,20 @@
         color:#f5f4f1; -webkit-tap-highlight-color:transparent;
         transition:transform .35s var(--ease, ease), border-color .35s var(--ease, ease), box-shadow .45s var(--ease, ease);
       }
-      .bgm-fab:hover{ transform:translateY(-2px) scale(1.03); border-color:rgba(245,244,241,.26); }
-      .bgm-fab:active{ transform:scale(.97); }
-      .bgm-fab:focus-visible{ outline:2px solid rgba(229,46,46,.9); outline-offset:4px; }
-      .bgm-icon{ width:26px; height:26px; display:block; color:#E52E2E; opacity:.45; transition:opacity .3s var(--ease, ease); }
+      .bgm-fab:hover{ transform:translateY(-2px); border-color:rgba(245,244,241,.26); }
+      .bgm-fab:focus-visible{ outline:2px solid rgba(229,46,46,.85); outline-offset:3px; }
       .bgm-fab[data-state="playing"]{
-        border-color:rgba(229,46,46,.55);
-        box-shadow:0 0 0 1px rgba(229,46,46,.30),
-                   0 10px 30px rgba(0,0,0,.55),
-                   0 0 18px rgba(229,46,46,.55),
-                   0 0 44px rgba(229,46,46,.38),
-                   0 0 80px rgba(229,46,46,.22),
-                   inset 0 1px 0 rgba(255,255,255,.06);
-      }
-      .bgm-fab[data-state="playing"]::before{
-        content:""; position:absolute; inset:-14px; border-radius:50%; pointer-events:none;
-        background:radial-gradient(circle, rgba(229,46,46,.42) 0%, rgba(229,46,46,.16) 45%, rgba(229,46,46,0) 72%);
-        filter:blur(6px);
-        animation:bgm-breathe 3.4s var(--ease, ease) infinite;
+        border-color:rgba(229,46,46,.42);
+        box-shadow:0 0 0 1px rgba(229,46,46,.16), 0 10px 30px rgba(0,0,0,.55), 0 0 26px rgba(229,46,46,.32), inset 0 1px 0 rgba(255,255,255,.06);
       }
       .bgm-fab[data-state="playing"]::after{
-        content:""; position:absolute; inset:-7px; border-radius:50%; pointer-events:none;
-        border:1.5px solid rgba(229,46,46,.55);
-        animation:bgm-halo 3.4s var(--ease, ease) infinite;
+        content:""; position:absolute; inset:-6px; border-radius:50%; pointer-events:none;
+        border:1px solid rgba(229,46,46,.30);
+        animation:bgm-halo 3.6s var(--ease, ease) infinite;
       }
-      .bgm-fab[data-state="playing"] .bgm-icon{
-        opacity:1;
-        animation:bgm-record 6s linear infinite;
-        filter:drop-shadow(0 0 7px rgba(229,46,46,.70));
-      }
+      .bgm-disc{ display:block; width:40px; height:40px; will-change:transform; }
+      .bgm-disc svg{ display:block; width:100%; height:100%; }
+      .bgm-fab[data-state="playing"] .bgm-disc{ animation:bgm-spin 7s linear infinite; }
       .bgm-state{ position:absolute; inset:0; display:grid; place-items:center; pointer-events:none; opacity:0; transition:opacity .3s var(--ease, ease); }
       .bgm-fab[data-state="paused"] .bgm-state{ opacity:1; }
       .bgm-state i{ display:grid; place-items:center; width:24px; height:24px; border-radius:50%; background:rgba(9,10,12,.86); color:rgba(245,244,241,.92); }
@@ -1391,26 +1376,23 @@
         position:absolute; right:calc(100% + 12px); top:50%;
         transform:translateY(-50%) translateX(6px);
         white-space:nowrap; font-size:12px; letter-spacing:.06em; line-height:1;
-        padding:7px 12px; border-radius:999px;
-        background:#131418; border:1px solid rgba(245,244,241,.22);
-        color:#f0efec;
-        box-shadow:0 8px 24px rgba(0,0,0,.75), 0 0 0 1px rgba(0,0,0,.55);
+        padding:7px 11px; border-radius:999px;
+        background:rgba(12,13,14,.78); border:1px solid rgba(245,244,241,.14);
+        color:rgba(245,244,241,.86);
+        -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
         opacity:0; pointer-events:none;
         transition:opacity .28s var(--ease, ease), transform .28s var(--ease, ease);
       }
       .bgm-fab:hover .bgm-tip, .bgm-fab:focus-visible .bgm-tip{ opacity:1; transform:translateY(-50%) translateX(0); }
-      @keyframes bgm-record{ to{ transform:rotate(360deg); } }
-      @keyframes bgm-halo{ 0%,100%{ opacity:.35; transform:scale(.94); } 50%{ opacity:1; transform:scale(1.10); } }
-      @keyframes bgm-breathe{ 0%,100%{ opacity:.40; transform:scale(.92); } 50%{ opacity:.95; transform:scale(1.06); } }
+      @keyframes bgm-spin{ to{ transform:rotate(360deg); } }
+      @keyframes bgm-halo{ 0%,100%{ opacity:.28; transform:scale(.96); } 50%{ opacity:.72; transform:scale(1.06); } }
       @media (prefers-reduced-motion: reduce){
-        .bgm-fab[data-state="playing"] .bgm-icon,
-        .bgm-fab[data-state="playing"]::before,
-        .bgm-fab[data-state="playing"]::after{ animation:none; }
-        .bgm-fab[data-state="playing"]::before{ opacity:.55; }
+        .bgm-fab[data-state="playing"] .bgm-disc{ animation:none; }
+        .bgm-fab[data-state="playing"]::after{ animation:none; opacity:.5; }
       }
       @media (max-width:720px){
-        .bgm-fab{ width:52px; height:52px; }
-        .bgm-icon{ width:24px; height:24px; }
+        .bgm-fab{ width:50px; height:50px; }
+        .bgm-disc{ width:36px; height:36px; }
         .bgm-tip{ display:none; }
       }
 </style>
@@ -1808,15 +1790,23 @@
     <!-- ===== 背景音乐（悬浮控制） ===== -->
   <audio id="bgm-audio" src="assets/bgm.mp3" loop preload="auto" playsinline></audio>
   <button class="bgm-fab" id="bgm-toggle" type="button" data-state="paused" aria-pressed="false" aria-label="播放背景音乐">
-    <svg class="bgm-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
-    </svg>
+    <span class="bgm-disc" aria-hidden="true">
+      <svg viewBox="0 0 48 48" fill="none">
+        <circle cx="24" cy="24" r="21.5" fill="#0b0b0e"/>
+        <circle cx="24" cy="24" r="21.5" stroke="rgba(245,244,241,.16)"/>
+        <circle cx="24" cy="24" r="16" stroke="rgba(245,244,241,.10)"/>
+        <circle cx="24" cy="24" r="12.5" stroke="rgba(227,34,25,.55)"/>
+        <circle cx="24" cy="24" r="9.5" stroke="rgba(245,244,241,.08)"/>
+        <circle cx="24" cy="24" r="5" fill="#e32219"/>
+        <circle cx="24" cy="24" r="1.6" fill="#08090a"/>
+        <path d="M24 2.5v3M24 42.5v3M2.5 24h3M42.5 24h3" stroke="rgba(229,46,46,.55)" stroke-width="1.4" stroke-linecap="round"/>
+      </svg>
+    </span>
     <span class="bgm-state" aria-hidden="true">
       <i><svg viewBox="0 0 24 24" fill="none"><path d="M4 9.5h3.2L12 5.5v13l-4.8-4H4z" fill="currentColor"/><path d="M16 9.5l5 5M21 9.5l-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></i>
     </span>
     <span class="bgm-tip" role="tooltip">背景音乐</span>
   </button>
-  </div>
 
 <script>
     (function () {
@@ -2162,81 +2152,40 @@
         btn.setAttribute('aria-pressed', playing ? 'true' : 'false');
         btn.setAttribute('aria-label', playing ? '暂停背景音乐' : '播放背景音乐');
       }
-      audio.addEventListener('play', function () { paint(true); });
-      audio.addEventListener('playing', function () { paint(true); });
-
-      /* 静音起播后把声音接回来：回到曲首，避免听到中段 */
-      function unmute() {
-        if (!audio.muted) return;
-        audio.muted = false;
-        try { if (audio.currentTime > 1.5) audio.currentTime = 0; } catch (e) {}
-      }
-      function playNow() {
+      function play() {
         var p = audio.play();
         if (p && typeof p.catch === 'function') p.catch(function () {});
         return p;
       }
+      audio.addEventListener('play', function () { paint(true); });
+      audio.addEventListener('playing', function () { paint(true); });
+      audio.addEventListener('pause', function () { paint(false); });
 
-      // 首次任意交互即可起播
+      // 自动播放被拦截时：等用户第一次任意交互再播
       var events = ['pointerdown', 'touchstart', 'touchend', 'click', 'keydown'];
-      var armed = false;
-      function unbind() {
-        if (!armed) return;
-        armed = false;
-        events.forEach(function (t) { document.removeEventListener(t, unlock, true); });
-      }
-      function arm() {
-        if (armed) return;
-        armed = true;
-        events.forEach(function (t) { document.addEventListener(t, unlock, true); });
-      }
+      function unbind() { events.forEach(function (t) { document.removeEventListener(t, unlock, true); }); }
       function unlock(e) {
-        if (e && e.target && e.target.closest && e.target.closest('#bgm-toggle')) return; // 按钮自己处理
-        unmute();
+        if (e && e.target && e.target.closest && e.target.closest('#bgm-toggle')) return; // 交给按钮自己处理
         if (!audio.paused) { unbind(); return; }
         var p = audio.play();
         if (p && typeof p.then === 'function') { p.then(unbind).catch(function () {}); }
         else { unbind(); }
       }
+      function arm() { events.forEach(function (t) { document.addEventListener(t, unlock, true); }); }
 
-      /* 默认自动开启：先有声 → 被拦则静音起播 → 静音也被拦则等首次交互 */
-      var userPaused = false;
-      function muteFallback() {
-        audio.muted = true;
-        var p = audio.play();
-        if (p && typeof p.then === 'function') {
-          p.then(function () { arm(); }).catch(function () { audio.muted = false; arm(); });
-        } else { audio.muted = false; arm(); }
-      }
-      function autoStart() {
-        if (userPaused || !audio.paused) return;
-        var p = audio.play();
-        if (!p || typeof p.then !== 'function') { if (audio.paused) arm(); return; }
-        p.then(function () { unbind(); }).catch(function (err) {
-          if (err && err.name === 'NotAllowedError') { muteFallback(); }
-          else { audio.addEventListener('canplay', function () { autoStart(); }, { once: true }); arm(); }
-        });
-      }
+      var attempt = play();
+      if (attempt && typeof attempt.then === 'function') {
+        attempt.then(function () { unbind(); }).catch(function () { arm(); });
+      } else if (audio.paused) { arm(); }
 
-      /* 只有用户主动暂停才记住「别再自动放」 */
-      audio.addEventListener('pause', function () {
-        paint(false);
-        if (!audio.muted) userPaused = true;
-      });
+      // 微信 / iOS WebView 兼容
+      document.addEventListener('WeixinJSBridgeReady', function () { if (audio.paused) play(); }, false);
+      if (window.WeixinJSBridge && typeof window.WeixinJSBridge.invoke === 'function' && audio.paused) play();
+      if (document.readyState === 'complete') { if (audio.paused) play(); }
+      else { window.addEventListener('load', function () { if (audio.paused) play(); }); }
 
-      autoStart();
-
-      /* 微信 / iOS WebView 兼容 */
-      document.addEventListener('WeixinJSBridgeReady', function () { unmute(); if (!userPaused) autoStart(); }, false);
-      if (window.WeixinJSBridge && typeof window.WeixinJSBridge.invoke === 'function') { unmute(); if (!userPaused) autoStart(); }
-      if (document.readyState === 'complete') { unmute(); if (!userPaused) autoStart(); }
-      else { window.addEventListener('load', function () { unmute(); if (!userPaused && audio.paused) autoStart(); }); }
-
-      /* 点击切换播放 / 暂停 */
-      btn.addEventListener('click', function () {
-        if (audio.muted) { unmute(); if (audio.paused) { userPaused = false; playNow(); } return; }
-        if (audio.paused) { userPaused = false; playNow(); } else { audio.pause(); }
-      });
+      // 点击切换播放 / 暂停
+      btn.addEventListener('click', function () { if (audio.paused) { play(); } else { audio.pause(); } });
       paint(!audio.paused);
     }());
   </script>
