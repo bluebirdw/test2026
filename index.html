@@ -2156,9 +2156,18 @@
       var btn = document.getElementById('bgm-toggle');
       if (!audio || !btn) return;
 
-      /* 三首背景音乐，每次进站随机选一首 */
+      /* 三首背景音乐：每次进站随机，但不与上一次重复 */
       var BGM_TRACKS = ['assets/bgm.mp3', 'assets/bgm-2.mp3', 'assets/bgm-3.mp3'];
-      var bgmPick = BGM_TRACKS[Math.floor(Math.random() * BGM_TRACKS.length)];
+      var bgmIdx = 0;
+      try {
+        var bgmLast = parseInt(localStorage.getItem('bgm-last'), 10);
+        do { bgmIdx = Math.floor(Math.random() * BGM_TRACKS.length); }
+        while (bgmIdx === bgmLast);
+        localStorage.setItem('bgm-last', String(bgmIdx));
+      } catch (e) {
+        bgmIdx = Math.floor(Math.random() * BGM_TRACKS.length);
+      }
+      var bgmPick = BGM_TRACKS[bgmIdx];
       if (audio.getAttribute('src') !== bgmPick) { audio.src = bgmPick; audio.load(); }
 
       audio.volume = 0.55;
